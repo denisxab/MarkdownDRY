@@ -1,0 +1,75 @@
+<head>
+    <meta charset="UTF-8">
+    <link href="./bootstrap-5.1.3-dist/main.css" rel="stylesheet">
+    <script src="./bootstrap-5.1.3-dist/main.js"></script>
+    <link rel="stylesheet" href="./main.min.css">
+    <link rel="stylesheet" href="./plugin.css">
+</head>
+- Вставить весь код из файла (стандартный Markdown) +
+
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 1.py" char_start="0" char_end="-1">Описание один</a>
+
+
+- Вставить фрагменты из файла
+
+На класс +
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#JsonFile" char_start="1683" char_end="3836">Описание 1</a>
+
+Конкуренция в классе + `'File = \'333\''`
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#File" char_start="4586" char_end="4600">Описание 1.1</a>
+
+
+На метод +
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#JsonFile.readFile" char_start="2039" char_end="2206">Описание 2</a>
+
+Конкуренция в методе +
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#JsonFile.appendFile" char_start="3713" char_end="3836">Описание 2.1</a>
+
+
+На атрибут +
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#JsonFile.__slots__" char_start="1764" char_end="1790">Описание 3</a>
+
+Конкуренция в атрибуте +
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#JsonFile.meta" char_start="1792" char_end="1808">Описание 3.1</a>
+
+
+На функции +
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#test_read_write" char_start="3836" char_end="4569">Описание 4</a>
+
+Конкуренция в функции +
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#summ" char_start="4634" char_end="4665">Описание 4.1</a>
+
+
+На переменную +
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#name" char_start="176" char_end="192">Описание 5</a>
+
+Конкуренция в переменной +
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#version" char_start="4566" char_end="4586">Описание 5.1</a>
+
+
+- НаЧтоМожноСослатся
+    - `Класс` - Возьмутся строки от начал и до конца объявление класса
+    - `ФункцияИлиМетод` - Возьмутся строки от начал и до конца объявление Функция/Метод
+
+Пример работы когда указан не существующий метод
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#File.readFile" char_start="0" char_end="0">Описание 6.1</a>
+
+
+Пример когда мы пытаемся обратиться к методу у обычной(так как в итоге конкуренции `'File = \'333\''`) переменой
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#File.createFileIfDoesntExist" char_start="0" char_end="0">Описание 6.2</a>
+
+
+Пример когда мы пытаемся обратиться к атрибуту у обычной(так как в итоге конкуренции `'File = \'333\''`) переменой
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#File.__slots__" char_start="0" char_end="0">Описание 6.3</a>
+
+
+Пример когда мы обращаемся в несуществующие имя
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#QWERTYASDF" char_start="0" char_end="0">Описание 6.4</a>
+
+
+Якорь многострочный
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Якорь.py#РегуляркаДляПоискаАтрибутов" char_start="1500" char_end="1675">Якорь 7.1</a>
+
+Якорь многострочный
+<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Якорь.py#Документация" char_start="3346" char_end="3847">Якорь 7.2</a>
+

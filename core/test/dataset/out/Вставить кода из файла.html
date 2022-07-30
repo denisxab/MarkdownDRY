@@ -1,0 +1,256 @@
+<head>
+    <meta charset="UTF-8">
+    <link href="./bootstrap-5.1.3-dist/main.css" rel="stylesheet">
+    <script src="./bootstrap-5.1.3-dist/main.js"></script>
+    <link rel="stylesheet" href="./main.min.css">
+    <link rel="stylesheet" href="./plugin.css">
+</head>
+- Вставить весь код из файла (стандартный Markdown) +
+
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание один</div>
+<pre><code>
+# Обычная функция
+from functools import wraps
+
+
+def another_function(func):
+    """
+    Функция которая принимает другую функцию
+    """
+
+    @wraps(func)  # !!
+    def wrapper():
+        """
+        Оберточная функция
+        """
+        val = "The result of %s is %s" % (func(), eval(func()))
+        return val
+
+    return wrapper
+
+
+@another_function
+def a_function():
+    """Обычная функция"""
+    return "1+1"
+
+
+if __name__ == "__main__":
+    # a_function()
+    print(a_function.__name__)  # a_function
+    print(a_function.__doc__)  # Обычная функция
+
+</code></pre></div>
+
+- Вставить фрагменты из файла
+
+На класс +
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание 1</div>
+<pre><code>
+class JsonFile(File):
+    """
+    Работа с Json файлами
+    """
+    meta = '123'
+    __slots__ = "nameFile"
+
+    meta = '321'
+
+    def __init__(self, nameFile: str):
+
+        if splitext(nameFile)[1] != ".json":  # Проверяем расширение файла
+            raise FileNotFoundError("Файл должен иметь расширение .json")
+
+        File.__init__(self, nameFile)
+
+    def readFile(self) -> Union[list, dict, int, str, float, None, bool]:
+        with open(self.nameFile, "r") as _jsonFile:
+            return json.load(_jsonFile)
+
+    def writeFile(self, data: Union[list, dict, int, str, float, None, bool, tuple],
+                  *, indent=4,
+                  skipkeys=False,
+                  sort_keys=True,
+                  ensure_ascii: bool = False):
+        """
+        :param data: list, dict, int, str, float, None, bool, tuple.
+        :param skipkeys: Если False вызовет исключение при неправильном типе данных.
+        :param indent: Отступы для записи.
+        :param sort_keys: Сортировать ключи.
+        :param ensure_ascii: Экранировать символы, если False данные запишутся как есть.
+        """
+        with open(self.nameFile, "w") as _jsonFile:
+            json.dump(data, _jsonFile, skipkeys=skipkeys, sort_keys=sort_keys, indent=indent, ensure_ascii=ensure_ascii)
+
+    def appendFile(self, data: Union[list, dict[str, Any]], *, ensure_ascii: bool = False):
+        tmp_data = self.readFile()
+        if type(data) == type(tmp_data):
+
+            # List
+            if type(data) == list:
+                tmp_data.extend(data)
+                self.writeFile(tmp_data, ensure_ascii=ensure_ascii)
+
+            # Tuple
+            elif type(data) == tuple:
+                self.writeFile(tmp_data + data, ensure_ascii=ensure_ascii)
+
+            # Dict Set
+            elif type(data) == dict or type(data) == set:
+                tmp_data.update(data)
+                self.writeFile(tmp_data, ensure_ascii=ensure_ascii)
+
+        else:
+            raise TypeError("Тип данных в файле и тип входных данных различны")
+
+    def appendFile(self, data: Union[list, dict[str, Any]], *, ensure_ascii: bool = False):
+        return 'Конкуренция'
+
+
+
+</code></pre></div>
+Конкуренция в классе + `'File = \'333\''`
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание 1.1</div>
+<pre><code>
+File = '333'
+</code></pre></div>
+
+На метод +
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание 2</div>
+<pre><code>
+    def readFile(self) -> Union[list, dict, int, str, float, None, bool]:
+        with open(self.nameFile, "r") as _jsonFile:
+            return json.load(_jsonFile)
+
+
+</code></pre></div>
+Конкуренция в методе +
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание 2.1</div>
+<pre><code>
+    def appendFile(self, data: Union[list, dict[str, Any]], *, ensure_ascii: bool = False):
+        return 'Конкуренция'
+
+
+
+</code></pre></div>
+
+На атрибут +
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание 3</div>
+<pre><code>
+    __slots__ = "nameFile"
+</code></pre></div>
+Конкуренция в атрибуте +
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание 3.1</div>
+<pre><code>
+    meta = '321'
+</code></pre></div>
+
+На функции +
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание 4</div>
+<pre><code>
+def test_read_write():
+    a = {
+        "1.224.123.143": ("898", "192.121.133.123:80", "Разрешить"),
+        "2.234.65.34": ("875", "193.121.133.123:80", "Запретить"),
+        "3.224.123.1423": ("898", "192.121.133.123:80", "Разрешить"),
+        "5.234.65.343": ("875", "193.121.133.123:80", "Запретить"),
+        "4.224.123.1543": ("898", "192.121.133.123:80", "Разрешить"),
+        "7.2342.65.34": ("875", "193.121.133.123:80", "Запретить"),
+        "6.2234.123.143": ("898", "192.121.133.123:80", "Разрешить"),
+        "9.2345.65.34": ("875", "193.121.133.123:80", "Запретить"),
+    }
+
+    json = JsonFile("test/my.json")
+
+    json.writeFile(a)
+
+    b = json.readFile()
+
+    print(f"a {id(a)}={a}")
+    print(f"b {id(b)}={b}")
+
+
+
+</code></pre></div>
+Конкуренция в функции +
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание 4.1</div>
+<pre><code>
+def summ():
+    return 1 + 3
+
+
+
+</code></pre></div>
+
+На переменную +
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание 5</div>
+<pre><code>
+name = __file__
+</code></pre></div>
+Конкуренция в переменной +
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание 5.1</div>
+<pre><code>
+version = '0.9.6'
+</code></pre></div>
+
+- НаЧтоМожноСослатся
+    - `Класс` - Возьмутся строки от начал и до конца объявление класса
+    - `ФункцияИлиМетод` - Возьмутся строки от начал и до конца объявление Функция/Метод
+
+Пример работы когда указан не существующий метод
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание 6.1</div>
+<pre><code>
+
+</code></pre></div>
+
+Пример когда мы пытаемся обратиться к методу у обычной(так как в итоге конкуренции `'File = \'333\''`) переменой
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание 6.2</div>
+<pre><code>
+
+</code></pre></div>
+
+Пример когда мы пытаемся обратиться к атрибуту у обычной(так как в итоге конкуренции `'File = \'333\''`) переменой
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Описание 6.3</div>
+<pre><code>
+
+</code></pre></div>
+
+Пример когда мы обращаемся в несуществующие имя
+[Описание 6.4](./Вставить кода из файл 2.py#QWERTYASDF)
+
+Якорь многострочный
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Якорь 7.1</div>
+<pre><code>
+        class_meth_attr_re = '(?P<meth>(?P<count_meth>[\t ]+)def[ \t]+{name}[\t ]*\(.+:)|' \
+                             '(?P<attr>(?P<count_attr>[\t ]+){name}.+)'
+
+        #
+</code></pre></div>
+Якорь многострочный
+<div class="MarkdownDRY InsertCodeFromFile">
+<div>Якорь 7.2</div>
+<pre><code>
+    ------------------------------------------------------------------
+    | Как добавить новый язык                                        |
+    |                                                                |
+    | 1. Создать наследника класса `Lange` - Реализовать его методы  |
+    | 2. Добавить в класс `AvailableLanguages`                       |
+    | 3. Добавить в класс `ConvertSuffixToLange`                     |
+    ------------------------------------------------------------------
+    
+</code></pre></div>

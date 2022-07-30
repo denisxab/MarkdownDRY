@@ -1,0 +1,252 @@
+<head>
+    <meta charset="UTF-8">
+    <link href="./bootstrap-5.1.3-dist/main.css" rel="stylesheet">
+    <script src="./bootstrap-5.1.3-dist/main.js"></script>
+    <link rel="stylesheet" href="./main.min.css">
+    <link rel="stylesheet" href="./plugin.css">
+</head>
+
+
+<div id="LinkCodeWindow" onclick="OnHide(event)">
+    <div id="LinkCodeWindowDet">
+        <div id="LinkCodeWindowButtonHide">
+            <input type="button" value="Скрыть" onclick="LinkCodeWindow.style.display='none'">
+        </div>
+        <pre class="code" id="LinkCodeWindowBody">
+        </pre>
+    </div>
+</div>
+<a class="MarkdownDRY LinkCode"
+   file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/LinkCode.py"
+   ref="NeClass" char_start="48" char_end="176">Имя Для Ссылки1</a>
+
+<a class="MarkdownDRY LinkCode"
+   file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/LinkCode.py"
+   ref="NeClass.name" char_start="63" char_end="87">Имя Для Ссылки2</a>
+
+<a class="MarkdownDRY LinkCode"
+   file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/LinkCode.py"
+   ref="NeClass.__call__" char_start="89" char_end="176">Имя Для Ссылки3</a>
+
+<a class="MarkdownDRY LinkCode"
+   file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/LinkCode.py"
+   ref="another_function" char_start="176" char_end="502">Имя Для Ссылки4</a>
+
+<a class="MarkdownDRY LinkCode"
+   file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/LinkCode.py"
+   ref="__name__" char_start="1246" char_end="1270">Имя Для Ссылки5</a>
+
+<a class="MarkdownDRY LinkCode"
+   file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/LinkCode.py"
+   ref="Химичим" char_start="378" char_end="451">Имя Для Ссылки6</a>
+
+<a class="MarkdownDRY LinkCode"
+   file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/LinkCode2.py"
+   ref="__name__" char_start="82" char_end="106">Имя Для Ссылки5</a>
+
+<a class="MarkdownDRY LinkCode"
+   file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/LinkCode2.py"
+   ref="another_function" char_start="0" char_end="0">Имя Для Ссылки6</a>
+
+
+Вот что будет если указать несуществующие элементы
+<a class="MarkdownDRY LinkCode"
+   file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/LinkCode.py"
+   ref="Скучаем" char_start="0" char_end="0">Имя Для Ссылки7</a>
+
+<a class="MarkdownDRY LinkCode"
+   file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/LinkCode.py"
+   ref="__file__" char_start="0" char_end="0">Имя Для Ссылки8</a>
+
+<a class="MarkdownDRY LinkCode"
+   file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/LinkCode.py"
+   ref="NeClass.__init__" char_start="0" char_end="0">Имя Для Ссылки9</a>
+
+<script>
+    LinkSourceCode = {
+        "/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/LinkCode.py": `# Обычная функция
+from functools import wraps
+
+
+class NeClass:
+    name: str = __file__
+
+    def __call__(self, *args, **kwargs):
+        """Доки"""
+        return self.name
+
+
+def another_function(func):
+    """
+    Функция которая принимает другую функцию
+    """
+
+    @wraps(func)  # !!
+    def wrapper():
+        """
+        Оберточная функция
+        """
+        # Химичим>
+        val = "The result of %s is %s" % (func(), eval(func()))
+        # <Химичим
+        return val
+
+    return wrapper
+
+
+@another_function
+def a_function():
+    """Обычная 'функция'"""
+    return "1+1"
+
+
+@another_function
+def a_function():
+    """Обычная 'функция'"""
+    return "1+1"
+
+
+@another_function
+def a_function():
+    """Обычная 'функция'"""
+    return "1+1"
+
+
+@another_function
+def a_function():
+    """Обычная 'функция'"""
+    return "1+1"
+
+
+@another_function
+def a_function():
+    """Обычная 'функция'"""
+    return "1+1"
+
+
+@another_function
+def a_function():
+    """Обычная 'функция'"""
+    return "1+1"
+
+
+@another_function
+def a_function():
+    """Обычная 'функция'"""
+    return "1+1"
+
+
+@another_function
+def a_function():
+    """Обычная 'функция'"""
+    return "1+1"
+
+
+@another_function
+def a_function():
+    """Обычная 'функция'"""
+    return "1+1"
+
+
+__name__ = '__main__'
+
+if __name__ == "__main__":
+    print(a_function.__name__)  # a_function
+    print(a_function.__doc__)  # Обычная функция
+`,
+        "/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/LinkCode2.py": `# Обычная функция
+
+
+def a_function():
+    """Обычная 'функция'"""
+    return "1+1"
+
+
+__name__ = '__main__'
+
+if __name__ == "__main__":
+    print(a_function.__name__)  # a_function
+    print(a_function.__doc__)  # Обычная функция
+`
+    };
+
+    function AddEventLinkCode() {
+        // Добавление обработка нажатий на ссылки
+        const elm = document.querySelectorAll(".MarkdownDRY.LinkCode");
+        elm.forEach((e) => {
+            e.addEventListener("click", () => {
+                DisplayLinkCode(e);
+            });
+        });
+    }
+
+    function DisplayLinkCode(_elem) {
+        /* Показать всплывающие окно с исходным кодом */
+        // Получаем элемент в котором будет исходный текст из файла
+        _el = document.querySelector('#LinkCodeWindowBody')
+        source_text = LinkSourceCode[_elem.getAttribute('file')]
+        if (source_text) {
+            // --- Вставка кода в всплывающие окно --- //
+            _el.innerHTML = toCode(source_text, 'code');
+            // --- Выделение кода --- //
+            char_start = _elem.getAttribute('char_start');
+            char_end = _elem.getAttribute('char_end');
+            if (char_start > 0 && char_end > 0) {
+                // Выделяем текст согласно диапазону из ссылки. Если конечно такой диапазон есть.
+                // Его может не быть если ссылка указывает на несуществующий элемент кода
+                highlig_text = toCode(toCode(_el.textContent.slice(char_start, char_end), 'span'), 'code');
+
+
+                // Собираем результат, и записываем в тело всплывающего окна
+                _el.innerHTML = `${toCode(_el.textContent.slice(0, char_start), 'code')}` +
+                    `\n${highlig_text}\n` +
+                    `${toCode(_el.textContent.slice(char_end, _el.innerHTML.length), 'code')}`
+            }
+            // --- --- //
+        }
+        // Делаем видимым окно
+        LinkCodeWindow.style.display = 'block';
+
+        // !!!
+        // Прокручиваем до начала выделенного блока
+        // Перебрать массива
+        for (let _e of _el.childNodes) {
+            if (_e.childNodes.length > 0 && _e.childNodes[0].tagName === "SPAN") {
+                _e.scrollIntoView({ behavior: 'smooth'});
+                break
+            }
+        }
+        // _el.childNodes.forEach(
+        //     (_e) => {
+        //
+        //         if (_e.childNodes.length > 0 && _e.childNodes[0].tagName === "SPAN") {
+        //             _e.scrollIntoView();
+        //             return false;
+        //         }
+        //     }
+        // )
+
+    }
+
+    function toCode(inText, tag) {
+        text = [];
+        inText.split('\n').forEach(
+            (_e) => {
+                text.push(`<${tag}>${_e}</${tag}>`);
+            }
+        )
+        return text.join('\n');
+    }
+
+    AddEventLinkCode();
+
+    function OnHide(_event) {
+        /* Скрыть выплывающие окно при нажатии вне его */
+        console.log(_event.target);
+        if (_event.target.id === 'LinkCodeWindow') {
+            LinkCodeWindow.style.display = 'none'
+
+        }
+    }
+
+</script>

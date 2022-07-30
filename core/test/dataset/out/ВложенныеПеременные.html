@@ -1,0 +1,42 @@
+<head>
+    <meta charset="UTF-8">
+    <link href="./bootstrap-5.1.3-dist/main.css" rel="stylesheet">
+    <script src="./bootstrap-5.1.3-dist/main.js"></script>
+    <link rel="stylesheet" href="./main.min.css">
+    <link rel="stylesheet" href="./plugin.css">
+</head>
+<div id="menu">
+    <div id="detail_menu">
+        <ul>   
+            <li><a href="#Пример">Пример</a></li><li><a href="#: TODO: Реализовать возможность использовать вложенные переменные !">: TODO: Реализовать возможность использовать вложенные переменные !</a></li>
+        </ul>
+        <input type="button" value=">>" onclick="detail_menu.hidden=true;bt_show_menu.hidden=false"/>
+    </div>
+    <div id="shot_menu">
+        <input type="button" id="bt_show_menu" value="<<" onclick="detail_menu.hidden=false;bt_show_menu.hidden=true">
+    </div>
+    <script>
+        bt_show_menu.hidden = true;
+    </script>
+</div>
+<h1 id="Пример" class="MarkdownDRY StandardHeaders">Пример</h1>
+%%ЗпВ-Месяц=11_000%%
+%%НДФЛ=20%%
+%%СтолькоТоКусковХлеба=2 куска%%
+
+В нашей компании достоянная заработная плата для начинающих IT специалистов, в размере <span class="MarkdownDRY MathSpan"><span class="math_result">8800</span>=11_000-((11_000/100)*20)</span> копеек. Для более опытных
+сотрудников, мы оплачиваемый половину горячего обед, и выдаем 2 куска хлеба на руки.
+
+Премия высчитывается по формуле
+
+%%СколькоЧасовОтработано=99%%
+%%СколькоЗадачВыполнено=10%%
+%%СколькоРазВыОпоздали=1%%
+%%РандомноеЧисло=20%99+10%%
+
+<h1 id=": TODO: Реализовать возможность использовать вложенные переменные !" class="MarkdownDRY StandardHeaders">: TODO: Реализовать возможность использовать вложенные переменные !</h1>
+%%ПремияБезНДФЛ=(99*10/1)-20%99+10%%
+%%ПремияС_НДФЛ=(99*10/1)-20%99+10-(((99*10/1)-20%99+10/100)*20)%%
+
+Итого: <span class="MarkdownDRY MathSpan"><span class="math_result">980</span>=(99*10/1)-20%99+10</span>
+

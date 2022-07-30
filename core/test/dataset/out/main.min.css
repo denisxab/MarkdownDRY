@@ -1,0 +1,168 @@
+@charset "UTF-8";
+#LinkCodeWindow {
+  width: 100%;
+  height: 100%;
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+}
+#LinkCodeWindow #LinkCodeWindowDet {
+  margin: 10px auto;
+  background: #acb7c7;
+  max-width: 800px;
+  height: 98%;
+  padding: 15px;
+  border-radius: 10px;
+}
+#LinkCodeWindow #LinkCodeWindowButtonHide {
+  text-align: right;
+}
+#LinkCodeWindow pre {
+  height: 97%;
+}
+#LinkCodeWindow pre span {
+  background: rgb(140, 206, 85);
+  border: rgb(140, 206, 85) solid;
+}
+#LinkCodeWindow pre #LinkCodeWindowBody {
+  overflow: auto;
+  padding: 0px;
+  margin: 0px;
+  display: block;
+}
+#LinkCodeWindow pre.code {
+  white-space: pre-wrap;
+}
+#LinkCodeWindow pre.code::before {
+  counter-reset: listing;
+}
+#LinkCodeWindow pre.code code {
+  counter-increment: listing;
+}
+#LinkCodeWindow pre.code code::before {
+  content: counter(listing) ". ";
+  display: inline-block;
+  width: 3em; /* now works */
+  background: rgb(143, 185, 185);
+  padding-left: 3px;
+}
+
+.MarkdownDRY.MathSpan {
+  color: aquamarine;
+  background: rgb(136, 145, 143);
+  border-radius: 10px;
+  padding: 2px 4px 2px 4px;
+}
+.MarkdownDRY.MathSpan .math_result {
+  color: antiquewhite;
+}
+.MarkdownDRY.HighlightBlock.HighlightBlock1 {
+  background: rgb(136, 197, 128);
+}
+.MarkdownDRY.HighlightBlock.HighlightBlock2 {
+  background: rgb(157, 186, 209);
+}
+.MarkdownDRY.HighlightBlock.HighlightBlock3 {
+  background: rgb(205, 224, 95);
+}
+.MarkdownDRY.DropdownBlock .DropdownBlockTitle {
+  color: blue;
+}
+.MarkdownDRY.DropdownBlock .DropdownBlockText {
+  display: none;
+  border: 1px solid #000;
+  background: #ddd;
+}
+.MarkdownDRY.DropdownBlock .DropdownBlockTitle:hover + .DropdownBlockText {
+  display: block;
+}
+.MarkdownDRY.DropdownBlock .DropdownBlockText:hover {
+  display: block;
+}
+.MarkdownDRY.MultiLineTables > table {
+  width: 100%;
+  margin-bottom: 20px;
+  border: 1px solid #dddddd;
+  border-collapse: collapse;
+}
+.MarkdownDRY.MultiLineTables > table th {
+  font-weight: bold;
+  padding: 5px;
+  background: #9ca8b6;
+  border: 1px solid #dddddd;
+  color: rgb(64, 107, 107);
+}
+.MarkdownDRY.MultiLineTables > table td {
+  border: 1px solid #dddddd;
+  padding: 5px;
+  color: rgb(64, 107, 107);
+}
+.MarkdownDRY.MultiLineTables > table tbody tr:nth-child(even) {
+  background: #fff;
+}
+.MarkdownDRY.MultiLineTables > table tbody tr:nth-child(odd) {
+  background: #f7f7f7;
+}
+.MarkdownDRY.Slider {
+  background: #000;
+  /*Описание группы*/
+}
+.MarkdownDRY.Slider > h2 {
+  text-align: center;
+  color: whitesmoke;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  display: block;
+}
+.MarkdownDRY.Slider .carousel-inner {
+  /*Активный элемент*/
+}
+.MarkdownDRY.Slider .carousel-inner > .carousel-item.active {
+  min-height: 400px;
+  /*Описание блока*/
+  /*Фото по центру*/
+}
+.MarkdownDRY.Slider .carousel-inner > .carousel-item.active h3 {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 50px;
+  color: whitesmoke;
+}
+.MarkdownDRY.Slider .carousel-inner > .carousel-item.active code {
+  color: white;
+  display: block;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+.MarkdownDRY.Slider .carousel-inner > .carousel-item.active code span {
+  background: rgb(129, 126, 83);
+  border: rgb(129, 126, 83) solid;
+}
+.MarkdownDRY.Slider .carousel-inner > .carousel-item.active img {
+  margin: 0 auto;
+}
+.MarkdownDRY.Slider .slider_nav {
+  padding-bottom: 30px;
+  /*Порядковые кнопки переключение блоков*/
+}
+.MarkdownDRY.Slider .slider_nav .carousel-indicators {
+  position: static;
+  float: left;
+  width: 40%;
+}
+.MarkdownDRY.Slider .slider_nav .carousel-indicators button {
+  width: 15px;
+  height: 15px;
+  border-radius: 100%;
+}
+.MarkdownDRY.Slider .slider_nav .carousel-control-prev {
+  float: left;
+}
+.MarkdownDRY.Slider .slider_nav .carousel-control-prev,
+.MarkdownDRY.Slider .slider_nav .carousel-control-next {
+  position: static;
+}
