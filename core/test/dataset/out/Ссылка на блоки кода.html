@@ -5,46 +5,58 @@
     <link rel="stylesheet" href="./main.min.css">
     <link rel="stylesheet" href="./plugin.css">
 </head>
+<!-- Всплывающие окно с исходным кодом из файла ------------------------------------------ -->
+<div id="LinkCodeWindow" onclick="OnHide(event)">
+    <div id="LinkCodeWindowDet">
+        <div id="LinkCodeWindowButtonTitle">
+            <div id="LinkCodeName"></div>
+            <input type="button" id="LinkCodeWindowButtonHide" value="Скрыть" onclick="LinkCodeWindow.style.display='none'">
+        </div>
+        <pre class="code" id="LinkCodeWindowBody">
+        </pre>
+    </div>
+</div>
+<!-- ---------------------------------------------------------------------------------------- -->
 - Вставить весь код из файла (стандартный Markdown) +
 
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 1.py" char_start="0" char_end="-1">Описание один</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 1.py" ref="" char_start="0" char_end="-1">Описание один</a>
 
 
 - Вставить фрагменты из файла
 
 На класс +
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#JsonFile" char_start="1683" char_end="3836">Описание 1</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="JsonFile" char_start="1683" char_end="3833">Описание 1</a>
 
 Конкуренция в классе + `'File = \'333\''`
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#File" char_start="4586" char_end="4600">Описание 1.1</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="File" char_start="4588" char_end="4600">Описание 1.1</a>
 
 
 На метод +
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#JsonFile.readFile" char_start="2039" char_end="2206">Описание 2</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="JsonFile.readFile" char_start="2039" char_end="2204">Описание 2</a>
 
 Конкуренция в методе +
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#JsonFile.appendFile" char_start="3713" char_end="3836">Описание 2.1</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="JsonFile.appendFile" char_start="3713" char_end="3833">Описание 2.1</a>
 
 
 На атрибут +
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#JsonFile.__slots__" char_start="1764" char_end="1790">Описание 3</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="JsonFile.__slots__" char_start="1764" char_end="1790">Описание 3</a>
 
 Конкуренция в атрибуте +
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#JsonFile.meta" char_start="1792" char_end="1808">Описание 3.1</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="JsonFile.meta" char_start="1792" char_end="1808">Описание 3.1</a>
 
 
 На функции +
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#test_read_write" char_start="3836" char_end="4569">Описание 4</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="test_read_write" char_start="3836" char_end="4566">Описание 4</a>
 
 Конкуренция в функции +
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#summ" char_start="4634" char_end="4665">Описание 4.1</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="summ" char_start="4634" char_end="4662">Описание 4.1</a>
 
 
 На переменную +
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#name" char_start="176" char_end="192">Описание 5</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="name" char_start="177" char_end="192">Описание 5</a>
 
 Конкуренция в переменной +
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#version" char_start="4566" char_end="4586">Описание 5.1</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="version" char_start="4569" char_end="4586">Описание 5.1</a>
 
 
 - НаЧтоМожноСослатся
@@ -52,24 +64,491 @@
     - `ФункцияИлиМетод` - Возьмутся строки от начал и до конца объявление Функция/Метод
 
 Пример работы когда указан не существующий метод
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#File.readFile" char_start="0" char_end="0">Описание 6.1</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="File.readFile" char_start="0" char_end="0">Описание 6.1</a>
 
 
 Пример когда мы пытаемся обратиться к методу у обычной(так как в итоге конкуренции `'File = \'333\''`) переменой
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#File.createFileIfDoesntExist" char_start="0" char_end="0">Описание 6.2</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="File.createFileIfDoesntExist" char_start="0" char_end="0">Описание 6.2</a>
 
 
 Пример когда мы пытаемся обратиться к атрибуту у обычной(так как в итоге конкуренции `'File = \'333\''`) переменой
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#File.__slots__" char_start="0" char_end="0">Описание 6.3</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="File.__slots__" char_start="0" char_end="0">Описание 6.3</a>
 
 
 Пример когда мы обращаемся в несуществующие имя
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py#QWERTYASDF" char_start="0" char_end="0">Описание 6.4</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py" ref="QWERTYASDF" char_start="0" char_end="0">Описание 6.4</a>
 
 
 Якорь многострочный
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Якорь.py#РегуляркаДляПоискаАтрибутов" char_start="1500" char_end="1675">Якорь 7.1</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Якорь.py" ref="РегуляркаДляПоискаАтрибутов" char_start="1500" char_end="1665">Якорь 7.1</a>
 
 Якорь многострочный
-<a class="MarkdownDRY LinkCode" href="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Якорь.py#Документация" char_start="3346" char_end="3847">Якорь 7.2</a>
+<a class ="MarkdownDRY LinkCode" file="/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Якорь.py" ref="Документация" char_start="3346" char_end="3842">Якорь 7.2</a>
 
+
+<script>
+/* -------------------------- Логика для LinkCode -------------------------- */
+// Переменная для хранения исходного кода из файлов.
+LinkSourceCode={
+    "/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 1.py":`# Обычная функция
+from functools import wraps
+
+
+def another_function(func):
+    """
+    Функция которая принимает другую функцию
+    """
+
+    @wraps(func)  # !!
+    def wrapper():
+        """
+        Оберточная функция
+        """
+        val = "The result of %s is %s" % (func(), eval(func()))
+        return val
+
+    return wrapper
+
+
+@another_function
+def a_function():
+    """Обычная функция"""
+    return "1+1"
+
+
+if __name__ == "__main__":
+    # a_function()
+    print(a_function.__name__)  # a_function
+    print(a_function.__doc__)  # Обычная функция
+`,"/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Вставить кода из файл 2.py":`import json
+from abc import ABC
+from os import makedirs, remove
+from os.path import abspath, dirname, exists, getsize, splitext
+from typing import Any, Union
+
+version = '0.6.9'
+name = __file__
+
+
+class File:
+    """
+    Родительский класс для работы с файлами
+    """
+    ...
+
+
+class File(object):
+    """
+    Родительский класс для работы с файлами
+    """
+    __slots__ = "nameFile"
+    createFileIfDoesntExist = ['12313']
+
+    def __init__(self, nameFile: str):
+        self.nameFile: str = nameFile
+        self.createFileIfDoesntExist()  # Создаем файл если его нет
+
+    def createFileIfDoesntExist(self):
+        # Создать файл если его нет
+        if not exists(self.nameFile):
+            tmp_ = dirname(self.nameFile)
+            if tmp_:  # Если задан путь из папок
+                makedirs(tmp_)  # Создаем путь из папок
+                open(self.nameFile, "w").close()
+            else:  # Если указано только имя файла без папок
+                open(self.nameFile, "w").close()
+
+    def checkExistenceFile(self) -> bool:
+        # Проверить существование файла
+        return True if exists(self.nameFile) else False
+
+    def deleteFile(self):
+        # Удаление файла
+        if self.checkExistenceFile():
+            remove(self.route())
+
+    def sizeFile(self) -> int:
+        # Размер файла в байтах
+        return getsize(self.nameFile)
+
+    def createFileIfDoesntExist(self):
+        # Создать файл если его нет
+        open(self.nameFile, "w").close()
+
+    def route(self) -> str:
+        # Путь к файлу
+        return abspath(self.nameFile)
+
+    meta = '321'
+
+
+def File(meta=ABC):
+    return 1 + 1
+
+
+File = '123'
+
+
+def createFileIfDoesntExist():
+    return ...
+
+
+class JsonFile(File):
+    """
+    Работа с Json файлами
+    """
+    meta = '123'
+    __slots__ = "nameFile"
+
+    meta = '321'
+
+    def __init__(self, nameFile: str):
+
+        if splitext(nameFile)[1] != ".json":  # Проверяем расширение файла
+            raise FileNotFoundError("Файл должен иметь расширение .json")
+
+        File.__init__(self, nameFile)
+
+    def readFile(self) -> Union[list, dict, int, str, float, None, bool]:
+        with open(self.nameFile, "r") as _jsonFile:
+            return json.load(_jsonFile)
+
+    def writeFile(self, data: Union[list, dict, int, str, float, None, bool, tuple],
+                  *, indent=4,
+                  skipkeys=False,
+                  sort_keys=True,
+                  ensure_ascii: bool = False):
+        """
+        :param data: list, dict, int, str, float, None, bool, tuple.
+        :param skipkeys: Если False вызовет исключение при неправильном типе данных.
+        :param indent: Отступы для записи.
+        :param sort_keys: Сортировать ключи.
+        :param ensure_ascii: Экранировать символы, если False данные запишутся как есть.
+        """
+        with open(self.nameFile, "w") as _jsonFile:
+            json.dump(data, _jsonFile, skipkeys=skipkeys, sort_keys=sort_keys, indent=indent, ensure_ascii=ensure_ascii)
+
+    def appendFile(self, data: Union[list, dict[str, Any]], *, ensure_ascii: bool = False):
+        tmp_data = self.readFile()
+        if type(data) == type(tmp_data):
+
+            # List
+            if type(data) == list:
+                tmp_data.extend(data)
+                self.writeFile(tmp_data, ensure_ascii=ensure_ascii)
+
+            # Tuple
+            elif type(data) == tuple:
+                self.writeFile(tmp_data + data, ensure_ascii=ensure_ascii)
+
+            # Dict Set
+            elif type(data) == dict or type(data) == set:
+                tmp_data.update(data)
+                self.writeFile(tmp_data, ensure_ascii=ensure_ascii)
+
+        else:
+            raise TypeError("Тип данных в файле и тип входных данных различны")
+
+    def appendFile(self, data: Union[list, dict[str, Any]], *, ensure_ascii: bool = False):
+        return 'Конкуренция'
+
+
+def test_read_write():
+    a = {
+        "1.224.123.143": ("898", "192.121.133.123:80", "Разрешить"),
+        "2.234.65.34": ("875", "193.121.133.123:80", "Запретить"),
+        "3.224.123.1423": ("898", "192.121.133.123:80", "Разрешить"),
+        "5.234.65.343": ("875", "193.121.133.123:80", "Запретить"),
+        "4.224.123.1543": ("898", "192.121.133.123:80", "Разрешить"),
+        "7.2342.65.34": ("875", "193.121.133.123:80", "Запретить"),
+        "6.2234.123.143": ("898", "192.121.133.123:80", "Разрешить"),
+        "9.2345.65.34": ("875", "193.121.133.123:80", "Запретить"),
+    }
+
+    json = JsonFile("test/my.json")
+
+    json.writeFile(a)
+
+    b = json.readFile()
+
+    print(f"a {id(a)}={a}")
+    print(f"b {id(b)}={b}")
+
+
+version = '0.9.6'
+
+File = '333'
+
+
+def summ():
+    return 1 + 2
+
+
+def summ():
+    return 1 + 3
+
+
+if __name__ == '__main__':
+    test_read_write()
+`,"/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/in/Якорь.py":`import re
+from abc import abstractstaticmethod, ABCMeta, abstractproperty
+from enum import Enum
+
+
+class Lange(metaclass=ABCMeta):
+    """
+    Шаблонная структура класса для языка программирования или языка разметки
+    """
+    ...
+
+    class REGEX(metaclass=ABCMeta):
+        """
+        Регулярные выражения
+        """
+
+        @abstractproperty
+        def class_func_var_re(self):
+            ...
+
+        @abstractproperty
+        def class_meth_attr_re(self):
+            ...
+
+        @abstractstaticmethod
+        def class_meth_attr(name: str, text: str) -> tuple[str, int, int]:
+            """
+            Поиск метода/атрибута в коде
+
+            :param name:
+            :param text:
+            :return: (НайденныйТекст, началоТекста, КонецТекста)
+            """
+            ...
+
+        @abstractstaticmethod
+        def class_func_var(name: str, text: str) -> tuple[str, int, int]:
+            """
+            Поиск класс/функции/переменной в коде
+
+            :param name:
+            :param text:
+            :return: (НайденныйТекст, началоТекста, КонецТекста)
+            """
+            ...
+
+
+
+
+class Python(Lange):
+    """
+    Python
+    """
+
+    class REGEX(Lange.REGEX):
+        class_func_var_re = "(?P<class>(class[\t ]+{name}[\t ]*)(?:\((.+)\))?:\n(?:\t+| {{1,4}}.*\n+)+)|" \
+                            "(?P<func>(def[\t ]+{name}[\t ]*)\((.+):\n(?:(?:\t+| {{1,4}}).*\n+)+)|" \
+                            "(?P<var>{name}[\t ]*=.+)"
+
+        # РегуляркаДляПоискаАтрибутов>
+        class_meth_attr_re = '(?P<meth>(?P<count_meth>[\t ]+)def[ \t]+{name}[\t ]*\(.+:)|' \
+                             '(?P<attr>(?P<count_attr>[\t ]+){name}.+)'
+
+        # <РегуляркаДляПоискаАтрибутов
+
+        @classmethod
+        def class_meth_attr(cls, name: str, text: str) -> tuple[str, int, int]:
+            # Ищем методы в тексте, также получаем отступы у этих методов, берем последний отступ и последний метод,
+            # Если нет отступов для метода то проверяем наличие атрибута с таким именем
+            # Если нет ни метода ни атрибута то возвращаем пустую ст уроку и нули
+            res: tuple[str, int, int] = ('', 0, 0)
+            for _m in re.finditer(cls.class_meth_attr_re.format(name=name), text):
+                if _m['count_meth']:
+                    re_math = f"(?P<meth>((?P<count>[\t ]+)def[ \t]+{name}[\t ]*)\((.+):\n(?:(?:\t| {{{len(_m['count_meth']) * 2},}}).*\n+)+)"
+                    tmp = re.search(re_math, text[_m.start():])
+                    res = tmp.group(0), _m.start(), _m.start() + tmp.end()
+                elif _m['attr']:
+                    res = _m['attr'], _m.start(), _m.end()
+            return res
+
+        @classmethod
+        def class_func_var(cls, name: str, text: str) -> tuple[str, int, int]:
+            # Ищем класс функцию переменю с указанным именем
+            # Если есть одноименные функции или переменные или классы то берём последний найденных элемент
+            res: tuple[str, int, int] = ('', 0, 0)
+            for _m in re.finditer(cls.class_func_var_re.format(name=name), text):
+                res = [x for x in (_m['class'], _m['func'], _m['var']) if x is not None][0], _m.start(), _m.end()
+            return res
+
+
+class AvailableLanguages(Enum):
+    """
+    Класс для хранения поддерживаемых языков программирования или языков разметки
+
+    # Документация>
+    ------------------------------------------------------------------
+    | Как добавить новый язык                                        |
+    |                                                                |
+    | 1. Создать наследника класса 'Lange' - Реализовать его методы  |
+    | 2. Добавить в класс 'AvailableLanguages'                       |
+    | 3. Добавить в класс 'ConvertSuffixToLange'                     |
+    ------------------------------------------------------------------
+    #<Документация
+    """
+    Python = Python
+
+
+class ConvertSuffixToLange:
+    """
+    Класс для перевода расширения файла в стандартное имя языка программирования или языка разметки
+    """
+
+    __store = {
+        '.py': AvailableLanguages.Python
+    }
+
+    @classmethod
+    def getlange(cls, suffix: str) -> Lange:
+        return cls.__store[suffix].value
+`
+};
+
+function AddEventLinkCode() {
+    /* Добавление обработка нажатий на ссылки */
+    
+    let elm = document.querySelectorAll(".MarkdownDRY.LinkCode");
+    elm.forEach((e) => {
+        e.addEventListener("click", () => {
+            DisplayLinkCode(e);
+        });
+    });
+}
+AddEventLinkCode();
+function DisplayLinkCode(_elem) {
+    /* Показать всплывающие окно с исходным кодом */
+    
+    // Устанавливаем в заголовок всплывающего окна, название ссылки которая вызвала это окно
+    LinkCodeName.textContent=_elem.textContent
+
+    // Получаем элемент в котором будет исходный текст из файла
+    let _el = document.querySelector('#LinkCodeWindowBody')
+    const source_text = LinkSourceCode[_elem.getAttribute('file')]
+    if (source_text) {
+        // --- Вставка кода в всплывающие окно --- //
+        _el.innerHTML = toTag(source_text, 'code');
+        // --- Выделение кода --- //
+        const char_start = _elem.getAttribute('char_start');
+        const char_end = _elem.getAttribute('char_end');
+        if (char_start > 0 && char_end > 0) {
+            // Выделяем текст согласно диапазону из ссылки. Если конечно такой диапазон есть.
+            // Его может не быть если ссылка указывает на несуществующий элемент кода.              
+            const highlight_text = toTag(toTag(_el.textContent.slice(char_start, char_end), 'span'), 'code', true);
+            // Собираем результат, и записываем его в тело всплывающего окна
+            _el.innerHTML = `${toTag(_el.textContent.slice(0, char_start), 'code', null, null, true)}` +
+                `${highlight_text}` +
+                `${toTag(_el.textContent.slice(char_end, _el.innerHTML.length), 'code', null, true, null)}`
+        }
+        // ------------------------------------------------------------- //        
+    }
+    // Делаем видимым окно
+    LinkCodeWindow.style.display = 'block';
+    // Перебираем все строки и ищем начало выделение кода
+    for (let _e of _el.childNodes) {
+        if (_e.childNodes.length > 0 && _e.childNodes[0].tagName === "SPAN") {
+            // Плавная прокрутка к первому выделенному блоку
+            _e.scrollIntoView({ behavior: 'smooth'});
+            break;
+        }
+    }
+}
+function toTag(text, tag) {
+    /*Поместить текст в теги*/
+    
+    let list = [];
+    text.split('\n').forEach(
+        (_e) => {
+            list.push(`<${tag}>${_e}</${tag}>`);
+        }
+    )
+    return list.join('\n');
+}
+
+function toTag(text, tag, is_skip_first_last) {
+    /*Поместить текст в теги
+    
+    is_skip_first_last=true - Если нужно пропустить первый и последний тег
+    */
+    
+    let list = [];
+    if (!is_skip_first_last) {
+        text.split('\n').forEach(
+            (_e) => {
+                list.push(`<${tag}>${_e}</${tag}>`);
+            }
+        )
+    } else {
+        // Если нужно пропустить первый и последний тег
+        const tmp = text.split('\n')
+        list.push(tmp[0])
+        tmp.slice(1, -1).forEach(
+            (_e) => {
+                list.push(`<${tag}>${_e}</${tag}>`);
+            }
+        )
+        list.push(tmp[tmp.length-1])
+    }
+    return list.join('\n');
+}
+function toTag(text, tag, is_skip_first_last, skip_first, skip_last) {
+    /*Поместить текст в теги
+
+    is_skip_first_last=true - Если нужно пропустить первый и последний тег
+    */
+
+    let list = [];
+    const tmp = text.split('\n');
+
+    if (!is_skip_first_last) {
+        if (skip_last) {
+            tmp.slice(0, -1).forEach(
+                (_e) => {
+                    list.push(`<${tag}>${_e}</${tag}>`);
+                }
+            )
+            list.push(`<${tag}>${tmp[tmp.length - 1]}`)
+        } else if (skip_first) {
+            list.push(`</${tag}>${tmp[0]}`)
+            tmp.slice(1, -1).forEach(
+                (_e) => {
+                    list.push(`<${tag}>${_e}</${tag}>`);
+                }
+            )
+        } else {
+            tmp.forEach(
+                (_e) => {
+                    list.push(`<${tag}>${_e}</${tag}>`);
+                }
+            )
+        }
+    } else {
+        // Если нужно пропустить первый и последний тег
+        list.push(tmp[0])
+        tmp.slice(1).forEach(
+            (_e) => {
+                list.push(`<${tag}>${_e}</${tag}>`);
+            }
+        )
+        // list.push(tmp[tmp.length - 1])
+    }
+    return list.join('\n');
+}
+function OnHide(_event) {
+    /* Скрыть выплывающие окно при нажатии вне его */
+    
+    console.log('OnHide');
+    if (_event.target.id === 'LinkCodeWindow') {
+        LinkCodeWindow.style.display = 'none'
+    }
+}
+
+/* --------------------------------------------------------------------------------------------- */
+</script>

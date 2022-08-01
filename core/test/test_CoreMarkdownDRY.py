@@ -150,7 +150,7 @@ def test_InsertCodeFromFile(T_in_data, T_check_data, _self_path):
         ReadTextFile('./dataset/in/Ссылки на структурные элементы кода.md',
                      'a2b6047c604859ba2669bcb1d25aa614d9dae4b1c8c746c743015ad08807fba7'),
         ReadTextFile('./dataset/out/Ссылка на блоки кода.html',
-                     '01c2432308ae79e7f11249c23790c6dd21d273aa28e12a174efb0f9a87ef2081'),
+                     '4dd6317484e891cb24d6307423256db50d8860da1db3cbc4e809ecb20f8ee46f'),
         self_path
     ]
 ])

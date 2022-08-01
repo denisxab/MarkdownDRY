@@ -14,7 +14,7 @@
         margin: 10px auto;
         background: #acb7c7;
         // Ширина всплывающего окна
-        max-width: 800px;
+        max-width: 900px;
         height: 98%;
         padding: 15px;
         border-radius: 10px;
@@ -26,7 +26,7 @@
         #LinkCodeName {
             display: inline;
             font-size: small;
-            font-weight:lighter;
+            font-weight: lighter;
         }
         // Кнопка скрытия выплывающего окна
         #LinkCodeWindowButtonHide {
@@ -49,7 +49,9 @@
         }
         // Нумерация строк
         &.code {
-            white-space: pre-wrap;
+            // Переносить новые строки, но не сам текст, 
+            // нужно для прокручивания длинного текста
+            white-space:pre;
         }
         &.code::before {
             counter-reset: listing;

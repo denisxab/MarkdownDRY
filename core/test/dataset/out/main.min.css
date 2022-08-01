@@ -13,7 +13,7 @@
 #LinkCodeWindow #LinkCodeWindowDet {
   margin: 10px auto;
   background: #acb7c7;
-  max-width: 800px;
+  max-width: 900px;
   height: 98%;
   padding: 15px;
   border-radius: 10px;
@@ -43,7 +43,7 @@
   display: block;
 }
 #LinkCodeWindow pre.code {
-  white-space: pre-wrap;
+  white-space: pre;
 }
 #LinkCodeWindow pre.code::before {
   counter-reset: listing;

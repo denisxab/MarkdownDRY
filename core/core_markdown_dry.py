@@ -434,7 +434,7 @@ class CoreMarkdownDRY:
         """
         res = REGEX.HeaderMain.sub(MDDRY_TO_HTML.HeaderMain, source_text)
         # Формируем навигационное оглавление по заголовкам
-        return "{menu}{res}".format(res=res, menu=f"""
+        return "{menu}{res}".format(menu=f"""
 <div id="{HTML_CLASS.menu.value}">
     <div id="{HTML_CLASS.detail_menu.value}">
         <ul>   
@@ -449,7 +449,7 @@ class CoreMarkdownDRY:
         {HTML_CLASS.bt_show_menu.value}.hidden = true;
     </script>
 </div>
-"""[1:])
+"""[1:], res=res)
 
     @classmethod
     def MultiLineTables(cls, source_text: str) -> Optional[str]:
