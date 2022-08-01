@@ -165,9 +165,9 @@ def test_LinkCode(T_in_data, T_check_data, _self_path):
 @mark.parametrize(['T_in_data', 'T_check_data', '_self_path'], [
     [
         ReadTextFile('./dataset/in/LinkCode.md',
-                     None),
+                     '7f63d2a010b00cebed7345f6fa425e1547a56644316379b7b84caf2bcbdec898'),
         ReadTextFile('./dataset/out/LinkCode.html',
-                     None),
+                     '15f359a788f08c2e6a48b722f64ea783af9b276e1f7982ac37486a3ab0266565'),
         self_path
     ]
 ])
@@ -184,7 +184,7 @@ def test_LinkCode_Simple(T_in_data, T_check_data: ReadTextFile, _self_path):
         ReadTextFile('./dataset/in/HeaderMain.md',
                      'fa42ff7eb6b27267f7da60391fde3f99ff98907a33fd2cc2b444cf0cab4cda1b'),
         ReadTextFile('./dataset/out/HeaderMain.html',
-                     None),
+                     '71180c9bf7f4eef6ecafeea145dfaee3d9b91cf7e3066029853bb8575fc30e14'),
         ReadTextFile('./dataset/out/HeaderMain Store.json',
                      '04902898b5e10020d58fc63e12fc73a644a1187ec1cba8d42615ac8c747d118d')
 

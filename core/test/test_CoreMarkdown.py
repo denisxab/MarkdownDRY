@@ -61,9 +61,9 @@ def test_Ol_and_Ul(T_in_data, T_check_data: ReadTextFile):
 @mark.parametrize(['T_in_data', 'T_check_data'], [
     [
         ReadTextFile('./dataset/in/Hr.md',
-                     None),
+                     '98a8d57899581e381ce83cb127c46a55515ea3515ae48e8790087b644b5a21c3'),
         ReadTextFile('./dataset/out/Hr.html',
-                     None),
+                     'a460cbaf4c6c1600de1c06d8ef7b027b50c192fa2ed80e55d1e3032d5f564ac6'),
 
     ]
 ])
