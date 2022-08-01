@@ -8,8 +8,9 @@
 <!-- Всплывающие окно с исходным кодом из файла ------------------------------------------ -->
 <div id="LinkCodeWindow" onclick="OnHide(event)">
     <div id="LinkCodeWindowDet">
-        <div id="LinkCodeWindowButtonHide">
-            <input type="button" value="Скрыть" onclick="LinkCodeWindow.style.display='none'">
+        <div id="LinkCodeWindowButtonTitle">
+            <div id="LinkCodeName"></div>
+            <input type="button" id="LinkCodeWindowButtonHide" value="Скрыть" onclick="LinkCodeWindow.style.display='none'">
         </div>
         <pre class="code" id="LinkCodeWindowBody">
         </pre>
@@ -156,7 +157,7 @@ if __name__ == "__main__":
 
 function AddEventLinkCode() {
     /* Добавление обработка нажатий на ссылки */
-
+    
     let elm = document.querySelectorAll(".MarkdownDRY.LinkCode");
     elm.forEach((e) => {
         e.addEventListener("click", () => {
@@ -167,6 +168,9 @@ function AddEventLinkCode() {
 AddEventLinkCode();
 function DisplayLinkCode(_elem) {
     /* Показать всплывающие окно с исходным кодом */
+    
+    // Устанавливаем в заголовок всплывающего окна, название ссылки которая вызвала это окно
+    LinkCodeName.textContent=_elem.textContent
 
     // Получаем элемент в котором будет исходный текст из файла
     let _el = document.querySelector('#LinkCodeWindowBody')
@@ -179,14 +183,14 @@ function DisplayLinkCode(_elem) {
         const char_end = _elem.getAttribute('char_end');
         if (char_start > 0 && char_end > 0) {
             // Выделяем текст согласно диапазону из ссылки. Если конечно такой диапазон есть.
-            // Его может не быть если ссылка указывает на несуществующий элемент кода.
+            // Его может не быть если ссылка указывает на несуществующий элемент кода.              
             const highlight_text = toTag(toTag(_el.textContent.slice(char_start, char_end), 'span'), 'code', true);
             // Собираем результат, и записываем его в тело всплывающего окна
             _el.innerHTML = `${toTag(_el.textContent.slice(0, char_start), 'code', null, null, true)}` +
                 `${highlight_text}` +
                 `${toTag(_el.textContent.slice(char_end, _el.innerHTML.length), 'code', null, true, null)}`
         }
-        // ------------------------------------------------------------- //
+        // ------------------------------------------------------------- //        
     }
     // Делаем видимым окно
     LinkCodeWindow.style.display = 'block';
@@ -201,7 +205,7 @@ function DisplayLinkCode(_elem) {
 }
 function toTag(text, tag) {
     /*Поместить текст в теги*/
-
+    
     let list = [];
     text.split('\n').forEach(
         (_e) => {
@@ -213,10 +217,10 @@ function toTag(text, tag) {
 
 function toTag(text, tag, is_skip_first_last) {
     /*Поместить текст в теги
-
+    
     is_skip_first_last=true - Если нужно пропустить первый и последний тег
     */
-
+    
     let list = [];
     if (!is_skip_first_last) {
         text.split('\n').forEach(
@@ -282,7 +286,7 @@ function toTag(text, tag, is_skip_first_last, skip_first, skip_last) {
 }
 function OnHide(_event) {
     /* Скрыть выплывающие окно при нажатии вне его */
-
+    
     console.log('OnHide');
     if (_event.target.id === 'LinkCodeWindow') {
         LinkCodeWindow.style.display = 'none'

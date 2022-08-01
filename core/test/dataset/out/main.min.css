@@ -18,8 +18,16 @@
   padding: 15px;
   border-radius: 10px;
 }
-#LinkCodeWindow #LinkCodeWindowButtonHide {
+#LinkCodeWindow #LinkCodeWindowButtonTitle {
   text-align: right;
+}
+#LinkCodeWindow #LinkCodeWindowButtonTitle #LinkCodeName {
+  display: inline;
+  font-size: small;
+  font-weight: lighter;
+}
+#LinkCodeWindow #LinkCodeWindowButtonTitle #LinkCodeWindowButtonHide {
+  font-size: small;
 }
 #LinkCodeWindow pre {
   height: 97%;
@@ -46,7 +54,10 @@
 #LinkCodeWindow pre.code code::before {
   content: counter(listing) ". ";
   display: inline-block;
-  width: 3em; /* now works */
+  width: 3em;
+  padding-left: auto;
+  margin-left: auto;
+  text-align: left;
   background: rgb(143, 185, 185);
   padding-left: 3px;
 }

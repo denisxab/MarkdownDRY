@@ -406,8 +406,9 @@ class CoreMarkdownDRY:
 <!-- Всплывающие окно с исходным кодом из файла ------------------------------------------ -->
 <div id="{HTML_CLASS.LinkCodeWindow.value}" onclick="OnHide(event)">
     <div id="{HTML_CLASS.LinkCodeWindowDet.value}">
-        <div id="{HTML_CLASS.LinkCodeWindowButtonHide.value}">
-            <input type="button" value="Скрыть" onclick="{HTML_CLASS.LinkCodeWindow.value}.style.display='none'">
+        <div id="{HTML_CLASS.LinkCodeWindowButtonTitle.value}">
+            <div id="{HTML_CLASS.LinkCodeName.value}"></div>
+            <input type="button" id="{HTML_CLASS.LinkCodeWindowButtonHide.value}" value="Скрыть" onclick="{HTML_CLASS.LinkCodeWindow.value}.style.display='none'">
         </div>
         <pre class="code" id="{HTML_CLASS.LinkCodeWindowBody.value}">
         </pre>

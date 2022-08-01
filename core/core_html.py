@@ -37,10 +37,12 @@ class HTML_CLASS(Enum):
     LinkCode = "LinkCode"
     LinkCodeSourceCode = "LinkCodeSourceCode"
     LinkCodeWindow = "LinkCodeWindow"
+    LinkCodeWindowButtonTitle = "LinkCodeWindowButtonTitle"
     LinkCodeWindowButtonHide = "LinkCodeWindowButtonHide"
     LinkCodeWindowBody = "LinkCodeWindowBody"
     LinkCodeWindowDet = "LinkCodeWindowDet"
     LinkSourceCode = "LinkSourceCode"
+    LinkCodeName = "LinkCodeName"
     MultiLineTables = "MultiLineTables"
     Ol = "Ol"
     Ul = "Ul"
@@ -70,6 +72,9 @@ AddEventLinkCode();
 function DisplayLinkCode(_elem) {{
     /* Показать всплывающие окно с исходным кодом */
     
+    // Устанавливаем в заголовок всплывающего окна, название ссылки которая вызвала это окно
+    LinkCodeName.textContent=_elem.textContent
+
     // Получаем элемент в котором будет исходный текст из файла
     let _el = document.querySelector('#{HTML_CLASS.LinkCodeWindowBody.value}')
     const source_text = {HTML_CLASS.LinkSourceCode.value}[_elem.getAttribute('file')]
