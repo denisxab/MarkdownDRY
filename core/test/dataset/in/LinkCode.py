@@ -21,7 +21,9 @@ def another_function(func):
         Оберточная функция
         """
         # Химичим>
+
         val = "The result of %s is %s" % (func(), eval(func()))
+
         # <Химичим
         return val
 

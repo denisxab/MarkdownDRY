@@ -9,5 +9,7 @@ def a_function():
 __name__ = '__main__'
 
 if __name__ == "__main__":
+    # ДелаемДела>
     print(a_function.__name__)  # a_function
+    # <ДелаемДела
     print(a_function.__doc__)  # Обычная функция

@@ -67,7 +67,6 @@ function AddEventLinkCode() {{
     }});
 }}
 AddEventLinkCode();
-
 function DisplayLinkCode(_elem) {{
     /* Показать всплывающие окно с исходным кодом */
     
@@ -82,12 +81,12 @@ function DisplayLinkCode(_elem) {{
         const char_end = _elem.getAttribute('char_end');
         if (char_start > 0 && char_end > 0) {{
             // Выделяем текст согласно диапазону из ссылки. Если конечно такой диапазон есть.
-            // Его может не быть если ссылка указывает на несуществующий элемент кода.
-            const highlight_text = toTag(toTag(_el.textContent.slice(char_start, char_end), 'span'), 'code');
+            // Его может не быть если ссылка указывает на несуществующий элемент кода.              
+            const highlight_text = toTag(toTag(_el.textContent.slice(char_start, char_end), 'span'), 'code', true);
             // Собираем результат, и записываем его в тело всплывающего окна
-            _el.innerHTML = `${{toTag(_el.textContent.slice(0, char_start), 'code')}}` +
-                `\\n${{highlight_text}}\\n` +
-                `${{toTag(_el.textContent.slice(char_end, _el.innerHTML.length), 'code')}}`
+            _el.innerHTML = `${{toTag(_el.textContent.slice(0, char_start), 'code', null, null, true)}}` +
+                `${{highlight_text}}` +
+                `${{toTag(_el.textContent.slice(char_end, _el.innerHTML.length), 'code', null, true, null)}}`
         }}
         // ------------------------------------------------------------- //        
     }}
@@ -102,7 +101,6 @@ function DisplayLinkCode(_elem) {{
         }}
     }}
 }}
-
 function toTag(text, tag) {{
     /*Поместить текст в теги*/
     
@@ -115,7 +113,75 @@ function toTag(text, tag) {{
     return list.join('\\n');
 }}
 
+function toTag(text, tag, is_skip_first_last) {{
+    /*Поместить текст в теги
+    
+    is_skip_first_last=true - Если нужно пропустить первый и последний тег
+    */
+    
+    let list = [];
+    if (!is_skip_first_last) {{
+        text.split('\\n').forEach(
+            (_e) => {{
+                list.push(`<${{tag}}>${{_e}}</${{tag}}>`);
+            }}
+        )
+    }} else {{
+        // Если нужно пропустить первый и последний тег
+        const tmp = text.split('\\n')
+        list.push(tmp[0])
+        tmp.slice(1, -1).forEach(
+            (_e) => {{
+                list.push(`<${{tag}}>${{_e}}</${{tag}}>`);
+            }}
+        )
+        list.push(tmp[tmp.length-1])
+    }}
+    return list.join('\\n');
+}}
+function toTag(text, tag, is_skip_first_last, skip_first, skip_last) {{
+    /*Поместить текст в теги
 
+    is_skip_first_last=true - Если нужно пропустить первый и последний тег
+    */
+
+    let list = [];
+    const tmp = text.split('\\n');
+
+    if (!is_skip_first_last) {{
+        if (skip_last) {{
+            tmp.slice(0, -1).forEach(
+                (_e) => {{
+                    list.push(`<${{tag}}>${{_e}}</${{tag}}>`);
+                }}
+            )
+            list.push(`<${{tag}}>${{tmp[tmp.length - 1]}}`)
+        }} else if (skip_first) {{
+            list.push(`</${{tag}}>${{tmp[0]}}`)
+            tmp.slice(1, -1).forEach(
+                (_e) => {{
+                    list.push(`<${{tag}}>${{_e}}</${{tag}}>`);
+                }}
+            )
+        }} else {{
+            tmp.forEach(
+                (_e) => {{
+                    list.push(`<${{tag}}>${{_e}}</${{tag}}>`);
+                }}
+            )
+        }}
+    }} else {{
+        // Если нужно пропустить первый и последний тег
+        list.push(tmp[0])
+        tmp.slice(1).forEach(
+            (_e) => {{
+                list.push(`<${{tag}}>${{_e}}</${{tag}}>`);
+            }}
+        )
+        // list.push(tmp[tmp.length - 1])
+    }}
+    return list.join('\\n');
+}}
 function OnHide(_event) {{
     /* Скрыть выплывающие окно при нажатии вне его */
     

@@ -76,7 +76,7 @@ class REGEX:
     # Поиск мест где нужно сослаться на код
     LinkCode: re.Pattern = re.compile(_BaseCodeRef)
     # Поиск якоря в коде
-    AnchorFromCode: str = '(?<={name}>\n)(?:.\s*(?!<{name}))+'
+    AnchorFromCode: str = '(?<={name}>\n)\n*(?:.\s*(?!<{name}))+'
     # ------------------------
 
     # - Заголовки и переменные - #

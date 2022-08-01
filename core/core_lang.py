@@ -48,6 +48,29 @@ class Lange(metaclass=ABCMeta):
             """
             ...
 
+    @staticmethod
+    def anchor(name: str, text: str) -> Optional[tuple[str, int, int]]:
+        """
+        Поиск уникального якоря
+        :param name:
+        :param text:
+        :return: (НайденныйТекст, началоТекста, КонецТекста)
+        """
+        res = None
+        for _m2 in re.finditer(core_markdown_dry.REGEX.AnchorFromCode.format(name=name), text):
+            # Находим лишние переносы строк в конце текст
+            _text = _m2.group(0)
+            _index_end = 0
+            for _i in range(len(_text) - 1, 0, -1):
+                if _text[_i] == '\n':
+                    _index_end = _i
+                    break
+            end: int = _m2.end() - (len(_text) - _index_end)
+            # Формируем ответ
+            res = _m2.group(), _m2.start(), end
+            logger.debug(res, 'Якорь')
+        return res
+
 
 class Python(Lange):
     """
@@ -70,9 +93,16 @@ class Python(Lange):
             res: tuple[str, int, int] = ('', 0, 0)
             for _m in re.finditer(cls.class_meth_attr_re.format(name=name), text):
                 if _m['count_meth']:
+                    # Регулярное выражение для поиска метода класса
                     re_math = f"(?P<meth>((?P<count>[\t ]+)def[ \t]+{name}[\t ]*)\((.+):\n(?:(?:\t| {{{len(_m['count_meth']) * 2},}}).*\n+)+)"
+                    # Ищем метод класса с начала найденного класса
                     tmp = re.search(re_math, text[_m.start():])
-                    res = tmp.group(0), _m.start(), _m.start() + tmp.end()
+                    # Получаем лишние переносы строк в конце текста
+                    end_next_line: Optional[re.Match] = re.search('\n+$', tmp.group(0))
+                    # Вычитаем лишние переносы строк в конце текста
+                    end: int = tmp.end() - (end_next_line.group(0).__len__() if end_next_line else 0)
+                    # Формируем результат
+                    res = tmp.group(0), _m.start(), _m.start() + end
                 elif _m['attr']:
                     res = _m['attr'], _m.start(), _m.end()
             if res == ('', 0, 0):
@@ -85,21 +115,24 @@ class Python(Lange):
             # Если есть одноименные функции или переменные или классы, то берём последний найденных элемент.
             res: Optional[tuple[str, int, int]] = None
             for _m in re.finditer(cls.class_func_var_re.format(name=name), text):
-                res = [x for x in (_m['class'], _m['func'], _m['var']) if x is not None][0], _m.start(), _m.end()
+                # Вычитаем лишние переносы строк в начале текста
+                start_next_line: Optional[re.Match] = re.search('^\n+', _m.group(0))
+                start: int = _m.start() + (start_next_line.group(0).__len__() if start_next_line else 0)
+                # Вычитаем лишние переносы строк в конце текста
+                end_next_line: Optional[re.Match] = re.search('\n+$', _m.group(0))
+                end: int = _m.end() - (end_next_line.group(0).__len__() if end_next_line else 0)
+                # Формируем результат
+                res = [x for x in (_m['class'], _m['func'], _m['var']) if x is not None][0], start, end
                 if _m['class']:
                     logger.debug(res, 'Класс')
                 elif _m['func']:
                     logger.debug(res, 'Функция')
                 elif _m['var']:
                     logger.debug(res, 'Переменная')
-
             if not res:
                 # Если класс/функцию/переменю с указанным именем не удалось найти, то тогда ищем якорь с таким именем, если он найдется,
                 # то берем код из якоря
-                for _m2 in re.finditer(core_markdown_dry.REGEX.AnchorFromCode.format(name=name), text):
-                    res = _m2.group(), _m2.start(), _m2.end()
-                    logger.debug(res, 'Якорь')
-
+                res = Lange.anchor(name, text)
             if not res:
                 # Если ничего не найдено
                 logger.debug(name, 'Пусто')
