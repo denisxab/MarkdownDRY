@@ -7,7 +7,7 @@ from typing import Optional, Union, Literal
 from logsmal import logger
 from sympy import sympify, SympifyError
 
-from core.core_html import HTML_CLASS, html_js
+from core.core_html import HTML_CLASS, HTML_JS
 from core.core_lang import Lange, ConvertSuffixToLange
 from core.types import BaseCodeRefReturn
 
@@ -403,8 +403,7 @@ class CoreMarkdownDRY:
         res = REGEX.LinkCode.sub(lambda t: MDDRY_TO_HTML.LinkCode(t, self_path), source_text)
         # Формируем HTML, Исходный код файла + ссылки
         return f"""
-        
-        
+<!-- Всплывающие окно с исходным кодом из файла ------------------------------------------ -->
 <div id="{HTML_CLASS.LinkCodeWindow.value}" onclick="OnHide(event)">
     <div id="{HTML_CLASS.LinkCodeWindowDet.value}">
         <div id="{HTML_CLASS.LinkCodeWindowButtonHide.value}">
@@ -414,12 +413,16 @@ class CoreMarkdownDRY:
         </pre>
     </div>
 </div>
+<!-- ---------------------------------------------------------------------------------------- -->
 {res}
 <script>
-    {HTML_CLASS.LinkSourceCode.value}={{
-        {','.join(f'"{k}":`{v.replace("`", f"{REGEX.Qm1}")}`' for k, v in StoreDoc.LinkCode.date.items())}
-    }};
-    {html_js}
+/* -------------------------- Логика для {HTML_CLASS.LinkCode.value} -------------------------- */
+// Переменная для хранения исходного кода из файлов.
+{HTML_CLASS.LinkSourceCode.value}={{
+    {','.join(f'"{k}":`{v.replace("`", f"{REGEX.Qm1}")}`' for k, v in StoreDoc.LinkCode.date.items())}
+}};
+{HTML_JS.LinkCode}
+/* --------------------------------------------------------------------------------------------- */
 </script>
 """[1:]
 
@@ -640,16 +643,18 @@ data-touch="true" -- переключение фото с помощью кла�
         child_re: str = m['child']
         # Исходный текст кода
         text_in_file = path_re.read_text()
-        # Формируем ссылку для HTML
+        # Формируем ссылку для `HTML`
         ref = f"{f'{main_re}' if main_re else ''}{f'.{child_re}' if child_re else ''}"
+        # Переменная для указания начало найденного элемента
         line_start = 0
+        # Переменная для указания конца найденного элемента
         line_end = -1
         # Если указано, что вставлять, то вставляем этот участок код из файла
         if main_re:
-            # Указывает на класс/функцию/переменную
+            # Если указывает на класс/функцию/переменную
             text_in_file, line_start, line_end = lange_file.REGEX.class_func_var_anchor(main_re, text_in_file)
             if child_re:
-                # Указывает на метод класса/атрибут класса
+                # Если указывает на метод класса/атрибут класса
                 text_in_file, tmp_line_start, tmp_line_end = lange_file.REGEX.class_meth_attr(child_re, text_in_file)
                 # Конец текста
                 line_end = line_start + tmp_line_end if tmp_line_end else 0

@@ -51,38 +51,45 @@ class HTML_CLASS(Enum):
     bt_show_menu = "bt_show_menu"
 
 
-html_js: str = f"""
+class HTML_JS:
+    """
+    JS код для MarkdownDRY
+    """
+    LinkCode = f"""
 function AddEventLinkCode() {{
-    // Добавление обработка нажатий на ссылки
-    const elm = document.querySelectorAll(".{HTML_CLASS.MarkdownDRY.value}.{HTML_CLASS.LinkCode.value}");
+    /* Добавление обработка нажатий на ссылки */
+    
+    let elm = document.querySelectorAll(".{HTML_CLASS.MarkdownDRY.value}.{HTML_CLASS.LinkCode.value}");
     elm.forEach((e) => {{
         e.addEventListener("click", () => {{
             DisplayLinkCode(e);
         }});
     }});
 }}
+AddEventLinkCode();
 
 function DisplayLinkCode(_elem) {{
     /* Показать всплывающие окно с исходным кодом */
+    
     // Получаем элемент в котором будет исходный текст из файла
-    _el = document.querySelector('#{HTML_CLASS.LinkCodeWindowBody.value}')
-    source_text = {HTML_CLASS.LinkSourceCode.value}[_elem.getAttribute('file')]
+    let _el = document.querySelector('#{HTML_CLASS.LinkCodeWindowBody.value}')
+    const source_text = {HTML_CLASS.LinkSourceCode.value}[_elem.getAttribute('file')]
     if (source_text) {{
         // --- Вставка кода в всплывающие окно --- //
-        _el.innerHTML = toCode(source_text, 'code');
+        _el.innerHTML = toTag(source_text, 'code');
         // --- Выделение кода --- //
-        char_start = _elem.getAttribute('char_start');
-        char_end = _elem.getAttribute('char_end');
+        const char_start = _elem.getAttribute('char_start');
+        const char_end = _elem.getAttribute('char_end');
         if (char_start > 0 && char_end > 0) {{
             // Выделяем текст согласно диапазону из ссылки. Если конечно такой диапазон есть.
             // Его может не быть если ссылка указывает на несуществующий элемент кода.
-            highlight_text = toCode(toCode(_el.textContent.slice(char_start, char_end), 'span'), 'code');
+            const highlight_text = toTag(toTag(_el.textContent.slice(char_start, char_end), 'span'), 'code');
             // Собираем результат, и записываем его в тело всплывающего окна
-            _el.innerHTML = `${{toCode(_el.textContent.slice(0, char_start), 'code')}}` +
+            _el.innerHTML = `${{toTag(_el.textContent.slice(0, char_start), 'code')}}` +
                 `\\n${{highlight_text}}\\n` +
-                `${{toCode(_el.textContent.slice(char_end, _el.innerHTML.length), 'code')}}`
+                `${{toTag(_el.textContent.slice(char_end, _el.innerHTML.length), 'code')}}`
         }}
-        // --- --- //
+        // ------------------------------------------------------------- //        
     }}
     // Делаем видимым окно
     {HTML_CLASS.LinkCodeWindow.value}.style.display = 'block';
@@ -96,24 +103,25 @@ function DisplayLinkCode(_elem) {{
     }}
 }}
 
-function toCode(inText, tag) {{
-    text = [];
-    inText.split('\\n').forEach(
+function toTag(text, tag) {{
+    /*Поместить текст в теги*/
+    
+    let list = [];
+    text.split('\\n').forEach(
         (_e) => {{
-            text.push(`<${{tag}}>${{_e}}</${{tag}}>`);
+            list.push(`<${{tag}}>${{_e}}</${{tag}}>`);
         }}
     )
-    return text.join('\\n');
+    return list.join('\\n');
 }}
 
-AddEventLinkCode();
 
 function OnHide(_event) {{
     /* Скрыть выплывающие окно при нажатии вне его */
-    console.log(_event.target);
+    
+    console.log('OnHide');
     if (_event.target.id === '{HTML_CLASS.LinkCodeWindow.value}') {{
         {HTML_CLASS.LinkCodeWindow.value}.style.display = 'none'
-
     }}
 }}
 """

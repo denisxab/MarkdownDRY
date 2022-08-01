@@ -173,7 +173,7 @@ def test_LinkCode(T_in_data, T_check_data, _self_path):
 ])
 def test_LinkCode_Simple(T_in_data, T_check_data: ReadTextFile, _self_path):
     """Быстрая проверка"""
-    # TODO: Записать данные из файла в JS строку, продумать логику показать этот код пользователю
+    # TODO: Сделать более четкие границы для найденных элементов кода
     _next_test()
     res = f"{html_head}{CoreMarkdownDRY.LinkCode(T_in_data.text, _self_path)}"
     # T_check_data.write(res)
