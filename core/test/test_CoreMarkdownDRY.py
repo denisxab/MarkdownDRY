@@ -150,7 +150,7 @@ def test_InsertCodeFromFile(T_in_data, T_check_data, _self_path):
         ReadTextFile('./dataset/in/Ссылки на структурные элементы кода.md',
                      'a2b6047c604859ba2669bcb1d25aa614d9dae4b1c8c746c743015ad08807fba7'),
         ReadTextFile('./dataset/out/Ссылка на блоки кода.html',
-                     '4dd6317484e891cb24d6307423256db50d8860da1db3cbc4e809ecb20f8ee46f'),
+                     'f61bf0debc6e819174b8b4d7eb6280b63afb5e966927bccacb3fbd37f39571c7'),
         self_path
     ]
 ])
@@ -167,7 +167,7 @@ def test_LinkCode(T_in_data, T_check_data, _self_path):
         ReadTextFile('./dataset/in/LinkCode.md',
                      '7f63d2a010b00cebed7345f6fa425e1547a56644316379b7b84caf2bcbdec898'),
         ReadTextFile('./dataset/out/LinkCode.html',
-                     '15f359a788f08c2e6a48b722f64ea783af9b276e1f7982ac37486a3ab0266565'),
+                     None),
         self_path
     ]
 ])

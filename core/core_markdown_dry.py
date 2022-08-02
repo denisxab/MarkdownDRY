@@ -418,9 +418,9 @@ class CoreMarkdownDRY:
 {res}
 <script>
 /* -------------------------- Логика для {HTML_CLASS.LinkCode.value} -------------------------- */
-// Переменная для хранения исходного кода из файлов.
+// Переменная для хранения исходного кода из файлов. Храниться в кодировки UTF-8, для экранирования спец символов
 {HTML_CLASS.LinkSourceCode.value}={{
-    {','.join(f'"{k}":`{v.replace("`", f"{REGEX.Qm1}")}`' for k, v in StoreDoc.LinkCode.date.items())}
+    {','.join(f'"{k}":decodeURIComponent(escape({REGEX.Qm1}{repr(v.encode("utf-8", "ignore"))[2:-1]}{REGEX.Qm1}))' for k, v in StoreDoc.LinkCode.date.items())}
 }};
 {HTML_JS.LinkCode}
 /* --------------------------------------------------------------------------------------------- */
