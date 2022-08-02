@@ -80,18 +80,18 @@ function DisplayLinkCode(_elem) {{
     const source_text = {HTML_CLASS.LinkSourceCode.value}[_elem.getAttribute('file')]
     if (source_text) {{
         // --- Вставка кода в всплывающие окно --- //
-        _el.innerHTML = toTag(source_text, 'code');
+        _el.innerHTML = toTag(source_text, 'code', 0, 0, 0, true);
         // --- Выделение кода --- //
         const char_start = _elem.getAttribute('char_start');
         const char_end = _elem.getAttribute('char_end');
         if (char_start > 0 && char_end > 0) {{
             // Выделяем текст согласно диапазону из ссылки. Если конечно такой диапазон есть.
             // Его может не быть если ссылка указывает на несуществующий элемент кода.              
-            const highlight_text = toTag(toTag(_el.textContent.slice(char_start, char_end), 'span'), 'code', true);
+            const highlight_text = toTag(toTag(_el.textContent.slice(char_start, char_end), 'span', 0, 0, 0, true), 'code', true);
             // Собираем результат, и записываем его в тело всплывающего окна
-            _el.innerHTML = `${{toTag(_el.textContent.slice(0, char_start), 'code', null, null, true)}}` +
+            _el.innerHTML = `${{toTag(_el.textContent.slice(0, char_start), 'code', null, null, true, true)}}` +
                 `${{highlight_text}}` +
-                `${{toTag(_el.textContent.slice(char_end, _el.innerHTML.length), 'code', null, true, null)}}`
+                `${{toTag(_el.textContent.slice(char_end, _el.innerHTML.length), 'code', null, true, null, true)}}`
         }}
         // ------------------------------------------------------------- //        
     }}
@@ -106,51 +106,17 @@ function DisplayLinkCode(_elem) {{
         }}
     }}
 }}
-function toTag(text, tag) {{
-    /*Поместить текст в теги*/
-    
-    let list = [];
-    text.split('\\n').forEach(
-        (_e) => {{
-            list.push(`<${{tag}}>${{_e}}</${{tag}}>`);
-        }}
-    )
-    return list.join('\\n');
-}}
-
-function toTag(text, tag, is_skip_first_last) {{
+function toTag(text, tag, is_skip_first_last, skip_first, skip_last, escaping) {{
     /*Поместить текст в теги
-    
-    is_skip_first_last=true - Если нужно пропустить первый и последний тег
+
+    is_skip_first_last=true - Если нужно пропустить первый и последний тег.
+    escaping=true -  Экранирование треугольных скобок, если этого не сделать то метод `innerHTML` скроет текст в скобках.
     */
-    
+
     let list = [];
-    if (!is_skip_first_last) {{
-        text.split('\\n').forEach(
-            (_e) => {{
-                list.push(`<${{tag}}>${{_e}}</${{tag}}>`);
-            }}
-        )
-    }} else {{
-        // Если нужно пропустить первый и последний тег
-        const tmp = text.split('\\n')
-        list.push(tmp[0])
-        tmp.slice(1, -1).forEach(
-            (_e) => {{
-                list.push(`<${{tag}}>${{_e}}</${{tag}}>`);
-            }}
-        )
-        list.push(tmp[tmp.length-1])
+    if (escaping) {{
+        text = text.replace(/</g,'&lt').replace(/>/g,'&gt');
     }}
-    return list.join('\\n');
-}}
-function toTag(text, tag, is_skip_first_last, skip_first, skip_last) {{
-    /*Поместить текст в теги
-
-    is_skip_first_last=true - Если нужно пропустить первый и последний тег
-    */
-
-    let list = [];
     const tmp = text.split('\\n');
 
     if (!is_skip_first_last) {{

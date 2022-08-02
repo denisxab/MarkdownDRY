@@ -30,7 +30,7 @@
 /* -------------------------- Логика для LinkCode -------------------------- */
 // Переменная для хранения исходного кода из файлов. Храниться в кодировки UTF-8, для экранирования спец символов
 LinkSourceCode={
-    "https:/gist.githubusercontent.com/denisxab/4290770428d4d34a83624f5343df87fd/raw/3fd17298a2dd382d0a2c52e4e11e2993f9b2da0b/SymmetricCrypto.py":decodeURIComponent(escape('import random\nimport secrets\nimport time\nfrom collections import deque\nfrom pprint import pprint\n\n\nclass SymmetricCrypto:\n    CHAR_ARR: tuple = (\n        \'\xd0\xb0\', \'\xd0\xb1\', \'\xd0\xb2\', \'\xd0\xb3\', \'\xd0\xb4\', \'\xd0\xb5\', \'\xd1\x91\', \'\xd0\xb6\', \'\xd0\xb7\', \'\xd0\xb8\',\n        \'\xd0\xb9\', \'\xd0\xba\', \'\xd0\xbb\', \'\xd0\xbc\', \'\xd0\xbd\', \'\xd0\xbe\', \'\xd0\xbf\', \'\xd1\x80\', \'\xd1\x81\', \'\xd1\x82\',\n        \'\xd1\x83\', \'\xd1\x84\', \'\xd1\x85\', \'\xd1\x86\', \'\xd1\x87\', \'\xd1\x88\', \'\xd1\x89\', \'\xd1\x8a\', \'\xd1\x8b\', \'\xd1\x8c\',\n        \'\xd1\x8d\', \'\xd1\x8e\', \'\xd1\x8f\', \'\xd0\x90\', \'\xd0\x91\', \'\xd0\x92\', \'\xd0\x93\', \'\xd0\x94\', \'\xd0\x95\', \'\xd0\x81\',\n        \'\xd0\x96\', \'\xd0\x97\', \'\xd0\x98\', \'\xd0\x99\', \'\xd0\x9a\', \'\xd0\x9b\', \'\xd0\x9c\', \'\xd0\x9d\', \'\xd0\x9e\', \'\xd0\x9f\',\n        \'\xd0\xa0\', \'\xd0\xa1\', \'\xd0\xa2\', \'\xd0\xa3\', \'\xd0\xa4\', \'\xd0\xa5\', \'\xd0\xa6\', \'\xd0\xa7\', \'\xd0\xa8\', \'\xd0\xa9\',\n        \'\xd0\xaa\', \'\xd0\xab\', \'\xd0\xac\', \'\xd0\xad\', \'\xd0\xae\', \'\xd0\xaf\',\n\n        \'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\', \'0\',\n        \' \', \'&\', \'?\', \'@\', \'!\', \':\', \'.\', \',\', \'\\\'\',\n        \'\\"\', \'(\', \')\', \'-\', \'+\', \'=\', \'_\', \'\xe2\x80\x93\', \'#\', \';\',\n        \'\\n\', \'\\t\', \'\\\\\', \'/\', \'|\',\n\n        \'a\', \'b\', \'c\', \'d\', \'e\', \'f\', \'g\', \'h\', \'i\', \'j\',\n        \'k\', \'l\', \'m\', \'n\', \'o\', \'p\', \'q\', \'r\', \'s\', \'t\',\n        \'u\', \'v\', \'w\', \'x\', \'y\', \'z\', \'A\', \'B\', \'C\', \'D\',\n        \'E\', \'F\', \'G\', \'H\', \'I\', \'J\', \'K\', \'L\', \'M\', \'N\',\n        \'O\', \'P\', \'Q\', \'R\', \'S\', \'T\', \'U\', \'V\', \'W\', \'X\',\n        \'Y\', \'Z\',\n    )\n\n    @staticmethod\n    def check_uniq_key(key: dict[str, list[int]]) -> bool:\n        """\n        \xd0\xa4\xd1\x83\xd0\xbd\xd0\xba\xd1\x86\xd0\xb8\xd1\x8f \xd0\xb4\xd0\xbb\xd1\x8f \xd0\xbf\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb5\xd1\x80\xd0\xba\xd0\xb8 \xd1\x83\xd0\xbd\xd0\xb8\xd0\xba\xd0\xb0\xd0\xbb\xd1\x8c\xd0\xbd\xd0\xbe\xd1\x81\xd1\x82\xd0\xb8 \xd0\xb2\xd1\x81\xd0\xb5\xd1\x85 \xd0\xb7\xd0\xbd\xd0\xb0\xd1\x87\xd0\xb5\xd0\xbd\xd0\xb8\xd0\xb9 \xd0\xb2 `key`\n\n        :param key: \xd0\x92\xd0\xb7\xd1\x8f\xd1\x82\xd1\x8c \xd0\xbd\xd0\xb0\xd0\xbf\xd1\x80\xd0\xb8\xd0\xbc\xd0\xb5\xd1\x80 \xd0\xb8\xd0\xb7 \xd0\xbc\xd0\xb5\xd1\x82\xd0\xbe\xd0\xb4\xd0\xb0 `generate_random_arr()`\n        """\n        used_char: set[int] = set()\n        for _k, _v in key.items():\n            for _y in _v:\n                if not _y in used_char:\n                    used_char.add(_y)\n                else:\n                    raise ValueError(f"\xd0\xa1\xd0\xb8\xd0\xbc\xd0\xb2\xd0\xbe\xd0\xbb `{_k}` \xd1\x81\xd0\xbe\xd0\xb4\xd0\xb5\xd1\x80\xd0\xb6\xd0\xb8\xd1\x82 \xd0\xbd\xd0\xb5 \xd1\x83\xd0\xbd\xd0\xb8\xd0\xba\xd0\xb0\xd0\xbb\xd1\x8c\xd0\xbd\xd0\xbe\xd0\xb5 \xd0\xb7\xd0\xbd\xd0\xb0\xd1\x87\xd0\xb5\xd0\xbd\xd0\xb8\xd0\xb5 `{_y}`")\n        return True\n\n    @classmethod\n    def generate_random_arr(cls,\n                            len_arr: int,\n                            min_random_int: int,\n                            max_random_int: int,\n                            seed_: int = None,\n                            ) -> dict[str, list[int]]:\n        """\n        \xd0\x93\xd0\xb5\xd0\xbd\xd0\xb5\xd1\x80\xd0\xb8\xd1\x80\xd1\x83\xd0\xb5\xd0\xbc \xd1\x81\xd0\xbb\xd1\x83\xd1\x87\xd0\xb0\xd0\xb9\xd0\xbd\xd1\x8b \xd0\xb7\xd0\xbd\xd0\xb0\xd1\x87\xd0\xb5\xd0\xbd\xd0\xb8\xd0\xb9 \xd0\xb4\xd0\xbb\xd1\x8f \xd0\xba\xd0\xbb\xd1\x8e\xd1\x87\xd0\xb5\xd0\xb9 \xd1\x81\xd0\xbb\xd0\xbe\xd0\xb2\xd0\xb0\xd1\x80\xd1\x8c\n\n        :param len_arr: \xd0\x94\xd0\xbb\xd0\xb8\xd0\xbd\xd0\xbd\xd0\xb0 \xd1\x81\xd0\xbb\xd1\x83\xd1\x87\xd0\xb0\xd0\xb9\xd0\xbd\xd1\x8b\xd1\x85 \xd1\x87\xd0\xb8\xd1\x81\xd0\xb5\xd0\xbb\n        :param min_random_int: \xd0\x9c\xd0\xb8\xd0\xbd\xd0\xb8\xd0\xbc\xd0\xb0\xd0\xbb\xd1\x8c\xd0\xbd\xd0\xbe\xd0\xb5 \xd1\x87\xd0\xb8\xd1\x81\xd0\xbb\xd0\xbe \xd0\xb4\xd0\xbb\xd1\x8f  `random.randint`\n        :param max_random_int: \xd0\x9c\xd0\xb0\xd0\xba\xd1\x81\xd0\xb8\xd0\xbc\xd0\xb0\xd0\xbb\xd1\x8c\xd0\xbd\xd0\xbe\xd0\xb5 \xd1\x87\xd0\xb8\xd1\x81\xd0\xbb\xd0\xbe \xd0\xb4\xd0\xbb\xd1\x8f  `random.randint`\n        :param seed_: \xd0\x97\xd0\xb5\xd1\x80\xd0\xbd\xd0\xbe \xd0\xb4\xd0\xbb\xd1\x8f \xd0\xb3\xd0\xb5\xd0\xbd\xd0\xb5\xd1\x80\xd0\xb0\xd1\x82\xd0\xbe\xd1\x80\xd0\xb0 `random.seed(seed_)`\n        """\n\n        def get_random_arr() -> list[int]:\n            # a = [1,2,3,4]\n            tmp_arr = []\n            while len(tmp_arr) != len_arr:\n                tmp = random.randint(min_random_int, max_random_int)\n                if not tmp in used_char:\n                    used_char.add(tmp)\n                    tmp_arr.append(tmp)\n            return tmp_arr\n\n        seed_ = seed_ if seed_ else int(time.time())\n        random.seed(seed_)\n        used_char = set()\n        char_dict: dict[str, list[int]] = {}\n        for _x in cls.CHAR_ARR:\n            char_dict[_x] = get_random_arr()\n        return char_dict\n\n    @staticmethod\n    def ReverseTransectsMap(translate_map: dict[str, list[int]]) -> dict[str, str]:\n        res: dict[str, str] = {}\n        for _k, _array_value in translate_map.items():\n            for _v in _array_value:\n                res[str(_v)] = _k\n\n        # print("1", str(translate_map)[:200])\n        # print("2", str(res)[:200])\n        return res\n\n    @staticmethod\n    def crypto(text: str, translate_map: dict[str, list[int]]) -> str:\n        res: deque[str] = deque()\n        for _char in text:\n            tmp = secrets.choice(translate_map[_char])\n            res.append(str(tmp))\n        return "|".join(res)\n\n    @staticmethod\n    def decrypto(text: str, reverse_translate_map: dict[str, str]) -> str:\n        res = []\n        for _char in text.split("|"):\n            tmp = reverse_translate_map.get(_char, False)\n            if tmp:\n                res.append(tmp)\n            else:\n                raise ValueError("\xd0\x9d\xd0\xb5\xd0\xb2\xd0\xb5\xd1\x80\xd0\xbd\xd1\x8b\xd0\xb5 \xd0\xb4\xd0\xb0\xd0\xbd\xd0\xbd\xd1\x8b\xd0\xb5")\n        return "".join(res)\n\n\nif __name__ == \'__main__\':\n    res = SymmetricCrypto.generate_random_arr(len_arr=4,\n                                              seed_=444423424344444444,\n                                              min_random_int=-600,\n                                              max_random_int=888)\n    pprint(res)\n    pprint(SymmetricCrypto.check_uniq_key(res))\n\n    text = SymmetricCrypto.crypto("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82", res)\n    print(text)\n\n    reverse_translate_map = SymmetricCrypto.ReverseTransectsMap(res)\n    print(SymmetricCrypto.decrypto(text, reverse_translate_map))'))
+    "https:/gist.githubusercontent.com/denisxab/4290770428d4d34a83624f5343df87fd/raw/3fd17298a2dd382d0a2c52e4e11e2993f9b2da0b/SymmetricCrypto.py":decodeURIComponent(escape(atob('aW1wb3J0IHJhbmRvbQppbXBvcnQgc2VjcmV0cwppbXBvcnQgdGltZQpmcm9tIGNvbGxlY3Rpb25zIGltcG9ydCBkZXF1ZQpmcm9tIHBwcmludCBpbXBvcnQgcHByaW50CgoKY2xhc3MgU3ltbWV0cmljQ3J5cHRvOgogICAgQ0hBUl9BUlI6IHR1cGxlID0gKAogICAgICAgICfQsCcsICfQsScsICfQsicsICfQsycsICfQtCcsICfQtScsICfRkScsICfQticsICfQtycsICfQuCcsCiAgICAgICAgJ9C5JywgJ9C6JywgJ9C7JywgJ9C8JywgJ9C9JywgJ9C+JywgJ9C/JywgJ9GAJywgJ9GBJywgJ9GCJywKICAgICAgICAn0YMnLCAn0YQnLCAn0YUnLCAn0YYnLCAn0YcnLCAn0YgnLCAn0YknLCAn0YonLCAn0YsnLCAn0YwnLAogICAgICAgICfRjScsICfRjicsICfRjycsICfQkCcsICfQkScsICfQkicsICfQkycsICfQlCcsICfQlScsICfQgScsCiAgICAgICAgJ9CWJywgJ9CXJywgJ9CYJywgJ9CZJywgJ9CaJywgJ9CbJywgJ9CcJywgJ9CdJywgJ9CeJywgJ9CfJywKICAgICAgICAn0KAnLCAn0KEnLCAn0KInLCAn0KMnLCAn0KQnLCAn0KUnLCAn0KYnLCAn0KcnLCAn0KgnLCAn0KknLAogICAgICAgICfQqicsICfQqycsICfQrCcsICfQrScsICfQricsICfQrycsCgogICAgICAgICcxJywgJzInLCAnMycsICc0JywgJzUnLCAnNicsICc3JywgJzgnLCAnOScsICcwJywKICAgICAgICAnICcsICcmJywgJz8nLCAnQCcsICchJywgJzonLCAnLicsICcsJywgJ1wnJywKICAgICAgICAnXCInLCAnKCcsICcpJywgJy0nLCAnKycsICc9JywgJ18nLCAn4oCTJywgJyMnLCAnOycsCiAgICAgICAgJ1xuJywgJ1x0JywgJ1xcJywgJy8nLCAnfCcsCgogICAgICAgICdhJywgJ2InLCAnYycsICdkJywgJ2UnLCAnZicsICdnJywgJ2gnLCAnaScsICdqJywKICAgICAgICAnaycsICdsJywgJ20nLCAnbicsICdvJywgJ3AnLCAncScsICdyJywgJ3MnLCAndCcsCiAgICAgICAgJ3UnLCAndicsICd3JywgJ3gnLCAneScsICd6JywgJ0EnLCAnQicsICdDJywgJ0QnLAogICAgICAgICdFJywgJ0YnLCAnRycsICdIJywgJ0knLCAnSicsICdLJywgJ0wnLCAnTScsICdOJywKICAgICAgICAnTycsICdQJywgJ1EnLCAnUicsICdTJywgJ1QnLCAnVScsICdWJywgJ1cnLCAnWCcsCiAgICAgICAgJ1knLCAnWicsCiAgICApCgogICAgQHN0YXRpY21ldGhvZAogICAgZGVmIGNoZWNrX3VuaXFfa2V5KGtleTogZGljdFtzdHIsIGxpc3RbaW50XV0pIC0+IGJvb2w6CiAgICAgICAgIiIiCiAgICAgICAg0KTRg9C90LrRhtC40Y8g0LTQu9GPINC/0YDQvtCy0LXRgNC60Lgg0YPQvdC40LrQsNC70YzQvdC+0YHRgtC4INCy0YHQtdGFINC30L3QsNGH0LXQvdC40Lkg0LIgYGtleWAKCiAgICAgICAgOnBhcmFtIGtleTog0JLQt9GP0YLRjCDQvdCw0L/RgNC40LzQtdGAINC40Lcg0LzQtdGC0L7QtNCwIGBnZW5lcmF0ZV9yYW5kb21fYXJyKClgCiAgICAgICAgIiIiCiAgICAgICAgdXNlZF9jaGFyOiBzZXRbaW50XSA9IHNldCgpCiAgICAgICAgZm9yIF9rLCBfdiBpbiBrZXkuaXRlbXMoKToKICAgICAgICAgICAgZm9yIF95IGluIF92OgogICAgICAgICAgICAgICAgaWYgbm90IF95IGluIHVzZWRfY2hhcjoKICAgICAgICAgICAgICAgICAgICB1c2VkX2NoYXIuYWRkKF95KQogICAgICAgICAgICAgICAgZWxzZToKICAgICAgICAgICAgICAgICAgICByYWlzZSBWYWx1ZUVycm9yKGYi0KHQuNC80LLQvtC7IGB7X2t9YCDRgdC+0LTQtdGA0LbQuNGCINC90LUg0YPQvdC40LrQsNC70YzQvdC+0LUg0LfQvdCw0YfQtdC90LjQtSBge195fWAiKQogICAgICAgIHJldHVybiBUcnVlCgogICAgQGNsYXNzbWV0aG9kCiAgICBkZWYgZ2VuZXJhdGVfcmFuZG9tX2FycihjbHMsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICBsZW5fYXJyOiBpbnQsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICBtaW5fcmFuZG9tX2ludDogaW50LAogICAgICAgICAgICAgICAgICAgICAgICAgICAgbWF4X3JhbmRvbV9pbnQ6IGludCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNlZWRfOiBpbnQgPSBOb25lLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgKSAtPiBkaWN0W3N0ciwgbGlzdFtpbnRdXToKICAgICAgICAiIiIKICAgICAgICDQk9C10L3QtdGA0LjRgNGD0LXQvCDRgdC70YPRh9Cw0LnQvdGLINC30L3QsNGH0LXQvdC40Lkg0LTQu9GPINC60LvRjtGH0LXQuSDRgdC70L7QstCw0YDRjAoKICAgICAgICA6cGFyYW0gbGVuX2Fycjog0JTQu9C40L3QvdCwINGB0LvRg9GH0LDQudC90YvRhSDRh9C40YHQtdC7CiAgICAgICAgOnBhcmFtIG1pbl9yYW5kb21faW50OiDQnNC40L3QuNC80LDQu9GM0L3QvtC1INGH0LjRgdC70L4g0LTQu9GPICBgcmFuZG9tLnJhbmRpbnRgCiAgICAgICAgOnBhcmFtIG1heF9yYW5kb21faW50OiDQnNCw0LrRgdC40LzQsNC70YzQvdC+0LUg0YfQuNGB0LvQviDQtNC70Y8gIGByYW5kb20ucmFuZGludGAKICAgICAgICA6cGFyYW0gc2VlZF86INCX0LXRgNC90L4g0LTQu9GPINCz0LXQvdC10YDQsNGC0L7RgNCwIGByYW5kb20uc2VlZChzZWVkXylgCiAgICAgICAgIiIiCgogICAgICAgIGRlZiBnZXRfcmFuZG9tX2FycigpIC0+IGxpc3RbaW50XToKICAgICAgICAgICAgIyBhID0gWzEsMiwzLDRdCiAgICAgICAgICAgIHRtcF9hcnIgPSBbXQogICAgICAgICAgICB3aGlsZSBsZW4odG1wX2FycikgIT0gbGVuX2FycjoKICAgICAgICAgICAgICAgIHRtcCA9IHJhbmRvbS5yYW5kaW50KG1pbl9yYW5kb21faW50LCBtYXhfcmFuZG9tX2ludCkKICAgICAgICAgICAgICAgIGlmIG5vdCB0bXAgaW4gdXNlZF9jaGFyOgogICAgICAgICAgICAgICAgICAgIHVzZWRfY2hhci5hZGQodG1wKQogICAgICAgICAgICAgICAgICAgIHRtcF9hcnIuYXBwZW5kKHRtcCkKICAgICAgICAgICAgcmV0dXJuIHRtcF9hcnIKCiAgICAgICAgc2VlZF8gPSBzZWVkXyBpZiBzZWVkXyBlbHNlIGludCh0aW1lLnRpbWUoKSkKICAgICAgICByYW5kb20uc2VlZChzZWVkXykKICAgICAgICB1c2VkX2NoYXIgPSBzZXQoKQogICAgICAgIGNoYXJfZGljdDogZGljdFtzdHIsIGxpc3RbaW50XV0gPSB7fQogICAgICAgIGZvciBfeCBpbiBjbHMuQ0hBUl9BUlI6CiAgICAgICAgICAgIGNoYXJfZGljdFtfeF0gPSBnZXRfcmFuZG9tX2FycigpCiAgICAgICAgcmV0dXJuIGNoYXJfZGljdAoKICAgIEBzdGF0aWNtZXRob2QKICAgIGRlZiBSZXZlcnNlVHJhbnNlY3RzTWFwKHRyYW5zbGF0ZV9tYXA6IGRpY3Rbc3RyLCBsaXN0W2ludF1dKSAtPiBkaWN0W3N0ciwgc3RyXToKICAgICAgICByZXM6IGRpY3Rbc3RyLCBzdHJdID0ge30KICAgICAgICBmb3IgX2ssIF9hcnJheV92YWx1ZSBpbiB0cmFuc2xhdGVfbWFwLml0ZW1zKCk6CiAgICAgICAgICAgIGZvciBfdiBpbiBfYXJyYXlfdmFsdWU6CiAgICAgICAgICAgICAgICByZXNbc3RyKF92KV0gPSBfawoKICAgICAgICAjIHByaW50KCIxIiwgc3RyKHRyYW5zbGF0ZV9tYXApWzoyMDBdKQogICAgICAgICMgcHJpbnQoIjIiLCBzdHIocmVzKVs6MjAwXSkKICAgICAgICByZXR1cm4gcmVzCgogICAgQHN0YXRpY21ldGhvZAogICAgZGVmIGNyeXB0byh0ZXh0OiBzdHIsIHRyYW5zbGF0ZV9tYXA6IGRpY3Rbc3RyLCBsaXN0W2ludF1dKSAtPiBzdHI6CiAgICAgICAgcmVzOiBkZXF1ZVtzdHJdID0gZGVxdWUoKQogICAgICAgIGZvciBfY2hhciBpbiB0ZXh0OgogICAgICAgICAgICB0bXAgPSBzZWNyZXRzLmNob2ljZSh0cmFuc2xhdGVfbWFwW19jaGFyXSkKICAgICAgICAgICAgcmVzLmFwcGVuZChzdHIodG1wKSkKICAgICAgICByZXR1cm4gInwiLmpvaW4ocmVzKQoKICAgIEBzdGF0aWNtZXRob2QKICAgIGRlZiBkZWNyeXB0byh0ZXh0OiBzdHIsIHJldmVyc2VfdHJhbnNsYXRlX21hcDogZGljdFtzdHIsIHN0cl0pIC0+IHN0cjoKICAgICAgICByZXMgPSBbXQogICAgICAgIGZvciBfY2hhciBpbiB0ZXh0LnNwbGl0KCJ8Iik6CiAgICAgICAgICAgIHRtcCA9IHJldmVyc2VfdHJhbnNsYXRlX21hcC5nZXQoX2NoYXIsIEZhbHNlKQogICAgICAgICAgICBpZiB0bXA6CiAgICAgICAgICAgICAgICByZXMuYXBwZW5kKHRtcCkKICAgICAgICAgICAgZWxzZToKICAgICAgICAgICAgICAgIHJhaXNlIFZhbHVlRXJyb3IoItCd0LXQstC10YDQvdGL0LUg0LTQsNC90L3Ri9C1IikKICAgICAgICByZXR1cm4gIiIuam9pbihyZXMpCgoKaWYgX19uYW1lX18gPT0gJ19fbWFpbl9fJzoKICAgIHJlcyA9IFN5bW1ldHJpY0NyeXB0by5nZW5lcmF0ZV9yYW5kb21fYXJyKGxlbl9hcnI9NCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNlZWRfPTQ0NDQyMzQyNDM0NDQ0NDQ0NCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG1pbl9yYW5kb21faW50PS02MDAsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBtYXhfcmFuZG9tX2ludD04ODgpCiAgICBwcHJpbnQocmVzKQogICAgcHByaW50KFN5bW1ldHJpY0NyeXB0by5jaGVja191bmlxX2tleShyZXMpKQoKICAgIHRleHQgPSBTeW1tZXRyaWNDcnlwdG8uY3J5cHRvKCLQn9GA0LjQstC10YIiLCByZXMpCiAgICBwcmludCh0ZXh0KQoKICAgIHJldmVyc2VfdHJhbnNsYXRlX21hcCA9IFN5bW1ldHJpY0NyeXB0by5SZXZlcnNlVHJhbnNlY3RzTWFwKHJlcykKICAgIHByaW50KFN5bW1ldHJpY0NyeXB0by5kZWNyeXB0byh0ZXh0LCByZXZlcnNlX3RyYW5zbGF0ZV9tYXApKQ==')))
 };
 
 function AddEventLinkCode() {
@@ -55,18 +55,18 @@ function DisplayLinkCode(_elem) {
     const source_text = LinkSourceCode[_elem.getAttribute('file')]
     if (source_text) {
         // --- Вставка кода в всплывающие окно --- //
-        _el.innerHTML = toTag(source_text, 'code');
+        _el.innerHTML = toTag(source_text, 'code', 0, 0, 0, true);
         // --- Выделение кода --- //
         const char_start = _elem.getAttribute('char_start');
         const char_end = _elem.getAttribute('char_end');
         if (char_start > 0 && char_end > 0) {
             // Выделяем текст согласно диапазону из ссылки. Если конечно такой диапазон есть.
             // Его может не быть если ссылка указывает на несуществующий элемент кода.              
-            const highlight_text = toTag(toTag(_el.textContent.slice(char_start, char_end), 'span'), 'code', true);
+            const highlight_text = toTag(toTag(_el.textContent.slice(char_start, char_end), 'span', 0, 0, 0, true), 'code', true);
             // Собираем результат, и записываем его в тело всплывающего окна
-            _el.innerHTML = `${toTag(_el.textContent.slice(0, char_start), 'code', null, null, true)}` +
+            _el.innerHTML = `${toTag(_el.textContent.slice(0, char_start), 'code', null, null, true, true)}` +
                 `${highlight_text}` +
-                `${toTag(_el.textContent.slice(char_end, _el.innerHTML.length), 'code', null, true, null)}`
+                `${toTag(_el.textContent.slice(char_end, _el.innerHTML.length), 'code', null, true, null, true)}`
         }
         // ------------------------------------------------------------- //        
     }
@@ -81,51 +81,17 @@ function DisplayLinkCode(_elem) {
         }
     }
 }
-function toTag(text, tag) {
-    /*Поместить текст в теги*/
-    
-    let list = [];
-    text.split('\n').forEach(
-        (_e) => {
-            list.push(`<${tag}>${_e}</${tag}>`);
-        }
-    )
-    return list.join('\n');
-}
-
-function toTag(text, tag, is_skip_first_last) {
+function toTag(text, tag, is_skip_first_last, skip_first, skip_last, escaping) {
     /*Поместить текст в теги
-    
-    is_skip_first_last=true - Если нужно пропустить первый и последний тег
+
+    is_skip_first_last=true - Если нужно пропустить первый и последний тег.
+    escaping=true -  Экранирование треугольных скобок, если этого не сделать то метод `innerHTML` скроет текст в скобках.
     */
-    
+
     let list = [];
-    if (!is_skip_first_last) {
-        text.split('\n').forEach(
-            (_e) => {
-                list.push(`<${tag}>${_e}</${tag}>`);
-            }
-        )
-    } else {
-        // Если нужно пропустить первый и последний тег
-        const tmp = text.split('\n')
-        list.push(tmp[0])
-        tmp.slice(1, -1).forEach(
-            (_e) => {
-                list.push(`<${tag}>${_e}</${tag}>`);
-            }
-        )
-        list.push(tmp[tmp.length-1])
+    if (escaping) {
+        text = text.replace(/</g,'&lt').replace(/>/g,'&gt');
     }
-    return list.join('\n');
-}
-function toTag(text, tag, is_skip_first_last, skip_first, skip_last) {
-    /*Поместить текст в теги
-
-    is_skip_first_last=true - Если нужно пропустить первый и последний тег
-    */
-
-    let list = [];
     const tmp = text.split('\n');
 
     if (!is_skip_first_last) {

@@ -63,11 +63,14 @@ class Lange:
             # Находим лишние переносы строк в конце текст
             _text = _m2.group(0)
             _index_end = 0
-            for _i in range(len(_text) - 1, 0, -1):
-                if _text[_i] == '\n':
-                    _index_end = _i
-                    break
-            end: int = _m2.end() - (len(_text) - _index_end)
+            # Если есть лишние переносы строк в конце, то удаляем их
+            if re.search('\n+$', text):
+                for _i in range(len(_text) - 1, 0, -1):
+                    if _text[_i] == '\n':
+                        _index_end = _i
+                        break
+                _index_end = len(_text) - _index_end
+            end: int = _m2.end() - _index_end
             # Формируем ответ
             res = _m2.group(), _m2.start(), end
             logger.debug(res, 'Якорь')

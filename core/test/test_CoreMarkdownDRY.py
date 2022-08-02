@@ -147,7 +147,7 @@ def test_InsertCodeFromFile(T_in_data, T_check_data, _self_path):
         ReadTextFile('./dataset/in/Ссылки на структурные элементы кода.md',
                      'a2b6047c604859ba2669bcb1d25aa614d9dae4b1c8c746c743015ad08807fba7'),
         ReadTextFile('./dataset/out/Ссылка на блоки кода.html',
-                     'f61bf0debc6e819174b8b4d7eb6280b63afb5e966927bccacb3fbd37f39571c7'),
+                     '905222b318ba15f0772dbd14962c833a4f98d4b0493083cd3e8529a29475dcc6'),
         self_path
     ]
 ])
@@ -164,7 +164,7 @@ def test_LinkCode(T_in_data, T_check_data, _self_path):
         ReadTextFile('./dataset/in/test_LinkCode_NET_GitGist.md',
                      'e03f90f14ca28c3fd9b185f4276418d41ed34974276e3eda694d1a728b9cc273'),
         ReadTextFile('./dataset/out/test_LinkCode_NET_GitGist.html',
-                     '719c8213e8df129411257bc09c866d676183d9aad370f5c4aedcaaec7f68af35'),
+                     '57e40351781fb385e50ceb34aea1441965447ffadfb7ee4faa0ba29fccdf7fdb'),
         self_path
     ]
 ])
@@ -179,9 +179,9 @@ def test_LinkCode_NET_GitGist(T_in_data, T_check_data, _self_path):
 @mark.parametrize(['T_in_data', 'T_check_data', '_self_path'], [
     [
         ReadTextFile('./dataset/in/LinkCode.md',
-                     None),
+                     'c77157a38180065e90324d5f4aff8c28cee84c602012c64236417a7b832b5dc6'),
         ReadTextFile('./dataset/out/LinkCode.html',
-                     None),
+                     'e681478c3119a4a4c9628e8e104ac4ea18b05bb4c20da01fe1a7b83d680eda7e'),
         self_path
     ]
 ])
