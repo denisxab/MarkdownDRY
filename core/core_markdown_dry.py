@@ -1,3 +1,4 @@
+import base64
 import re
 from enum import Enum
 from hashlib import md5
@@ -81,7 +82,6 @@ class REGEX:
     # ------------------------
 
     # - Заголовки и переменные - #
-    #: TODO: Реализовать возможность использовать вложенные переменные !
     #: Поиск заголовков и его тела.
     HeaderMain: re.Pattern = re.compile('(?:\A|\n)(?P<lvl>#{1,}) (?P<name>.+)\n+(?P<body>(?:.\s*(?!#{1,}))*)')
     #: Поиск типа заголовка, обычный или скрытый
@@ -421,7 +421,7 @@ class CoreMarkdownDRY:
 /* -------------------------- Логика для {HTML_CLASS.LinkCode.value} -------------------------- */
 // Переменная для хранения исходного кода из файлов. Храниться в кодировки UTF-8, для экранирования спец символов
 {HTML_CLASS.LinkSourceCode.value}={{
-    {','.join(f'"{k}":decodeURIComponent(escape({REGEX.Qm1}{repr(v.encode("utf-8", "ignore"))[2:-1]}{REGEX.Qm1}))' for k, v in StoreDoc.LinkCode.date.items())}
+    {','.join(f'"{k}":decodeURIComponent(escape(atob({REGEX.Qm1}{repr(base64.b64encode(v.encode("utf8")))[2:-1]}{REGEX.Qm1})))' for k, v in StoreDoc.LinkCode.date.items())}
 }};
 {HTML_JS.LinkCode}
 /* --------------------------------------------------------------------------------------------- */
@@ -653,17 +653,16 @@ data-touch="true" -- переключение фото с помощью кла�
             """Это ссылку в интернет"""
             logger.debug(m['path'], 'URL')
             path_re = Path(m['path'])
-            lange_file = ConvertSuffixToLange.getlange(path_re.suffix)
+            lange_file = ConvertSuffixToLange.getlang(path_re.suffix)
             # Скачиваем исходный текст из интернета
             text_in_file = requests.get(m['path']).text
         else:
             """Это локальный путь"""
             logger.debug(m['path'], 'LOCAL')
             path_re = Path(self_path, m['path']).resolve()
-            lange_file = ConvertSuffixToLange.getlange(path_re.suffix)
+            lange_file = ConvertSuffixToLange.getlang(path_re.suffix)
             text_in_file = path_re.read_text()
 
-        # TODO: сделать поддержку скачивания кода с интерната
         # TODO: сделать язык по умолчанию чтобы были доступны якоря
 
         # Формируем ссылку для `HTML`

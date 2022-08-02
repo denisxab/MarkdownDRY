@@ -179,7 +179,7 @@ def test_LinkCode_NET_GitGist(T_in_data, T_check_data, _self_path):
 @mark.parametrize(['T_in_data', 'T_check_data', '_self_path'], [
     [
         ReadTextFile('./dataset/in/LinkCode.md',
-                     '7f63d2a010b00cebed7345f6fa425e1547a56644316379b7b84caf2bcbdec898'),
+                     None),
         ReadTextFile('./dataset/out/LinkCode.html',
                      None),
         self_path

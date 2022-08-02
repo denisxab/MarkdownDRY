@@ -8,7 +8,7 @@ from logsmal import logger
 from core import core_markdown_dry
 
 
-class Lange(metaclass=ABCMeta):
+class Lange:
     """
     Шаблонная структура класса для языка программирования или языка разметки
     """
@@ -35,18 +35,20 @@ class Lange(metaclass=ABCMeta):
             :param text:
             :return: (НайденныйТекст, началоТекста, КонецТекста)
             """
-            ...
+            return text, 0, 0
 
         @abstractstaticmethod
         def class_func_var_anchor(name: str, text: str) -> tuple[str, int, int]:
             """
             Поиск класс/функции/переменной в коде
 
+            Если не определен, то вызовет метод для поиска `УникальногоЯкоря`
+
             :param name:
             :param text:
             :return: (НайденныйТекст, началоТекста, КонецТекста)
             """
-            ...
+            return Lange.anchor(name, text)
 
     @staticmethod
     def anchor(name: str, text: str) -> Optional[tuple[str, int, int]]:
@@ -144,15 +146,17 @@ class AvailableLanguages(Enum):
     """
     Класс для хранения поддерживаемых языков программирования или языков разметки
 
-
     ------------------------------------------------------------------
     | Как добавить новый язык                                        |
     |                                                                |
     | 1. Создать наследника класса `Lange` - Реализовать его методы  |
-    | 2. Добавить в класс `AvailableLanguages`                       |
-    | 3. Добавить в класс `ConvertSuffixToLange`                     |
+    | 2. Добавить наследника в класс `AvailableLanguages`            |
+    | 3. Добавить наследника в класс `ConvertSuffixToLange.__store`  |
     ------------------------------------------------------------------
     """
+    # Неопределенный тип файла
+    NoneType = Lange
+    # Определённые языки программирования
     Python = Python
 
 
@@ -166,5 +170,10 @@ class ConvertSuffixToLange:
     }
 
     @classmethod
-    def getlange(cls, suffix: str) -> Lange:
-        return cls.__store[suffix].value
+    def getlang(cls, suffix: str) -> Lange:
+        """
+        Получить объект на основе расширения файла, если расширение файла не поддерживается или оно не указано то тогда
+        будет поддержка только `УникальногоЯкоря`
+        """
+        res = cls.__store.get(suffix, AvailableLanguages.NoneType)
+        return res.value
