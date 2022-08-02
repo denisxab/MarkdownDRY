@@ -13,9 +13,6 @@ def _next_test():
     StoreDoc.clear()
 
 
-# pathlib.Path('./dataset/out/...').write_text(res)
-
-
 self_path: pathlib.Path = Path(__file__).parent / 'dataset/in'
 
 
