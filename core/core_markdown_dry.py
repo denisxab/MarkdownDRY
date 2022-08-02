@@ -4,6 +4,7 @@ from hashlib import md5
 from pathlib import Path
 from typing import Optional, Union, Literal
 
+import requests
 from logsmal import logger
 from sympy import sympify, SympifyError
 
@@ -229,9 +230,9 @@ class StoreDoc:
         date: dict[str, str] = dict()
 
         @classmethod
-        def add(cls, path_file: Path):
+        def add(cls, path_file: Path, text: str):
             if not cls.date.get(path_file.__str__(), None):
-                cls.date[path_file.__str__()] = path_file.read_text()
+                cls.date[path_file.__str__()] = text
 
         @classmethod
         def clear(cls):
@@ -396,7 +397,7 @@ class CoreMarkdownDRY:
         return REGEX.InsertCodeFromFile.sub(lambda t: MDDRY_TO_HTML.InsertCodeFromFile(t, self_path), source_text)
 
     @classmethod
-    def LinkCode(cls, source_text: str, self_path: str) -> Optional[str]:
+    def LinkCode(cls, source_text: str, self_path: str = None) -> Optional[str]:
         """
         Ссылка на элементы кода
         """
@@ -638,35 +639,59 @@ data-touch="true" -- переключение фото с помощью кла�
     def _BaseCodeRef(cls, m: re.Match, self_path: str) -> BaseCodeRefReturn:
         """Подготовить параметры для ссылки на код"""
         name_re: str = m['name']
-        path_re: Path = Path(self_path, m['path']).resolve()
-        lange_file: Lange = ConvertSuffixToLange.getlange(path_re.suffix)
         main_re: str = m['main']
         child_re: str = m['child']
+        # Путь к исходному файлу
+        path_re: Path
+        # Язык программирования или разметки
+        lange_file: Lange
         # Исходный текст кода
-        text_in_file = path_re.read_text()
+        text_in_file: str
+        # Проверяем куда указывает путь, локально или в интернет
+        path_or_url = re.match('(https|http|ftp|tcp|localhost):', m['path'])
+        if path_or_url:
+            """Это ссылку в интернет"""
+            logger.debug(m['path'], 'URL')
+            path_re = Path(m['path'])
+            lange_file = ConvertSuffixToLange.getlange(path_re.suffix)
+            # Скачиваем исходный текст из интернета
+            text_in_file = requests.get(m['path']).text
+        else:
+            """Это локальный путь"""
+            logger.debug(m['path'], 'LOCAL')
+            path_re = Path(self_path, m['path']).resolve()
+            lange_file = ConvertSuffixToLange.getlange(path_re.suffix)
+            text_in_file = path_re.read_text()
+
+        # TODO: сделать поддержку скачивания кода с интерната
+        # TODO: сделать язык по умолчанию чтобы были доступны якоря
+
         # Формируем ссылку для `HTML`
         ref = f"{f'{main_re}' if main_re else ''}{f'.{child_re}' if child_re else ''}"
         # Переменная для указания начало найденного элемента
         line_start = 0
         # Переменная для указания конца найденного элемента
         line_end = -1
+        # Обрезанный текст
+        text_in_file_cup: str = text_in_file
         # Если указано, что вставлять, то вставляем этот участок код из файла
         if main_re:
             # Если указывает на класс/функцию/переменную
-            text_in_file, line_start, line_end = lange_file.REGEX.class_func_var_anchor(main_re, text_in_file)
+            text_in_file_cup, line_start, line_end = lange_file.REGEX.class_func_var_anchor(main_re, text_in_file)
             if child_re:
                 # Если указывает на метод класса/атрибут класса
-                text_in_file, tmp_line_start, tmp_line_end = lange_file.REGEX.class_meth_attr(child_re, text_in_file)
+                text_in_file_cup, tmp_line_start, tmp_line_end = lange_file.REGEX.class_meth_attr(child_re, text_in_file_cup)
                 # Конец текста
                 line_end = line_start + tmp_line_end if tmp_line_end else 0
                 # Начало текст
                 line_start = line_start + tmp_line_start if tmp_line_start else 0
         return BaseCodeRefReturn(name_re=name_re,
+                                 text_in_file_cup=text_in_file_cup,
                                  text_in_file=text_in_file,
                                  line_start=line_start,
                                  line_end=line_end,
                                  ref=ref,
-                                 file=path_re.__str__())
+                                 file=path_re)
 
     @classmethod
     def InsertCodeFromFile(cls, m: re.Match, self_path: str) -> str:
@@ -676,7 +701,7 @@ data-touch="true" -- переключение фото с помощью кла�
 <div class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.InsertCodeFromFile.value}">
 <div>{res.name_re}</div>
 <pre><code>
-{res.text_in_file}
+{res.text_in_file_cup}
 </code></pre></div>"""[1:]
 
     @classmethod
@@ -684,9 +709,9 @@ data-touch="true" -- переключение фото с помощью кла�
         """Ссылка на код"""
         res: BaseCodeRefReturn = cls._BaseCodeRef(m, self_path)
         # Записать в кеш исходный текст из файла
-        StoreDoc.LinkCode.add(Path(self_path, m['path']))
+        StoreDoc.LinkCode.add(res.file, res.text_in_file)
         return f"""
-<a class ="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.LinkCode.value}" file="{res.file}" ref="{res.ref}" char_start="{res.line_start}" char_end="{res.line_end}">{res.name_re}</a>
+<a class ="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.LinkCode.value}" file="{res.file.__str__()}" ref="{res.ref}" char_start="{res.line_start}" char_end="{res.line_end}">{res.name_re}</a>
 """[1:]
 
     @classmethod

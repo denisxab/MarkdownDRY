@@ -164,6 +164,23 @@ def test_LinkCode(T_in_data, T_check_data, _self_path):
 
 @mark.parametrize(['T_in_data', 'T_check_data', '_self_path'], [
     [
+        ReadTextFile('./dataset/in/test_LinkCode_NET_GitGist.md',
+                     'e03f90f14ca28c3fd9b185f4276418d41ed34974276e3eda694d1a728b9cc273'),
+        ReadTextFile('./dataset/out/test_LinkCode_NET_GitGist.html',
+                     '719c8213e8df129411257bc09c866d676183d9aad370f5c4aedcaaec7f68af35'),
+        self_path
+    ]
+])
+def test_LinkCode_NET_GitGist(T_in_data, T_check_data, _self_path):
+    """Проверка ссылки ан GitGist"""
+    _next_test()
+    res = f"{html_head}{CoreMarkdownDRY.LinkCode(T_in_data.text, _self_path)}"
+    # T_check_data.write(res)
+    assert res == T_check_data.text
+
+
+@mark.parametrize(['T_in_data', 'T_check_data', '_self_path'], [
+    [
         ReadTextFile('./dataset/in/LinkCode.md',
                      '7f63d2a010b00cebed7345f6fa425e1547a56644316379b7b84caf2bcbdec898'),
         ReadTextFile('./dataset/out/LinkCode.html',
