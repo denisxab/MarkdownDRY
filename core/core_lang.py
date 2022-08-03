@@ -159,6 +159,18 @@ class AvailableLanguages(Enum):
     """
     # Неопределенный тип файла
     NoneType = Lange
+    # Бинарный тип файла, эти типы файлов будут исключены из обработки `InsertCodeFromFile`, `LinkCode`
+    Binary: re.Pattern = re.compile(
+        ".+(?={0})".format(
+            "".join(f"{x}|" for x in (
+                "jpg", "png", "gif", "bmp", "tiff", "psd", "mp4", "mkv", "avi", "mov", "mpg", "vob", "mp3", "aac", "wav", "flac",
+                "ogg", "mka", "wma", "pdf", "doc", "xls", "ppt", "docx", "odt", "zip", "rar", "7z", "tar", "iso", "mdb", "accde",
+                "frm", "sqlite", "exe", "dll", "so", "jpeg"
+                # Можете добавлять сюда дополнительные расширения файлов
+            ))[:-1]
+        )
+    )
+
     # Определённые языки программирования
     Python = Python
 

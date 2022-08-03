@@ -10,7 +10,7 @@ from logsmal import logger
 from sympy import sympify, SympifyError
 
 from core.core_html import HTML_CLASS, HTML_JS
-from core.core_lang import Lange, ConvertSuffixToLange
+from core.core_lang import Lange, ConvertSuffixToLange, AvailableLanguages
 from core.types import BaseCodeRefReturn
 
 
@@ -639,13 +639,16 @@ data-touch="true" -- переключение фото с помощью кла�
             return False
 
     @classmethod
-    def _BaseCodeRef(cls, m: re.Match, self_path: str) -> BaseCodeRefReturn:
+    def _BaseCodeRef(cls, m: re.Match, self_path: str) -> Optional[BaseCodeRefReturn]:
         """Подготовить параметры для ссылки на код"""
         name_re: str = m['name']
         main_re: str = m['main']
         child_re: str = m['child']
         # Путь к исходному файлу
-        path_re: Path
+        path_re: Path = Path(m['path'])
+        # Проверим что это не бинарный файл, путем просмотра расширения файла. Если это бинарный файл, то выходим из функции
+        if AvailableLanguages.Binary.value.search(path_re.suffix):
+            return None
         # Язык программирования или разметки
         lange_file: Lange
         # Исходный текст кода
@@ -655,17 +658,14 @@ data-touch="true" -- переключение фото с помощью кла�
         if path_or_url:
             """Это ссылку в интернет"""
             logger.debug(m['path'], 'URL')
-            path_re = Path(m['path'])
             lange_file = ConvertSuffixToLange.getlang(path_re.suffix)
             # Скачиваем исходный текст из интернета
             text_in_file = requests.get(m['path']).text
         else:
             """Это локальный путь"""
             logger.debug(Path(self_path, m['path']).resolve(), 'LOCAL')
-            # В Html записываем относительный путь
-            path_re = Path(m['path'])
             lange_file = ConvertSuffixToLange.getlang(path_re.suffix)
-            # А файл читаем по абсолютному пути
+            # Читаем файл по абсолютному пути
             text_in_file = Path(self_path, path_re).resolve().read_text()
 
         # Формируем ссылку для `HTML`
@@ -688,17 +688,22 @@ data-touch="true" -- переключение фото с помощью кла�
                 # Начало текст
                 line_start = line_start + tmp_line_start if tmp_line_start else 0
         return BaseCodeRefReturn(name_re=name_re,
-                                 text_in_file_cup=text_in_file_cup,
-                                 text_in_file=text_in_file,
+                                 # Экранирование угловых скобок для корректной вставки в HTML
+                                 text_in_file_cup=text_in_file_cup.replace('<', '&lt').replace('>', '&gt'),
+                                 # Экранирование угловых скобок для корректной вставки в HTML
+                                 text_in_file=text_in_file.replace('<', '&lt').replace('>', '&gt'),
                                  line_start=line_start,
                                  line_end=line_end,
                                  ref=ref,
                                  file=path_re)
 
     @classmethod
-    def InsertCodeFromFile(cls, m: re.Match, self_path: str) -> str:
+    def InsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
         """Вставка кода"""
         res: BaseCodeRefReturn = cls._BaseCodeRef(m, self_path)
+        if not res:
+            # Если нет ответа то вернем тот же текст
+            return m.group(0)
         return f"""
 <div class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.InsertCodeFromFile.value}">
 <div>{res.name_re}</div>
@@ -707,9 +712,12 @@ data-touch="true" -- переключение фото с помощью кла�
 </code></pre></div>"""[1:]
 
     @classmethod
-    def LinkCode(cls, m: re.Match, self_path: str) -> str:
+    def LinkCode(cls, m: re.Match, self_path: str) -> Optional[str]:
         """Ссылка на код"""
         res: BaseCodeRefReturn = cls._BaseCodeRef(m, self_path)
+        if not res:
+            # Если нет ответа то вернем тот же текст
+            return m.group(0)
         # Записать в кеш исходный текст из файла
         StoreDoc.LinkCode.add(res.file, res.text_in_file)
         return f"""
