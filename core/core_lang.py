@@ -64,7 +64,7 @@ class Lange:
             _text = _m2.group(0)
             _index_end = 0
             # Если есть лишние переносы строк в конце, то удаляем их
-            if re.search('\n+$', text):
+            if re.search('\s+$', _m2.group()[:-1]):
                 for _i in range(len(_text) - 1, 0, -1):
                     if _text[_i] == '\n':
                         _index_end = _i

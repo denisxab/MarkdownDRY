@@ -6,11 +6,9 @@ $h2_color: #454a54;
 $h1_color: #505762;
 $h_color: #abb0ba;
 
-$Серый: #2f333a;
-$border_color: #a4a4a4;
-$ЦветТекст: #f0f8ff;
-
 // --------------
+// https://www.nordtheme.com/docs/colors-and-palettes
+
 $ЦветФона: #2e3440;
 
 $БазовыйЦветТекста: #eceff4;
@@ -25,13 +23,15 @@ $ЦветФонаПодсказки: #434c5e;
 
 // -------------- Базовые настройки тем -----------------
 
+// Глобальные настройки
 body {
     background: $ЦветФона;
     color: $БазовыйЦветТекста;
+    padding-left: 15px;
 }
 
+// Ссылки
 a {
-    //  Убрать подчёркивание ссылки
     text-decoration: none;
     &:link {
         color: $БазовыйЦветСсылки;
@@ -39,6 +39,47 @@ a {
 
     &:visited {
         color: $БазовыйЦветПосещеннойСсылки;
+    }
+}
+// Блок с кодом
+div > pre {
+    background: $ЦветФонаВсплывающегоОкна;
+    padding: 10px 0px 15px 0px;
+    margin: 20px;
+    border-radius: 4px;
+    // Стиль для выделение текста
+    span {
+        background: $ЦветВыделениеТекста;
+        border: $ЦветВыделениеТекста solid;
+    }
+    #LinkCodeWindowBody {
+        overflow: auto;
+        padding: 0px;
+        margin: 0px;
+        display: block;
+    }
+    // Нумерация строк
+    &.code {
+        // Переносить новые строки, но не сам текст,
+        // нужно для прокручивания длинного текста
+        white-space: pre;
+    }
+    &.code::before {
+        counter-reset: listing;
+    }
+    &.code code {
+        counter-increment: listing;
+    }
+    &.code code::before {
+        content: counter(listing) ". ";
+        display: inline-block;
+        width: 3em;
+        padding-left: auto;
+        margin-left: auto;
+        text-align: left;
+        // Фон линии номера кода
+        background: $ЦветФонаПодсказки;
+        padding-left: 3px;
     }
 }
 // --------------------------------------------------------
@@ -94,40 +135,6 @@ a {
         // Оформление сходного кода из файла
         pre {
             height: 97%;
-            // Стиль для выделение текста
-            span {
-                background: $ЦветВыделениеТекста;
-                border: $ЦветВыделениеТекста solid;
-            }
-            #LinkCodeWindowBody {
-                overflow: auto;
-                padding: 0px;
-                margin: 0px;
-                display: block;
-            }
-            // Нумерация строк
-            &.code {
-                // Переносить новые строки, но не сам текст,
-                // нужно для прокручивания длинного текста
-                white-space: pre;
-            }
-            &.code::before {
-                counter-reset: listing;
-            }
-            &.code code {
-                counter-increment: listing;
-            }
-            &.code code::before {
-                content: counter(listing) ". ";
-                display: inline-block;
-                width: 3em;
-                padding-left: auto;
-                margin-left: auto;
-                text-align: left;
-                // Фон линии номера кода
-                background: $ЦветФонаПодсказки;
-                padding-left: 3px;
-            }
         }
     }
 }

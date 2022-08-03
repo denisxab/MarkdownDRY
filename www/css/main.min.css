@@ -2,6 +2,7 @@
 body {
   background: #2e3440;
   color: #eceff4;
+  padding-left: 15px;
 }
 
 a {
@@ -12,6 +13,42 @@ a:link {
 }
 a:visited {
   color: #81a1c1;
+}
+
+div > pre {
+  background: #3b4252;
+  padding: 10px 0px 15px 0px;
+  margin: 20px;
+  border-radius: 4px;
+}
+div > pre span {
+  background: #5e81ac;
+  border: #5e81ac solid;
+}
+div > pre #LinkCodeWindowBody {
+  overflow: auto;
+  padding: 0px;
+  margin: 0px;
+  display: block;
+}
+div > pre.code {
+  white-space: pre;
+}
+div > pre.code::before {
+  counter-reset: listing;
+}
+div > pre.code code {
+  counter-increment: listing;
+}
+div > pre.code code::before {
+  content: counter(listing) ". ";
+  display: inline-block;
+  width: 3em;
+  padding-left: auto;
+  margin-left: auto;
+  text-align: left;
+  background: #434c5e;
+  padding-left: 3px;
 }
 
 #LinkCodeWindow {
@@ -51,35 +88,6 @@ a:visited {
 }
 #LinkCodeWindow #LinkCodeWindowDet pre {
   height: 97%;
-}
-#LinkCodeWindow #LinkCodeWindowDet pre span {
-  background: #5e81ac;
-  border: #5e81ac solid;
-}
-#LinkCodeWindow #LinkCodeWindowDet pre #LinkCodeWindowBody {
-  overflow: auto;
-  padding: 0px;
-  margin: 0px;
-  display: block;
-}
-#LinkCodeWindow #LinkCodeWindowDet pre.code {
-  white-space: pre;
-}
-#LinkCodeWindow #LinkCodeWindowDet pre.code::before {
-  counter-reset: listing;
-}
-#LinkCodeWindow #LinkCodeWindowDet pre.code code {
-  counter-increment: listing;
-}
-#LinkCodeWindow #LinkCodeWindowDet pre.code code::before {
-  content: counter(listing) ". ";
-  display: inline-block;
-  width: 3em;
-  padding-left: auto;
-  margin-left: auto;
-  text-align: left;
-  background: #434c5e;
-  padding-left: 3px;
 }
 
 .MarkdownDRY.MathSpan {

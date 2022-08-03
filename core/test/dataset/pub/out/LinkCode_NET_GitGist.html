@@ -23,7 +23,7 @@
 <br><a href="#" class="MarkdownDRY LinkCode" file="https:/gist.githubusercontent.com/denisxab/4290770428d4d34a83624f5343df87fd/raw/3fd17298a2dd382d0a2c52e4e11e2993f9b2da0b/SymmetricCrypto.py" ref="SymmetricCrypto.check_uniq_key" char_start="1074" char_end="1601">check_uniq_key</a>
 
 <br><a href="#" class="MarkdownDRY LinkCode" file="https:/gist.githubusercontent.com/denisxab/4290770428d4d34a83624f5343df87fd/raw/3fd17298a2dd382d0a2c52e4e11e2993f9b2da0b/SymmetricCrypto.py" ref="SymmetricCrypto.crypto" char_start="3224" char_end="3472">crypto</a>
-asdasdad
+
 
 <script>
 /* -------------------------- Логика для LinkCode -------------------------- */
@@ -34,7 +34,7 @@ LinkSourceCode={
 
 function AddEventLinkCode() {
     /* Добавление обработка нажатий на ссылки */
-
+    
     let elm = document.querySelectorAll(".MarkdownDRY.LinkCode");
     elm.forEach((e) => {
         e.addEventListener("click", () => {
@@ -45,10 +45,10 @@ function AddEventLinkCode() {
 AddEventLinkCode();
 function DisplayLinkCode(_elem) {
     /* Показать всплывающие окно с исходным кодом */
-
+    
     // Устанавливаем в заголовок всплывающего окна, название ссылки которая вызвала это окно
     LinkCodeName.textContent=_elem.textContent
-
+    
     // Установить путь к файлу или ссылку в выплывающие окно
     LinkCodeWindowPath.textContent=_elem.getAttribute('file')
 
@@ -63,14 +63,14 @@ function DisplayLinkCode(_elem) {
         const char_end = _elem.getAttribute('char_end');
         if (char_start > 0 && char_end > 0) {
             // Выделяем текст согласно диапазону из ссылки. Если конечно такой диапазон есть.
-            // Его может не быть если ссылка указывает на несуществующий элемент кода.
+            // Его может не быть если ссылка указывает на несуществующий элемент кода.              
             const highlight_text = toTag(toTag(_el.textContent.slice(char_start, char_end), 'span', 0, 0, 0, true), 'code', true);
             // Собираем результат, и записываем его в тело всплывающего окна
             _el.innerHTML = `${toTag(_el.textContent.slice(0, char_start), 'code', null, null, true, true)}` +
                 `${highlight_text}` +
                 `${toTag(_el.textContent.slice(char_end, _el.innerHTML.length), 'code', null, true, null, true)}`
         }
-        // ------------------------------------------------------------- //
+        // ------------------------------------------------------------- //        
     }
     // Делаем видимым окно
     LinkCodeWindow.style.display = 'block';
@@ -132,7 +132,7 @@ function toTag(text, tag, is_skip_first_last, skip_first, skip_last, escaping) {
 }
 function OnHide(_event) {
     /* Скрыть выплывающие окно при нажатии вне его */
-
+    
     console.log('OnHide');
     if (_event.target.id === 'LinkCodeWindow') {
         LinkCodeWindow.style.display = 'none'

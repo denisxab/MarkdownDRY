@@ -234,9 +234,9 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/InsertCodeFromFile.md',
-                         'c293680d10ec1eb7716246ec35280f0159f13bfc997a6945082375b4cd9a0a3c'),
+                         None),
             ReadTextFile('./dataset/pub/out/InsertCodeFromFile.html',
-                         '6e577cbc42a4cc36437210ba7be249dcd1bb50ca9a108c9406c85ab7bf87e796')
+                         None)
         ]
     ])
     def test_InsertCodeFromFile(self, T_in_data, T_check_data):
@@ -246,7 +246,7 @@ class Test_Pub:
 
     @mark.parametrize(['T_in_data', 'T_check_data', ], [
         [
-            ReadTextFile('./dataset/pub/in/raw/LinkCode_NET_GitGist.md',
+            ReadTextFile('./dataset/pub/in/LinkCode_NET_GitGist.md',
                          None),
             ReadTextFile('./dataset/pub/out/LinkCode_NET_GitGist.html',
                          None)
@@ -256,4 +256,19 @@ class Test_Pub:
         """Проверка ссылки ан GitGist"""
         res = f"{html_head}{CoreMarkdownDRY.LinkCode(T_in_data.text, self.path)}"
         # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data', ], [
+        [
+            ReadTextFile('./dataset/pub/in/LinkCode.md',
+                         None),
+            ReadTextFile('./dataset/pub/out/LinkCode.html',
+                         None),
+
+        ]
+    ])
+    def test_LinkCode(self, T_in_data, T_check_data: ReadTextFile):
+        """Быстрая проверка"""
+        res = f"{html_head}{CoreMarkdownDRY.LinkCode(T_in_data.text, self.path)}"
+        T_check_data.write(res)
         assert res == T_check_data.text

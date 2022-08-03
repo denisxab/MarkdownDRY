@@ -1,0 +1,6 @@
+<br>[Имя Для Ссылки1](./raw/LinkCode.py#NeClass)
+<br>[Имя Для Ссылки2](./raw/LinkCode.py#NeClass.name)
+<br>[Имя Для Ссылки3](./raw/LinkCode.py#NeClass.__call__)
+<br>[Имя Для Ссылки4](./raw/LinkCode.py#another_function)
+<br>[Имя Для Ссылки5](./raw/LinkCode.py#__name__)
+<br>[Имя Для Ссылки6](./raw/LinkCode.py#Химичим)

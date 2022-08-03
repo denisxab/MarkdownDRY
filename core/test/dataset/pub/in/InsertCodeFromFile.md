@@ -2,6 +2,4 @@
 <br>Regex: Да без проблем `:)`
 <br>Regex:
 
-<pre>
-![МемПроРегулярки](./raw/regex_mem.txt)
-</pre>
+![Текст регулярки](./raw/regex_mem.txt)

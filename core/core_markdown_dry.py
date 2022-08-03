@@ -707,9 +707,8 @@ data-touch="true" -- переключение фото с помощью кла�
         return f"""
 <div class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.InsertCodeFromFile.value}">
 <div>{res.name_re}</div>
-<pre><code>
-{res.text_in_file_cup}
-</code></pre></div>"""[1:]
+<pre class="code">{HTML_CLASS.toCode(res.text_in_file_cup)}</pre>
+</div>"""[1:]
 
     @classmethod
     def LinkCode(cls, m: re.Match, self_path: str) -> Optional[str]:
@@ -751,15 +750,12 @@ data-touch="true" -- переключение фото с помощью кла�
         else:
             res_HeadersType = HeaderType.Standard
             res_HeadersTypeHtml = HTML_CLASS.StandardHeaders.value
-
         # Получаем уровень заголовка
         level: Literal[1, 2, 3, 4, 5, 6] = len(m['lvl'])
-
         # Добавляем заголовок в кеш
         StoreDoc.HeaderMain.addHeaders(name_header, level, res_HeadersType)
 
         #: Поиск инициализации переменных
-
         def _vars_init(_m: re.Match) -> str:
             # Обработать вложенных переменных, То есть когда мы обращаемся к другой переменной во время инициализации текущей
             """

@@ -54,6 +54,11 @@ class HTML_CLASS(Enum):
     shot_menu = "shot_menu"
     bt_show_menu = "bt_show_menu"
 
+    @staticmethod
+    def toCode(text: str) -> str:
+        """Конвертировать текст в вид для нумерованного кода"""
+        return ''.join(f'<code>{x}</code>\n' for x in text.split('\n'))
+
 
 class HTML_JS:
     """
