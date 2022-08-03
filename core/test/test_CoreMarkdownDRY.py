@@ -272,3 +272,5 @@ class Test_Pub:
         res = f"{html_head}{CoreMarkdownDRY.LinkCode(T_in_data.text, self.path)}"
         # T_check_data.write(res)
         assert res == T_check_data.text
+
+    # TODO: продолжить в верх HiddenHeaders,исправление тестов на публичные примеры
