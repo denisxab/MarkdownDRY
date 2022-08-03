@@ -4,10 +4,10 @@ from enum import Enum
 html_head: str = """
 <head>
     <meta charset="UTF-8">
-    <link href="./bootstrap-5.1.3-dist/main.css" rel="stylesheet">
-    <script src="./bootstrap-5.1.3-dist/main.js"></script>
-    <link rel="stylesheet" href="./main.min.css">
-    <link rel="stylesheet" href="./plugin.css">
+    <link href="../../../../../www/css/bootstrap-5.1.3-dist/main.css" rel="stylesheet">
+    <script src="../../../../../www/css/bootstrap-5.1.3-dist/main.js"></script>
+    <link rel="stylesheet" href="../../../../../www/css/main.min.css">
+    <link rel="stylesheet" href="../../../../../www/css/plugin.css">
 </head>
 """[1:]
 

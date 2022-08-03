@@ -721,7 +721,7 @@ data-touch="true" -- переключение фото с помощью кла�
         # Записать в кеш исходный текст из файла
         StoreDoc.LinkCode.add(res.file, res.text_in_file)
         return f"""
-<a class ="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.LinkCode.value}" file="{res.file.__str__()}" ref="{res.ref}" char_start="{res.line_start}" char_end="{res.line_end}">{res.name_re}</a>
+<a href="#" class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.LinkCode.value}" file="{res.file.__str__()}" ref="{res.ref}" char_start="{res.line_start}" char_end="{res.line_end}">{res.name_re}</a>
 """[1:]
 
     @classmethod

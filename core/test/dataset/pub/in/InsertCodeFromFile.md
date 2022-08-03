@@ -5,5 +5,3 @@
 <pre>
 ![МемПроРегулярки](./raw/regex_mem.txt)
 </pre>
-
-

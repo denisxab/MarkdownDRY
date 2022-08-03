@@ -1,4 +1,19 @@
 @charset "UTF-8";
+body {
+  background: #2e3440;
+  color: #eceff4;
+}
+
+a {
+  text-decoration: none;
+}
+a:link {
+  color: #5e81ac;
+}
+a:visited {
+  color: #81a1c1;
+}
+
 #LinkCodeWindow {
   width: 100%;
   height: 100%;
@@ -12,12 +27,12 @@
 }
 #LinkCodeWindow #LinkCodeWindowFooter #LinkCodeWindowPath {
   text-align: left;
-  color: #acb7c7;
-  background: #000;
+  color: #d8dee9;
+  background: #434c5e;
 }
 #LinkCodeWindow #LinkCodeWindowDet {
   margin: 10px auto;
-  background: #acb7c7;
+  background: #3b4252;
   max-width: 900px;
   height: 98%;
   padding: 15px;
@@ -38,8 +53,8 @@
   height: 97%;
 }
 #LinkCodeWindow #LinkCodeWindowDet pre span {
-  background: rgb(140, 206, 85);
-  border: rgb(140, 206, 85) solid;
+  background: #5e81ac;
+  border: #5e81ac solid;
 }
 #LinkCodeWindow #LinkCodeWindowDet pre #LinkCodeWindowBody {
   overflow: auto;
@@ -63,7 +78,7 @@
   padding-left: auto;
   margin-left: auto;
   text-align: left;
-  background: rgb(143, 185, 185);
+  background: #434c5e;
   padding-left: 3px;
 }
 
