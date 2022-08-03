@@ -15,18 +15,13 @@ def another_function(func):
     Функция которая принимает другую функцию
     """
 
-    @wraps(func)  # !!
+    @wraps(func)
     def wrapper():
         """
         Оберточная функция
         """
         # Химичим>
-
         val = "The result of %s iSs %ss" % (func(), eval(func()))
-
-
-
-
         # <Химичим
         return val
 
