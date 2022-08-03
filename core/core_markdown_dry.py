@@ -414,6 +414,9 @@ class CoreMarkdownDRY:
         <pre class="code" id="{HTML_CLASS.LinkCodeWindowBody.value}">
         </pre>
     </div>
+    <div id="{HTML_CLASS.LinkCodeWindowFooter.value}">
+        <div id="{HTML_CLASS.LinkCodeWindowPath.value}"></div>
+    </div>
 </div>
 <!-- ---------------------------------------------------------------------------------------- -->
 {res}
@@ -658,10 +661,12 @@ data-touch="true" -- переключение фото с помощью кла�
             text_in_file = requests.get(m['path']).text
         else:
             """Это локальный путь"""
-            logger.debug(m['path'], 'LOCAL')
-            path_re = Path(self_path, m['path']).resolve()
+            logger.debug(Path(self_path, m['path']).resolve(), 'LOCAL')
+            # В Html записываем относительный путь
+            path_re = Path(m['path'])
             lange_file = ConvertSuffixToLange.getlang(path_re.suffix)
-            text_in_file = path_re.read_text()
+            # А файл читаем по абсолютному пути
+            text_in_file = Path(self_path, path_re).resolve().read_text()
 
         # Формируем ссылку для `HTML`
         ref = f"{f'{main_re}' if main_re else ''}{f'.{child_re}' if child_re else ''}"

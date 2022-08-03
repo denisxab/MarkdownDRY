@@ -40,7 +40,9 @@ class HTML_CLASS(Enum):
     LinkCodeWindowButtonTitle = "LinkCodeWindowButtonTitle"
     LinkCodeWindowButtonHide = "LinkCodeWindowButtonHide"
     LinkCodeWindowBody = "LinkCodeWindowBody"
+    LinkCodeWindowFooter = "LinkCodeWindowFooter"
     LinkCodeWindowDet = "LinkCodeWindowDet"
+    LinkCodeWindowPath = "LinkCodeWindowPath"
     LinkSourceCode = "LinkSourceCode"
     LinkCodeName = "LinkCodeName"
     MultiLineTables = "MultiLineTables"
@@ -74,6 +76,9 @@ function DisplayLinkCode(_elem) {{
     
     // Устанавливаем в заголовок всплывающего окна, название ссылки которая вызвала это окно
     LinkCodeName.textContent=_elem.textContent
+    
+    // Установить путь к файлу или ссылку в выплывающие окно
+    LinkCodeWindowPath.textContent=_elem.getAttribute('file')
 
     // Получаем элемент в котором будет исходный текст из файла
     let _el = document.querySelector('#{HTML_CLASS.LinkCodeWindowBody.value}')

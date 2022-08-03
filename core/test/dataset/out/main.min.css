@@ -10,6 +10,11 @@
   left: 0;
   margin: auto;
 }
+#LinkCodeWindow #LinkCodeWindowFooter #LinkCodeWindowPath {
+  text-align: left;
+  color: #acb7c7;
+  background: #000;
+}
 #LinkCodeWindow #LinkCodeWindowDet {
   margin: 10px auto;
   background: #acb7c7;
@@ -18,40 +23,40 @@
   padding: 15px;
   border-radius: 10px;
 }
-#LinkCodeWindow #LinkCodeWindowButtonTitle {
+#LinkCodeWindow #LinkCodeWindowDet #LinkCodeWindowButtonTitle {
   text-align: right;
 }
-#LinkCodeWindow #LinkCodeWindowButtonTitle #LinkCodeName {
+#LinkCodeWindow #LinkCodeWindowDet #LinkCodeWindowButtonTitle #LinkCodeName {
   display: inline;
   font-size: small;
   font-weight: lighter;
 }
-#LinkCodeWindow #LinkCodeWindowButtonTitle #LinkCodeWindowButtonHide {
+#LinkCodeWindow #LinkCodeWindowDet #LinkCodeWindowButtonTitle #LinkCodeWindowButtonHide {
   font-size: small;
 }
-#LinkCodeWindow pre {
+#LinkCodeWindow #LinkCodeWindowDet pre {
   height: 97%;
 }
-#LinkCodeWindow pre span {
+#LinkCodeWindow #LinkCodeWindowDet pre span {
   background: rgb(140, 206, 85);
   border: rgb(140, 206, 85) solid;
 }
-#LinkCodeWindow pre #LinkCodeWindowBody {
+#LinkCodeWindow #LinkCodeWindowDet pre #LinkCodeWindowBody {
   overflow: auto;
   padding: 0px;
   margin: 0px;
   display: block;
 }
-#LinkCodeWindow pre.code {
+#LinkCodeWindow #LinkCodeWindowDet pre.code {
   white-space: pre;
 }
-#LinkCodeWindow pre.code::before {
+#LinkCodeWindow #LinkCodeWindowDet pre.code::before {
   counter-reset: listing;
 }
-#LinkCodeWindow pre.code code {
+#LinkCodeWindow #LinkCodeWindowDet pre.code code {
   counter-increment: listing;
 }
-#LinkCodeWindow pre.code code::before {
+#LinkCodeWindow #LinkCodeWindowDet pre.code code::before {
   content: counter(listing) ". ";
   display: inline-block;
   width: 3em;

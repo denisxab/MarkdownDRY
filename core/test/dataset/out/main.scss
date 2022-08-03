@@ -9,6 +9,17 @@
     bottom: 0;
     left: 0;
     margin: auto;
+
+    // Нижня часть всплывающего окна
+    #LinkCodeWindowFooter {
+        // Путь к файлу или ссылка на файл
+        #LinkCodeWindowPath {
+            text-align: left;
+            color: #acb7c7;
+            background: #000;
+        }
+    }
+
     // Непосредственно тело всплывающего окна
     #LinkCodeWindowDet {
         margin: 10px auto;
@@ -18,57 +29,59 @@
         height: 98%;
         padding: 15px;
         border-radius: 10px;
-    }
-    // Стили для заголовка всплывающего окна
-    #LinkCodeWindowButtonTitle {
-        text-align: right;
-        // Стиль для имени заголовка
-        #LinkCodeName {
-            display: inline;
-            font-size: small;
-            font-weight: lighter;
+
+        // Стили для заголовка всплывающего окна
+        #LinkCodeWindowButtonTitle {
+            text-align: right;
+            // Стиль для имени заголовка
+            #LinkCodeName {
+                display: inline;
+                font-size: small;
+                font-weight: lighter;
+            }
+            // Кнопка скрытия выплывающего окна
+            #LinkCodeWindowButtonHide {
+                font-size: small;
+            }
         }
-        // Кнопка скрытия выплывающего окна
-        #LinkCodeWindowButtonHide {
-            font-size: small;
-        }
-    }
-    // Оформление сходного кода из файла
-    pre {
-        height: 97%;
-        // Стиль для выделение текста
-        span {
-            background: rgb(140, 206, 85);
-            border: rgb(140, 206, 85) solid;
-        }
-        #LinkCodeWindowBody {
-            overflow: auto;
-            padding: 0px;
-            margin: 0px;
-            display: block;
-        }
-        // Нумерация строк
-        &.code {
-            // Переносить новые строки, но не сам текст, 
-            // нужно для прокручивания длинного текста
-            white-space:pre;
-        }
-        &.code::before {
-            counter-reset: listing;
-        }
-        &.code code {
-            counter-increment: listing;
-        }
-        &.code code::before {
-            content: counter(listing) ". ";
-            display: inline-block;
-            width: 3em;
-            padding-left: auto;
-            margin-left: auto;
-            text-align: left;
-            // Фон линии номера кода
-            background: rgb(143, 185, 185);
-            padding-left: 3px;
+
+        // Оформление сходного кода из файла
+        pre {
+            height: 97%;
+            // Стиль для выделение текста
+            span {
+                background: rgb(140, 206, 85);
+                border: rgb(140, 206, 85) solid;
+            }
+            #LinkCodeWindowBody {
+                overflow: auto;
+                padding: 0px;
+                margin: 0px;
+                display: block;
+            }
+            // Нумерация строк
+            &.code {
+                // Переносить новые строки, но не сам текст,
+                // нужно для прокручивания длинного текста
+                white-space: pre;
+            }
+            &.code::before {
+                counter-reset: listing;
+            }
+            &.code code {
+                counter-increment: listing;
+            }
+            &.code code::before {
+                content: counter(listing) ". ";
+                display: inline-block;
+                width: 3em;
+                padding-left: auto;
+                margin-left: auto;
+                text-align: left;
+                // Фон линии номера кода
+                background: rgb(143, 185, 185);
+                padding-left: 3px;
+            }
         }
     }
 }
