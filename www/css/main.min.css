@@ -52,14 +52,12 @@ h6 {
   z-index: 999;
   position: fixed;
   background: #3b4252;
-  color: #000;
   right: 0px;
   bottom: 0px;
-  border: 1px solid #000;
+  border: 1px solid #434c5e;
   border-radius: 10px 0px 0px 0px;
 }
 #menu ol {
-  padding-left: 18px;
   color: #abb0ba;
 }
 #menu ol a {
@@ -68,8 +66,18 @@ h6 {
 #menu ol a:link {
   color: #abb0ba;
 }
+#menu ol a:hover {
+  text-decoration: underline;
+}
 #menu ol a:visited {
   color: #abb0ba;
+}
+#menu #bt_show_menu,
+#menu #bt_hidden_menu {
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  width: 100%;
 }
 
 a {

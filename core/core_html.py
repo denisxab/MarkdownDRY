@@ -53,6 +53,7 @@ class HTML_CLASS(Enum):
     detail_menu = "detail_menu"
     shot_menu = "shot_menu"
     bt_show_menu = "bt_show_menu"
+    bt_hidden_menu = "bt_hidden_menu"
 
     @staticmethod
     def toCode(text: str) -> str:

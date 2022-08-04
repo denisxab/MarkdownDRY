@@ -84,7 +84,7 @@ class REGEX:
     # - Заголовки и переменные - #
     #: Поиск заголовков и его тела.
     HeaderMain: re.Pattern = re.compile(
-        '(?P<lvl>#+) (?P<hidden>\^?)(?P<name>.+)((?:.*\s*(?!#+))+\n?)'
+        '(?P<lvl>#+) (?P<hidden>\^?)(?P<name>.+)(?P<body>(?:.*\s*(?!#+))+\n?)'
     )
     #: Поиск типа заголовка, обычный или скрытый
     # HeaderType: re.Pattern = re.compile('\s*(?P<hidden>\^)?.+')
@@ -441,13 +441,67 @@ class CoreMarkdownDRY:
         """
         res = REGEX.HeaderMain.sub(MDDRY_TO_HTML.HeaderMain, source_text)
         # Формируем навигационное оглавление по заголовкам
+
+        # TODO: Доделать вложенность заголовков
+        """
+        
+hed = {
+    'Стек технологий': (1, 0, {}),
+    'БД': (2, 0, {}),
+    'SQL': (3, 0, {}),
+    'NoSQL': (3, 0, {}),
+    'Frontend': (2, 0, {}),
+    'Брокеры сообщений': (2, 0, {}),
+    'Диплой': (2, 0, {}),
+    'Ссылки на документацию': (1, 0, {}),
+    'Ошибки': (1, 0, {}),
+    'Ошибки связанные с API': (2, 1, {}),
+    'Ошибки связанные с БД': (2, 1, {}),
+    'Ошибки в UI': (2, 1, {}),
+    'Ошибки связанные с VPN': (2, 1, {}),
+    'Ошибки связанные с Легаси кодом': (2, 1, {}),
+    'Готовые решения задач': (1, 0, {})
+}
+
+if __name__ == '__main__':
+    # TODO: Сделать вложенные заголовки
+
+    print()
+
+    _tmp = [(k, v) for k, v in hed.items()]
+
+    _last: int = 0
+    _next: int = 0
+    _tmp2 = []
+    res = ""
+    for _index in range(len(_tmp)):
+        _next = _tmp[_index][1][0]
+
+        if _next < _last:
+            print('<')
+            res += "\n</ol>"
+        if _next > _last:
+            print('>')
+            res += "<ol>"
+        res += f"    \n<li>{_tmp[_index][0]}</li>"
+        if _next > _last:
+            print('>')
+            res += "</ol>"
+
+        _last = _next
+
+    res += "</ol>"
+    print()
+
+        """
+        
         return "{menu}{res}".format(menu=f"""
 <div id="{HTML_CLASS.menu.value}">
     <div id="{HTML_CLASS.detail_menu.value}">
         <ol>   
             {''.join(f'<li><a href="#{_header}">{_header}</a></li>' for _header, _val in StoreDoc.HeaderMain.date.items() if _val[1] != HeaderType.Hide.value)}
         </ol>
-        <input type="button" value=">>" onclick="{HTML_CLASS.detail_menu.value}.hidden=true;{HTML_CLASS.bt_show_menu.value}.hidden=false"/>
+        <input type="button" id="{HTML_CLASS.bt_hidden_menu.value}"  value=">>" onclick="{HTML_CLASS.detail_menu.value}.hidden=true;{HTML_CLASS.bt_show_menu.value}.hidden=false"/>
     </div>
     <div id="{HTML_CLASS.shot_menu.value}">
         <input type="button" id="{HTML_CLASS.bt_show_menu.value}" value="<<" onclick="{HTML_CLASS.detail_menu.value}.hidden=false;{HTML_CLASS.bt_show_menu.value}.hidden=true">
@@ -745,7 +799,7 @@ data-touch="true" -- переключение фото с помощью кла�
         # Получаем имя заголовка
         name_header = m['name']
         # Получим тело заголовка
-        body_re: re.Match = re.search('(?:.+\s+(?!#+))+\n?', m.string[m.end():])
+        body_header: str = m['body']
         # Получаем тип заголовка
         res_HeadersType: Optional[HeaderType] = None
         if m['hidden']:
@@ -785,12 +839,9 @@ data-touch="true" -- переключение фото с помощью кла�
             """
             return StoreDoc.HeaderMain.getVar(name_header, _m['name'], _m.group(0))
 
-        if body_re:
-            body_header: str = body_re.group(0)
-            body_header = REGEX.VarsInit.sub(_vars_init, body_header)
-            body_header = REGEX.VarsGet.sub(_vars_get, body_header)
-            return f"""<h{level} id="{name_header}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}">{name_header}</h{level}>\n{body_header}\n"""
-        return m.group(0), body_re.end()
+        body_header = REGEX.VarsInit.sub(_vars_init, body_header)
+        body_header = REGEX.VarsGet.sub(_vars_get, body_header)
+        return f"""<h{level} id="{name_header}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}">{name_header}</h{level}>\n{body_header}\n"""
 
     @classmethod
     def MultiLineTables(cls, m: re.Match) -> str:
