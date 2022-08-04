@@ -273,4 +273,22 @@ class Test_Pub:
         # T_check_data.write(res)
         assert res == T_check_data.text
 
+    @mark.parametrize(['T_in_data', 'T_check_data', 'T_check_store'], [
+        [
+            ReadTextFile('./dataset/pub/in/HeaderMain.md',
+                         None),
+            ReadTextFile('./dataset/pub/out/HeaderMain.html',
+                         None),
+            ReadTextFile('./dataset/pub/out/store/HeaderMain Store.json',
+                         None)
+
+        ]
+    ])
+    def test_HeaderMain(self, T_in_data, T_check_data: ReadTextFile, T_check_store):
+        _next_test()
+        res = f"{html_head}{CoreMarkdownDRY.HeaderMain(T_in_data.text)}"
+        assert dumps(StoreDoc.HeaderMain.date, ensure_ascii=False) == T_check_store.text
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
     # TODO: продолжить в верх HiddenHeaders,исправление тестов на публичные примеры

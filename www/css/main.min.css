@@ -5,6 +5,73 @@ body {
   padding-left: 15px;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #abb0ba;
+  margin: 0;
+  padding: 3px 0 3px 10px;
+  border-radius: 4px 4px 0 0;
+}
+
+h1 {
+  background: #505762;
+  font-size: 32px;
+}
+
+h2 {
+  background: #454a54;
+  font-size: 30px;
+}
+
+h3 {
+  background: #393e46;
+  font-size: 28px;
+}
+
+h4 {
+  background: #2f333a;
+  font-size: 26px;
+}
+
+h5 {
+  background: #2e3238;
+  font-size: 24px;
+}
+
+h6 {
+  background: #22252a;
+  font-size: 22px;
+}
+
+#menu {
+  padding: 10px;
+  z-index: 999;
+  position: fixed;
+  background: #3b4252;
+  color: #000;
+  right: 0px;
+  bottom: 0px;
+  border: 1px solid #000;
+  border-radius: 10px 0px 0px 0px;
+}
+#menu ol {
+  padding-left: 18px;
+  color: #abb0ba;
+}
+#menu ol a {
+  text-decoration: none;
+}
+#menu ol a:link {
+  color: #abb0ba;
+}
+#menu ol a:visited {
+  color: #abb0ba;
+}
+
 a {
   text-decoration: none;
 }

@@ -1,11 +1,3 @@
-$h6_color: #22252a;
-$h5_color: #2e3238;
-$h4_color: #2f333a;
-$h3_color: #393e46;
-$h2_color: #454a54;
-$h1_color: #505762;
-$h_color: #abb0ba;
-
 // --------------
 // https://www.nordtheme.com/docs/colors-and-palettes
 
@@ -29,6 +21,86 @@ body {
     color: $БазовыйЦветТекста;
     padding-left: 15px;
 }
+
+// Заголовки
+$h6_color: #22252a;
+$h5_color: #2e3238;
+$h4_color: #2f333a;
+$h3_color: #393e46;
+$h2_color: #454a54;
+$h1_color: #505762;
+$h_color: #abb0ba;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: $h_color;
+    margin: 0;
+    padding: 3px 0 3px 10px;
+    border-radius: 4px 4px 0 0;
+}
+
+h1 {
+    background: $h1_color;
+    font-size: 32px;
+}
+h2 {
+    background: $h2_color;
+    font-size: 30px;
+}
+h3 {
+    background: $h3_color;
+    font-size: 28px;
+}
+
+h4 {
+    background: $h4_color;
+    font-size: 26px;
+}
+
+h5 {
+    background: $h5_color;
+    font-size: 24px;
+}
+h6 {
+    background: $h6_color;
+    font-size: 22px;
+}
+// Оглавление
+#menu {
+    padding: 10px;
+    z-index: 999;
+    position: fixed;
+    // width: 400px;
+    // overflow: hidden;
+    background: $ЦветФонаВсплывающегоОкна;
+    color: #000;
+    right: 0px;
+    bottom: 0px;
+    border: 1px solid #000;
+    border-radius: 10px 0px 0px 0px;
+    ol {
+        // Убрать тире у элементов ненумерованного списка
+        // list-style-type: none;
+        padding-left: 18px;
+        color: $h_color;
+        // Ссылки
+        a {
+            text-decoration: none;
+            &:link {
+                color: $h_color;
+            }
+
+            &:visited {
+                color: $h_color;
+            }
+        }
+    }
+}
+// ------------------
 
 // Ссылки
 a {

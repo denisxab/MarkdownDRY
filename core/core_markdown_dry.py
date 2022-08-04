@@ -83,9 +83,12 @@ class REGEX:
 
     # - Заголовки и переменные - #
     #: Поиск заголовков и его тела.
-    HeaderMain: re.Pattern = re.compile('(?:\A|\n)(?P<lvl>#{1,}) (?P<name>.+)\n+(?P<body>(?:.\s*(?!#{1,}))*)')
+    HeaderMain: re.Pattern = re.compile(
+        '(?P<lvl>#+) (?P<hidden>\^?)(?P<name>.+)((?:.*\s*(?!#+))+\n?)'
+    )
     #: Поиск типа заголовка, обычный или скрытый
-    HeaderType: re.Pattern = re.compile('\s*(?P<hidden>\^)?.+')
+    # HeaderType: re.Pattern = re.compile('\s*(?P<hidden>\^)?.+')
+
     #: Поиск инициализированных переменных
     VarsInit: re.Pattern = re.compile('- \[=(?P<name>[^]]+)]\((?P<value>.+(?!\n))\)')
     #: Поиск мест, где идет обращение к переменной
@@ -441,9 +444,9 @@ class CoreMarkdownDRY:
         return "{menu}{res}".format(menu=f"""
 <div id="{HTML_CLASS.menu.value}">
     <div id="{HTML_CLASS.detail_menu.value}">
-        <ul>   
+        <ol>   
             {''.join(f'<li><a href="#{_header}">{_header}</a></li>' for _header, _val in StoreDoc.HeaderMain.date.items() if _val[1] != HeaderType.Hide.value)}
-        </ul>
+        </ol>
         <input type="button" value=">>" onclick="{HTML_CLASS.detail_menu.value}.hidden=true;{HTML_CLASS.bt_show_menu.value}.hidden=false"/>
     </div>
     <div id="{HTML_CLASS.shot_menu.value}">
@@ -738,13 +741,14 @@ data-touch="true" -- переключение фото с помощью кла�
 
         После этого происходит замена обращение к переменной на значение переменной.
         """
+
         # Получаем имя заголовка
         name_header = m['name']
         # Получим тело заголовка
-        body_header = m['body']
+        body_re: re.Match = re.search('(?:.+\s+(?!#+))+\n?', m.string[m.end():])
         # Получаем тип заголовка
         res_HeadersType: Optional[HeaderType] = None
-        if REGEX.HeaderType.match(name_header)['hidden']:
+        if m['hidden']:
             res_HeadersType = HeaderType.Hide
             res_HeadersTypeHtml = HTML_CLASS.HiddenHeaders.value
         else:
@@ -775,16 +779,18 @@ data-touch="true" -- переключение фото с помощью кла�
             # Скрываем из текста инициализацию переменных
             return f"%%{_m['name']}={res_var}%%"
 
-        body_header = REGEX.VarsInit.sub(_vars_init, body_header)
-
         def _vars_get(_m: re.Match) -> str:
             """
             Вставка значений в места, где идет обращение к переменным
             """
             return StoreDoc.HeaderMain.getVar(name_header, _m['name'], _m.group(0))
 
-        body_header = REGEX.VarsGet.sub(_vars_get, body_header)
-        return f"""<h{level} id="{name_header}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}">{name_header}</h{level}>\n{body_header}\n"""
+        if body_re:
+            body_header: str = body_re.group(0)
+            body_header = REGEX.VarsInit.sub(_vars_init, body_header)
+            body_header = REGEX.VarsGet.sub(_vars_get, body_header)
+            return f"""<h{level} id="{name_header}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}">{name_header}</h{level}>\n{body_header}\n"""
+        return m.group(0), body_re.end()
 
     @classmethod
     def MultiLineTables(cls, m: re.Match) -> str:
