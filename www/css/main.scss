@@ -80,9 +80,9 @@ h6 {
     border: 1px solid $ЦветФонаПодсказки;
     border-radius: 10px 0px 0px 0px;
     height: 50%;
-    width: 35%;
+    // Список заголовков
     #detail_menu {
-        height: 95%;
+        height: 100%;
         overflow: scroll;
     }
     ol {
@@ -92,8 +92,9 @@ h6 {
         padding-left: 0px;
         // 1 заголовок
         ol {
+            padding: 0px 0px 0px 5px;
+            border-radius: 5px 0px 0px 5px;
             background: $h1_color;
-            padding-left: 20px;
             // 2 заголовок
             ol {
                 background: $h2_color;
@@ -135,6 +136,9 @@ h6 {
         border-radius: 4px;
         text-decoration: none;
         width: 100%;
+    }
+    #bt_hidden_menu {
+        margin-bottom: 5px;
     }
 }
 

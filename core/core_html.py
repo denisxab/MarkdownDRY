@@ -65,6 +65,66 @@ class HTML_JS:
     """
     JS код для MarkdownDRY
     """
+
+    class Hotkey:
+        """
+        Комбинации клавиш для различных фич. Вставлять нужно собранные `result`
+
+        - `ALT+T` - Скрыть/Показать оглавление
+
+        """
+
+        HeaderMain = f"""
+if (e.altKey && e.which == 84) {{
+    if ({HTML_CLASS.menu.value}_is_hidden() === false) {{
+        {HTML_CLASS.menu.value}_show();
+    }} else {{
+        {HTML_CLASS.menu.value}_hidden();
+    }}
+    return false;
+}}
+"""[1:]
+        result = f"""
+<script>
+// https://snipp.ru/handbk/js-kbd-codes
+document.onkeyup = function () {{
+    var e = e || window.event;
+    {HeaderMain}
+}}
+</script>
+"""[1:]
+
+    HeaderMain = f"""
+function {HTML_CLASS.menu.value}_hidden(){{
+    // Скрыть оглавление
+    {HTML_CLASS.detail_menu.value}.hidden=false;
+    {HTML_CLASS.bt_show_menu.value}.hidden=true;
+    {HTML_CLASS.bt_hidden_menu.value}.hidden=false;
+    {HTML_CLASS.menu.value}.style.height='50%';
+}}
+function {HTML_CLASS.menu.value}_show(){{
+    // Показать оглавление
+   {HTML_CLASS.detail_menu.value}.hidden=true;
+   {HTML_CLASS.bt_show_menu.value}.hidden=false;
+   {HTML_CLASS.bt_hidden_menu.value}.hidden=true;
+   {HTML_CLASS.menu.value}.style.height='50px';
+}}
+function {HTML_CLASS.menu.value}_is_hidden(){{
+    // Узнать скрыто ли оглавление
+    return {HTML_CLASS.detail_menu.value}.hidden
+}}
+// Изначально скрываем кнопку показа оглавления
+{HTML_CLASS.bt_show_menu.value}.hidden = true;
+(function (){{
+    // Переход к заголовку по нажатию элемент оглавления.        
+    document.querySelectorAll("#detail_menu li").forEach((e) => {{
+        e.onclick = ()=>{{
+          window.location.href  = e.children[0].href
+        }}
+      }}
+    );
+}})()
+"""[1:]
     LinkCode = f"""
 function AddEventLinkCode() {{
     /* Добавление обработка нажатий на ссылки */
@@ -172,4 +232,4 @@ function OnHide(_event) {{
         {HTML_CLASS.LinkCodeWindow.value}.style.display = 'none'
     }}
 }}
-"""
+"""[1:]

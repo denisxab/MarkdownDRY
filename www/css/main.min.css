@@ -57,10 +57,9 @@ h6 {
   border: 1px solid #434c5e;
   border-radius: 10px 0px 0px 0px;
   height: 50%;
-  width: 35%;
 }
 #menu #detail_menu {
-  height: 95%;
+  height: 100%;
   overflow: scroll;
 }
 #menu ol {
@@ -69,8 +68,9 @@ h6 {
   padding-left: 0px;
 }
 #menu ol ol {
+  padding: 0px 0px 0px 5px;
+  border-radius: 5px 0px 0px 5px;
   background: #505762;
-  padding-left: 20px;
 }
 #menu ol ol ol {
   background: #454a54;
@@ -105,6 +105,9 @@ h6 {
   border-radius: 4px;
   text-decoration: none;
   width: 100%;
+}
+#menu #bt_hidden_menu {
+  margin-bottom: 5px;
 }
 
 a {

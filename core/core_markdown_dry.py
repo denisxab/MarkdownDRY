@@ -441,12 +441,9 @@ class CoreMarkdownDRY:
         """
         res = REGEX.HeaderMain.sub(MDDRY_TO_HTML.HeaderMain, source_text)
 
-        # Формируем навигационное оглавление по заголовкам
-
-        # TODO: Доделать вложенность заголовков
-
-        def create_table_contents_from_HTML(hed: dict[str, tuple[int, HeaderType, dict[str, str]]],
-                                            template_li: str = "<li>{header}</li>") -> str:
+        def create_table_contents_from_HTML(
+                hed: dict[str, tuple[int, HeaderType, dict[str, str]]],
+                template_li: str = "<li>{header}</li>") -> str:
             """
             Сделать оглавление в формате HTML
 
@@ -517,15 +514,15 @@ class CoreMarkdownDRY:
             _res.append("</ol>")
             return ''.join(_res)
 
+        # Формируем навигационное оглавление по заголовкам
         return "{menu}{res}".format(menu=f"""
 <div id="{HTML_CLASS.menu.value}">
-
     <!-- Скрыть оглавление -->
     <input type="button" id="bt_show_menu" value="<<"
-           onclick="{HTML_CLASS.detail_menu.value}.hidden=false;{HTML_CLASS.bt_show_menu.value}.hidden=true;{HTML_CLASS.bt_hidden_menu.value}.hidden=false;{HTML_CLASS.menu.value}.style.height = '50%';{HTML_CLASS.menu.value}.style.width = '35%';">
+           onclick="{HTML_CLASS.menu.value}_hidden()">
     <!-- Развернуть оглавление -->
     <input type="button" id="bt_hidden_menu" value=">>"
-           onclick="{HTML_CLASS.detail_menu.value}.hidden=true;{HTML_CLASS.bt_show_menu.value}.hidden=false;  {HTML_CLASS.bt_hidden_menu.value}.hidden=true;{HTML_CLASS.menu.value}.style.height = '50px';{HTML_CLASS.menu.value}.style.width = '50px';"/>
+           onclick="{HTML_CLASS.menu.value}_show()"/>
     <!-- Темы оглавления -->
     <div id="{HTML_CLASS.detail_menu.value}">
         <ol>
@@ -533,14 +530,7 @@ class CoreMarkdownDRY:
         </ol>
     </div>
     <script>
-        {HTML_CLASS.bt_show_menu.value}.hidden = true;
-        // Переход к заголовку по нажатию элемент оглавления.
-        document.querySelectorAll("#detail_menu li").forEach((e) => {{
-            e.onclick = ()=>{{
-              window.location.href  = e.children[0].href
-            }}
-          }}
-        );
+        {HTML_JS.HeaderMain}
     </script>
 </div>
 """[1:], res=res)

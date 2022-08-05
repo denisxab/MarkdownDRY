@@ -4,7 +4,7 @@ from pathlib import Path
 from pytest import mark
 from testfull_pack.file import ReadTextFile
 
-from core.core_html import html_head
+from core.core_html import html_head, HTML_JS
 from core.core_markdown_dry import CoreMarkdownDRY, StoreDoc
 
 
@@ -263,7 +263,7 @@ class Test_Pub:
             ReadTextFile('./dataset/pub/in/LinkCode.md',
                          None),
             ReadTextFile('./dataset/pub/out/LinkCode.html',
-                         None),
+                         'None'),
 
         ]
     ])
@@ -286,9 +286,9 @@ class Test_Pub:
     ])
     def test_HeaderMain(self, T_in_data, T_check_data: ReadTextFile, T_check_store):
         _next_test()
-        res = f"{html_head}{CoreMarkdownDRY.HeaderMain(T_in_data.text)}"
-        assert dumps(StoreDoc.HeaderMain.date, ensure_ascii=False) == T_check_store.text
+        res = f"{html_head}{CoreMarkdownDRY.HeaderMain(T_in_data.text)}{HTML_JS.Hotkey.result}"
         # T_check_data.write(res)
+        assert dumps(StoreDoc.HeaderMain.date, ensure_ascii=False) == T_check_store.text
         assert res == T_check_data.text
 
     # TODO: продолжить в верх HiddenHeaders,исправление тестов на публичные примеры
