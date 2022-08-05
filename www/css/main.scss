@@ -166,12 +166,6 @@ div > pre {
         background: $ЦветВыделениеТекста;
         border: $ЦветВыделениеТекста solid;
     }
-    #LinkCodeWindowBody {
-        overflow: auto;
-        padding: 0px;
-        margin: 0px;
-        display: block;
-    }
     // Нумерация строк
     &.code {
         // Переносить новые строки, но не сам текст,
@@ -183,6 +177,7 @@ div > pre {
     }
     &.code code {
         counter-increment: listing;
+
     }
     &.code code::before {
         content: counter(listing) ". ";
@@ -194,6 +189,8 @@ div > pre {
         // Фон линии номера кода
         background: $ЦветФонаПодсказки;
         padding-left: 3px;
+        margin-right: 10px;
+
     }
 }
 // --------------------------------------------------------
@@ -202,7 +199,7 @@ div > pre {
 
 #LinkCodeWindow {
     width: 100%;
-    height: 100%;
+    // height: 100%;
     display: none;
     position: absolute;
     top: 0;
@@ -220,7 +217,15 @@ div > pre {
             background: $ЦветФонаПодсказки;
         }
     }
-
+    // Оформление сходного кода из файла
+    #LinkCodeWindowBody {
+        overflow: auto;
+        padding: 0px;
+        margin-top: 0px;
+        margin: 0px;
+        display: block;
+        height: 95%;
+    }
     // Непосредственно тело всплывающего окна
     #LinkCodeWindowDet {
         margin: 10px auto;
@@ -228,7 +233,7 @@ div > pre {
         // Ширина всплывающего окна
         max-width: 900px;
         height: 98%;
-        padding: 15px;
+        padding: 15px 15px 0px 15px;
         border-radius: 10px;
 
         // Стили для заголовка всплывающего окна
@@ -244,11 +249,6 @@ div > pre {
             #LinkCodeWindowButtonHide {
                 font-size: small;
             }
-        }
-
-        // Оформление сходного кода из файла
-        pre {
-            height: 97%;
         }
     }
 }

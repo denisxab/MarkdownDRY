@@ -130,12 +130,6 @@ div > pre span {
   background: #5e81ac;
   border: #5e81ac solid;
 }
-div > pre #LinkCodeWindowBody {
-  overflow: auto;
-  padding: 0px;
-  margin: 0px;
-  display: block;
-}
 div > pre.code {
   white-space: pre;
 }
@@ -154,11 +148,11 @@ div > pre.code code::before {
   text-align: left;
   background: #434c5e;
   padding-left: 3px;
+  margin-right: 10px;
 }
 
 #LinkCodeWindow {
   width: 100%;
-  height: 100%;
   display: none;
   position: absolute;
   top: 0;
@@ -172,12 +166,20 @@ div > pre.code code::before {
   color: #d8dee9;
   background: #434c5e;
 }
+#LinkCodeWindow #LinkCodeWindowBody {
+  overflow: auto;
+  padding: 0px;
+  margin-top: 0px;
+  margin: 0px;
+  display: block;
+  height: 95%;
+}
 #LinkCodeWindow #LinkCodeWindowDet {
   margin: 10px auto;
   background: #3b4252;
   max-width: 900px;
   height: 98%;
-  padding: 15px;
+  padding: 15px 15px 0px 15px;
   border-radius: 10px;
 }
 #LinkCodeWindow #LinkCodeWindowDet #LinkCodeWindowButtonTitle {
@@ -190,9 +192,6 @@ div > pre.code code::before {
 }
 #LinkCodeWindow #LinkCodeWindowDet #LinkCodeWindowButtonTitle #LinkCodeWindowButtonHide {
   font-size: small;
-}
-#LinkCodeWindow #LinkCodeWindowDet pre {
-  height: 97%;
 }
 
 .MarkdownDRY.MathSpan {
