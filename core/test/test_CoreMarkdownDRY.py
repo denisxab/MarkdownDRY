@@ -294,7 +294,7 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/MathSpan.md',
-                         None),
+                         'c52f435a90dea50ca3c50e95ea996d5ca53e55ee9ac1f3903894aeef01dbea42'),
             ReadTextFile('./dataset/pub/out/MathSpan.html',
                          None),
 
@@ -302,7 +302,7 @@ class Test_Pub:
     ])
     def test_MathSpan(self, T_in_data, T_check_data):
         res = f"{html_head}{CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text))}{HTML_JS.Hotkey.result}"
-        T_check_data.write(res)
-
+        # T_check_data.write(res)
         assert res == T_check_data.text
-    # TODO: продолжить в верх MathSpan1,исправление тестов на публичные примеры
+
+    # TODO: продолжить в верх PhotoGallery,исправление тестов на публичные примеры
