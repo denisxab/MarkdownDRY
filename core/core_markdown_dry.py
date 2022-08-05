@@ -440,74 +440,107 @@ class CoreMarkdownDRY:
         Поиск заголовка и его тела
         """
         res = REGEX.HeaderMain.sub(MDDRY_TO_HTML.HeaderMain, source_text)
+
         # Формируем навигационное оглавление по заголовкам
 
         # TODO: Доделать вложенность заголовков
-        """
-        
-hed = {
-    'Стек технологий': (1, 0, {}),
-    'БД': (2, 0, {}),
-    'SQL': (3, 0, {}),
-    'NoSQL': (3, 0, {}),
-    'Frontend': (2, 0, {}),
-    'Брокеры сообщений': (2, 0, {}),
-    'Диплой': (2, 0, {}),
-    'Ссылки на документацию': (1, 0, {}),
-    'Ошибки': (1, 0, {}),
-    'Ошибки связанные с API': (2, 1, {}),
-    'Ошибки связанные с БД': (2, 1, {}),
-    'Ошибки в UI': (2, 1, {}),
-    'Ошибки связанные с VPN': (2, 1, {}),
-    'Ошибки связанные с Легаси кодом': (2, 1, {}),
-    'Готовые решения задач': (1, 0, {})
-}
 
-if __name__ == '__main__':
-    # TODO: Сделать вложенные заголовки
+        def create_table_contents_from_HTML(hed: dict[str, tuple[int, HeaderType, dict[str, str]]],
+                                            template_li: str = "<li>{header}</li>") -> str:
+            """
+            Сделать оглавление в формате HTML
 
-    print()
+            :param template_li: Шаблон для элемента оглавления
+            :param hed: ИмяЗаголовка:(УровеньЗаголовка, ЛюбоеЧисло, ЛюбойСловарь)
 
-    _tmp = [(k, v) for k, v in hed.items()]
+            :ПРИМЕР:
 
-    _last: int = 0
-    _next: int = 0
-    _tmp2 = []
-    res = ""
-    for _index in range(len(_tmp)):
-        _next = _tmp[_index][1][0]
+            IN:
+            {
+                'Стек технологий': (1, 0, {}),
+                'БД': (2, 0, {}),
+                'SQL': (3, 0, {}),
+                'NoSQL': (3, 0, {}),
+                'Frontend': (2, 0, {}),
+                'Брокеры сообщений': (2, 0, {}),
+                'Диплой': (2, 0, {}),
+                'Ссылки на документацию': (1, 0, {}),
+                'Ошибки': (1, 0, {}),
+                'Ошибки связанные с API': (2, 1, {}),
+                'Ошибки связанные с БД': (2, 1, {}),
+                'Ошибки в UI': (2, 1, {}),
+                'Ошибки связанные с VPN': (2, 1, {}),
+                'Ошибки связанные с Легаси кодом': (2, 1, {}),
+                'Готовые решения задач': (1, 0, {})
+            }
+            --------------------------------------------------
+            OUT:
+            <ol>
+                <li>Стек технологий</li>
+                <ol>
+                    <li>БД</li>
+                    <ol>
+                        <li>SQL</li>
+                        <li>NoSQL</li>
+                    </ol>
+                    <li>Frontend</li>
+                    <li>Брокеры сообщений</li>
+                    <li>Диплой</li>
+                </ol>
+                <li>Ссылки на документацию</li>
+                <li>Ошибки</li>
+                <ol>
+                    <li>Ошибки связанные с API</li>
+                    <li>Ошибки связанные с БД</li>
+                    <li>Ошибки в UI</li>
+                    <li>Ошибки связанные с VPN</li>
+                    <li>Ошибки связанные с Легаси кодом</li>
+                </ol>
+                <li>Готовые решения задач</li>
+            </ol>
+            --------------------------------------------------
 
-        if _next < _last:
-            print('<')
-            res += "\n</ol>"
-        if _next > _last:
-            print('>')
-            res += "<ol>"
-        res += f"    \n<li>{_tmp[_index][0]}</li>"
-        if _next > _last:
-            print('>')
-            res += "</ol>"
+            """
+            _tmp = [(k, v) for k, v in hed.items()]
+            _last: int = 0
+            _res: list[str] = []
+            for _index in range(len(_tmp)):
+                _next: int = _tmp[_index][1][0]
+                if _next > _last:
+                    _res.append("<ol>")
+                elif _next < _last:
+                    _res.append("</ol>")
+                # Не скрытый заголовок попадает в оглавление
+                if _tmp[_index][1][1] != HeaderType.Hide.value:
+                    _res.append(template_li.format(header=_tmp[_index][0]))
+                _last = _next
+            _res.append("</ol>")
+            return ''.join(_res)
 
-        _last = _next
-
-    res += "</ol>"
-    print()
-
-        """
-        
         return "{menu}{res}".format(menu=f"""
 <div id="{HTML_CLASS.menu.value}">
+
+    <!-- Скрыть оглавление -->
+    <input type="button" id="bt_show_menu" value="<<"
+           onclick="{HTML_CLASS.detail_menu.value}.hidden=false;{HTML_CLASS.bt_show_menu.value}.hidden=true;{HTML_CLASS.bt_hidden_menu.value}.hidden=false;{HTML_CLASS.menu.value}.style.height = '50%';{HTML_CLASS.menu.value}.style.width = '35%';">
+    <!-- Развернуть оглавление -->
+    <input type="button" id="bt_hidden_menu" value=">>"
+           onclick="{HTML_CLASS.detail_menu.value}.hidden=true;{HTML_CLASS.bt_show_menu.value}.hidden=false;  {HTML_CLASS.bt_hidden_menu.value}.hidden=true;{HTML_CLASS.menu.value}.style.height = '50px';{HTML_CLASS.menu.value}.style.width = '50px';"/>
+    <!-- Темы оглавления -->
     <div id="{HTML_CLASS.detail_menu.value}">
-        <ol>   
-            {''.join(f'<li><a href="#{_header}">{_header}</a></li>' for _header, _val in StoreDoc.HeaderMain.date.items() if _val[1] != HeaderType.Hide.value)}
+        <ol>
+            {create_table_contents_from_HTML(StoreDoc.HeaderMain.date, '<li><a href="#{header}">{header}</a></li>')}
         </ol>
-        <input type="button" id="{HTML_CLASS.bt_hidden_menu.value}"  value=">>" onclick="{HTML_CLASS.detail_menu.value}.hidden=true;{HTML_CLASS.bt_show_menu.value}.hidden=false"/>
-    </div>
-    <div id="{HTML_CLASS.shot_menu.value}">
-        <input type="button" id="{HTML_CLASS.bt_show_menu.value}" value="<<" onclick="{HTML_CLASS.detail_menu.value}.hidden=false;{HTML_CLASS.bt_show_menu.value}.hidden=true">
     </div>
     <script>
         {HTML_CLASS.bt_show_menu.value}.hidden = true;
+        // Переход к заголовку по нажатию элемент оглавления.
+        document.querySelectorAll("#detail_menu li").forEach((e) => {{
+            e.onclick = ()=>{{
+              window.location.href  = e.children[0].href
+            }}
+          }}
+        );
     </script>
 </div>
 """[1:], res=res)

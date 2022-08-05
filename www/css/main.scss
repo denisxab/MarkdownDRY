@@ -79,10 +79,42 @@ h6 {
     bottom: 0px;
     border: 1px solid $ЦветФонаПодсказки;
     border-radius: 10px 0px 0px 0px;
+    height: 50%;
+    width: 35%;
+    #detail_menu {
+        height: 95%;
+        overflow: scroll;
+    }
     ol {
         // Убрать тире у элементов ненумерованного списка
-        // list-style-type: none;
+        list-style-type: none;
         color: $h_color;
+        padding-left: 0px;
+        // 1 заголовок
+        ol {
+            background: $h1_color;
+            padding-left: 20px;
+            // 2 заголовок
+            ol {
+                background: $h2_color;
+                // 3 заголовок
+                ol {
+                    background: $h3_color;
+                    // 4 заголовок
+                    ol {
+                        background: $h4_color;
+                        // 5 заголовок
+                        ol {
+                            background: $h5_color;
+                            // 6 заголовок
+                            ol {
+                                background: $h6_color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         // Ссылки
         a {
             text-decoration: none;

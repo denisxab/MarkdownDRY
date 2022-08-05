@@ -56,9 +56,36 @@ h6 {
   bottom: 0px;
   border: 1px solid #434c5e;
   border-radius: 10px 0px 0px 0px;
+  height: 50%;
+  width: 35%;
+}
+#menu #detail_menu {
+  height: 95%;
+  overflow: scroll;
 }
 #menu ol {
+  list-style-type: none;
   color: #abb0ba;
+  padding-left: 0px;
+}
+#menu ol ol {
+  background: #505762;
+  padding-left: 20px;
+}
+#menu ol ol ol {
+  background: #454a54;
+}
+#menu ol ol ol ol {
+  background: #393e46;
+}
+#menu ol ol ol ol ol {
+  background: #2f333a;
+}
+#menu ol ol ol ol ol ol {
+  background: #2e3238;
+}
+#menu ol ol ol ol ol ol ol {
+  background: #22252a;
 }
 #menu ol a {
   text-decoration: none;
