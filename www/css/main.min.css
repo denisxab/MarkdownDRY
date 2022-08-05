@@ -195,13 +195,13 @@ div > pre.code code::before {
 }
 
 .MarkdownDRY.MathSpan {
-  color: aquamarine;
-  background: rgb(136, 145, 143);
-  border-radius: 10px;
+  color: #ebcb8b;
+  background: #434c5e;
+  border-radius: 6px;
   padding: 2px 4px 2px 4px;
 }
 .MarkdownDRY.MathSpan .math_result {
-  color: antiquewhite;
+  color: #88c0d0;
 }
 .MarkdownDRY.HighlightBlock.HighlightBlock1 {
   background: rgb(136, 197, 128);

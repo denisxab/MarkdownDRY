@@ -111,20 +111,6 @@ class Test_Dev:
 
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
-            ReadTextFile('./dataset/dev/in/Математический Размах.md',
-                         'e5de21331b0ac36342f02a5411a7af7611ca2b56a7de8e3fd456bcd649dcfd14'),
-            ReadTextFile('./dataset/dev/out/Математический Размах.html',
-                         'bc2df24d7436ec351b100b1475123aa13eb3cfa6408f713ed183f37c7272e7c4'),
-
-        ]
-    ])
-    def test_MathSpan(self, T_in_data, T_check_data):
-        _next_test()
-        res = f"{html_head}{CoreMarkdownDRY.MathSpan(T_in_data.text)}"
-        assert res == T_check_data.text
-
-    @mark.parametrize(['T_in_data', 'T_check_data'], [
-        [
             ReadTextFile('./dataset/dev/in/Вставить кода из файла.md',
                          'c4819749a44277248d9bab900a4113bd69d3f55f47866b4c361d92d790278cec'),
             ReadTextFile('./dataset/dev/out/Вставить кода из файла.html',
@@ -234,7 +220,7 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/InsertCodeFromFile.md',
-                         None),
+                         'db0cb3300b33614ef2072406de60534782913406417d79a181d0c515d457b371'),
             ReadTextFile('./dataset/pub/out/InsertCodeFromFile.html',
                          None)
         ]
@@ -247,7 +233,7 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data', ], [
         [
             ReadTextFile('./dataset/pub/in/LinkCode_NET_GitGist.md',
-                         None),
+                         'af1bf1e2543c80163daf049fc8da8eb47d1bca2f4f85d6e0c2505173c878dce6'),
             ReadTextFile('./dataset/pub/out/LinkCode_NET_GitGist.html',
                          None)
         ]
@@ -261,9 +247,9 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data', ], [
         [
             ReadTextFile('./dataset/pub/in/LinkCode.md',
-                         None),
+                         '9076c42a3fe2bfddd30108aaa7d29691229d6c078a0b9ca9787c0d650375083b'),
             ReadTextFile('./dataset/pub/out/LinkCode.html',
-                         'None'),
+                         None),
 
         ]
     ])
@@ -276,19 +262,47 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data', 'T_check_store'], [
         [
             ReadTextFile('./dataset/pub/in/HeaderMain.md',
-                         None),
+                         '88810814dbe7c5a4089ae4c5c22748916cdddc2a239677c9d28d4faaa55b6ab3'),
             ReadTextFile('./dataset/pub/out/HeaderMain.html',
                          None),
             ReadTextFile('./dataset/pub/out/store/HeaderMain Store.json',
-                         None)
+                         '868ad22fa9545e1dfce87c6be30bddc55f05422438f6164657b883534ff6e2a1')
 
         ]
     ])
     def test_HeaderMain(self, T_in_data, T_check_data: ReadTextFile, T_check_store):
-        _next_test()
         res = f"{html_head}{CoreMarkdownDRY.HeaderMain(T_in_data.text)}{HTML_JS.Hotkey.result}"
         # T_check_data.write(res)
         assert dumps(StoreDoc.HeaderMain.date, ensure_ascii=False) == T_check_store.text
         assert res == T_check_data.text
 
-    # TODO: продолжить в верх HiddenHeaders,исправление тестов на публичные примеры
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/MathSpan_Simpl.md',
+                         'ec42c80aa7a3437cab8ab289b9f9c498046117b8f10cc38910fcadd520e3bf97'),
+            ReadTextFile('./dataset/pub/out/MathSpan_Simpl.html',
+                         None),
+
+        ]
+    ])
+    def test_MathSpan_Simpl(self, T_in_data, T_check_data):
+        """Быстрая проверка"""
+        res = f"{html_head}{CoreMarkdownDRY.MathSpan(T_in_data.text)}"
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/MathSpan.md',
+                         None),
+            ReadTextFile('./dataset/pub/out/MathSpan.html',
+                         None),
+
+        ]
+    ])
+    def test_MathSpan(self, T_in_data, T_check_data):
+        res = f"{html_head}{CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text))}{HTML_JS.Hotkey.result}"
+        T_check_data.write(res)
+
+        assert res == T_check_data.text
+    # TODO: продолжить в верх MathSpan1,исправление тестов на публичные примеры

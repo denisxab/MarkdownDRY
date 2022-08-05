@@ -716,7 +716,7 @@ data-touch="true" -- переключение фото с помощью кла�
         try:
             return f"""<span class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.MathSpan.value}"><span class="math_result">{sympify(text).__str__()}</span>={text}</span>"""
         except SympifyError:
-            return False
+            return m.group(0)
 
     @classmethod
     def _BaseCodeRef(cls, m: re.Match, self_path: str) -> Optional[BaseCodeRefReturn]:
