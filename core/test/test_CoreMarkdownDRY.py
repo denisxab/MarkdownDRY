@@ -50,22 +50,6 @@ class Test_Dev:
         assert res == T_check_data.text
         assert dumps(StoreDoc.ReferenceBlock, ensure_ascii=False) == T_check_store.text
 
-    @mark.parametrize(['T_in_data', 'T_check_data', 'T_check_store'], [
-        [
-            ReadTextFile('./dataset/dev/in/Раскрываемые блок.md',
-                         '7ecc3dece8c790cf5b530e7af1193e71438cf645136b3239f768cee0c2ddc758'),
-            ReadTextFile('./dataset/dev/out/Раскрываемые блок.html',
-                         'c30e69e530e3ff547ff6837b21bb00dd7f4dde24db872c1f1f573f1c29f7fdf5'),
-            ReadTextFile('./dataset/dev/out/DropdownBlock Store.json',
-                         'b976fb7c8af5edc9dfe5ae21680640f56f7cd709bc4eb1a214324c8f3b1f739a')
-        ]
-    ])
-    def test_DropdownBlock(self, T_in_data, T_check_data: ReadTextFile, T_check_store):
-        _next_test()
-        res = f"{html_head}{CoreMarkdownDRY.DropdownBlock(T_in_data.text)}"
-        assert res == T_check_data.text
-        assert dumps(StoreDoc.DropdownBlock, ensure_ascii=False) == T_check_store.text
-
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/dev/in/Фото галерея.md',
@@ -251,7 +235,7 @@ class Test_Pub:
                          '88810814dbe7c5a4089ae4c5c22748916cdddc2a239677c9d28d4faaa55b6ab3'),
             ReadTextFile('./dataset/pub/out/HeaderMain.html',
                          None),
-            ReadTextFile('./dataset/pub/out/store/HeaderMain Store.json',
+            ReadTextFile('./dataset/pub/out/store/HeaderMain.json',
                          '868ad22fa9545e1dfce87c6be30bddc55f05422438f6164657b883534ff6e2a1')
 
         ]
@@ -328,7 +312,7 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/HighlightBlock.md',
-                         None),
+                         'a1da4d84a72f2742f59f70df3a4632ec0e0eb9d0bafbf0a2d4ae344a2c5d5948'),
             ReadTextFile('./dataset/pub/out/HighlightBlock.html',
                          None)
         ]
@@ -338,4 +322,20 @@ class Test_Pub:
         # T_check_data.write(res)
         assert res == T_check_data.text
 
-    # TODO: продолжить в верх HighlightBlock,исправление тестов на публичные примеры
+    @mark.parametrize(['T_in_data', 'T_check_data', 'T_check_store'], [
+        [
+            ReadTextFile('./dataset/pub/in/DropdownBlock.md',
+                         None),
+            ReadTextFile('./dataset/pub/out/DropdownBlock.html',
+                         None),
+            ReadTextFile('./dataset/pub/out/store/DropdownBlock.json',
+                         None)
+        ]
+    ])
+    def test_DropdownBlock(self, T_in_data, T_check_data: ReadTextFile, T_check_store):
+        res = f"{html_head}{CoreMarkdownDRY.DropdownBlock(T_in_data.text)}"
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+        assert dumps(StoreDoc.DropdownBlock, ensure_ascii=False) == T_check_store.text
+
+    # TODO: продолжить в верх DropdownBlock,исправление тестов на публичные примеры

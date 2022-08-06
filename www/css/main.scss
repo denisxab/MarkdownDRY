@@ -16,6 +16,10 @@ $ЦветФонаПодсказки: #434c5e;
 $ЯркоеВыделение: #ebcb8b;
 $ЯркоеВыделение2: #88c0d0;
 
+$Хорошо: #a3be8c;
+$Среднее: #ebcb8b;
+$Плохо: #d08770;
+
 // -------------- Базовые настройки тем -----------------
 
 // Глобальные настройки
@@ -267,19 +271,29 @@ div > pre {
             color: $ЯркоеВыделение2;
         }
     }
+
     // Выделяемый блок
     &.HighlightBlock {
+        padding: 10px;
+        margin: 10px 30px 10px 30px;
+        color: $ЦветФона;
+        border-radius: 5px;
+        // Заголовок выделения
+        .HighlightTitle {
+            text-align: center;
+            margin-bottom: 5px;
+        }
         // Пример
         &.HighlightBlock1 {
-            background: rgb(136, 197, 128);
+            background: $Хорошо;
         }
         // Информация
         &.HighlightBlock2 {
-            background: rgb(157, 186, 209);
+            background: $Среднее;
         }
         // Предупреждение
         &.HighlightBlock3 {
-            background: rgb(205, 224, 95);
+            background: $Плохо;
         }
     }
     // Раскрываемый блок

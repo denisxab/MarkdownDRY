@@ -203,14 +203,24 @@ div > pre.code code::before {
 .MarkdownDRY.MathSpan .math_result {
   color: #88c0d0;
 }
+.MarkdownDRY.HighlightBlock {
+  padding: 10px;
+  margin: 10px 30px 10px 30px;
+  color: #2e3440;
+  border-radius: 5px;
+}
+.MarkdownDRY.HighlightBlock .HighlightTitle {
+  text-align: center;
+  margin-bottom: 5px;
+}
 .MarkdownDRY.HighlightBlock.HighlightBlock1 {
-  background: rgb(136, 197, 128);
+  background: #a3be8c;
 }
 .MarkdownDRY.HighlightBlock.HighlightBlock2 {
-  background: rgb(157, 186, 209);
+  background: #ebcb8b;
 }
 .MarkdownDRY.HighlightBlock.HighlightBlock3 {
-  background: rgb(205, 224, 95);
+  background: #d08770;
 }
 .MarkdownDRY.DropdownBlock .DropdownBlockTitle {
   color: blue;
