@@ -123,7 +123,6 @@ a:visited {
 div > pre {
   background: #3b4252;
   padding: 10px 0px 15px 0px;
-  margin: 20px;
   border-radius: 4px;
 }
 div > pre span {
@@ -194,6 +193,16 @@ div > pre.code code::before {
   font-size: small;
 }
 
+.MarkdownDRY.InsertCodeFromFile {
+  background: #3b4252;
+}
+.MarkdownDRY.InsertCodeFromFile div {
+  padding-left: 3em;
+  padding-top: 5px;
+  margin-top: 5px;
+  font-size: medium;
+  text-align: center;
+}
 .MarkdownDRY.MathSpan {
   color: #ebcb8b;
   background: #434c5e;

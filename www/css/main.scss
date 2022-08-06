@@ -166,7 +166,7 @@ a {
 div > pre {
     background: $ЦветФонаВсплывающегоОкна;
     padding: 10px 0px 15px 0px;
-    margin: 20px;
+    // margin: 20px;
     border-radius: 4px;
     // Стиль для выделение текста
     span {
@@ -204,7 +204,6 @@ div > pre {
 
 #LinkCodeWindow {
     width: 100%;
-    // height: 100%;
     display: none;
     position: absolute;
     top: 0;
@@ -260,6 +259,17 @@ div > pre {
 //----------------------------------------------------------------------------
 
 .MarkdownDRY {
+    // Вставленный код
+    &.InsertCodeFromFile {
+        background: $ЦветФонаВсплывающегоОкна;
+        div {
+            padding-left: 3em;
+            padding-top: 5px;
+            margin-top: 5px;
+            font-size: medium;
+            text-align: center;
+        }
+    }
     // Математический размах
     &.MathSpan {
         color: $ЯркоеВыделение;

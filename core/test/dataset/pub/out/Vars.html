@@ -1,0 +1,98 @@
+<head>
+    <meta charset="UTF-8">
+    <link href="../../../../../www/css/bootstrap-5.1.3-dist/main.css" rel="stylesheet">
+    <script src="../../../../../www/css/bootstrap-5.1.3-dist/main.js"></script>
+    <link rel="stylesheet" href="../../../../../www/css/main.min.css">
+    <link rel="stylesheet" href="../../../../../www/css/plugin.css">
+</head>
+<div id="menu">
+    <!-- Скрыть оглавление -->
+    <input type="button" id="bt_show_menu" value="<<"
+           onclick="menu_hidden()">
+    <!-- Развернуть оглавление -->
+    <input type="button" id="bt_hidden_menu" value=">>"
+           onclick="menu_show()"/>
+    <!-- Темы оглавления -->
+    <div id="detail_menu">
+        <ol>
+            <ol><li><a href="#Документация таблиц">Документация таблиц</a></li></ol>
+        </ol>
+    </div>
+    <script>
+        function menu_hidden(){
+    // Скрыть оглавление
+    detail_menu.hidden=false;
+    bt_show_menu.hidden=true;
+    bt_hidden_menu.hidden=false;
+    menu.style.height='50%';
+}
+function menu_show(){
+    // Показать оглавление
+   detail_menu.hidden=true;
+   bt_show_menu.hidden=false;
+   bt_hidden_menu.hidden=true;
+   menu.style.height='50px';
+}
+function menu_is_hidden(){
+    // Узнать скрыто ли оглавление
+    return detail_menu.hidden
+}
+// Изначально скрываем кнопку показа оглавления
+bt_show_menu.hidden = true;
+(function (){
+    // Переход к заголовку по нажатию элемент оглавления.        
+    document.querySelectorAll("#detail_menu li").forEach((e) => {
+        e.onclick = ()=>{
+          window.location.href  = e.children[0].href
+        }
+      }
+    );
+})()
+
+    </script>
+</div>
+<h1 id="Документация таблиц" class="MarkdownDRY StandardHeaders">Документация таблиц</h1>
+
+
+<br>Инициализируем переменные в которых будут храниться текст с типами(текста с
+<br>инициализацией переменных в html не будет, потому что зачем всем что вы любите
+<br>обзывать переменные тремя буквами XD)
+<br>
+<br>%%VCH=varchar%%
+<br>%%Строка255=тип varchar(255)%%
+<br>%%Строка8=тип varchar(255)%%
+<br>%%ЭтоОбязательно=(\* это поле обязательно для заполнения)%%
+<br>%%ПоУмолчанию=По умолчанию%%
+<br>
+<br>Вот наша оригинальная таблица которая нуждается в документации. Приведем два
+<br>варианта как это можно записать.
+<br>
+<br>- DLL_Имя Описание Тип
+<br>- Login Логин тип varchar(255) (\* это поле обязательно для заполнения)
+<br>- Password Парольтип varchar(255) (\* это поле обязательно для заполнения)
+<br>- FIO ФИО тип varchar(255)
+<br>- DATE_CREATE Дата рождения тип varchar(255) (\* это поле обязательно для заполнения)
+<br>- Family_Status Семейное положение По умолчанию [=IS_LONELY_DOG]
+<br>
+<br>| DLL Имя       | Описание           | Тип                             |
+<br>| ------------- | ------------------ |---------------------------------|
+<br>| Login         | Логин              | тип varchar(255) (\* это поле обязательно для заполнения)  | 
+<br>| Password      | Пароль             | тип varchar(255) (\* это поле обязательно для заполнения)  |
+<br>| FIO           | ФИО                | тип varchar(255) (\* это поле обязательно для заполнения)  |
+<br>| DATE_CREATE   | Дата рождения      | тип varchar(255)                      |
+<br>| Family_Status | Семейное положение | По умолчанию [=IS_LONELY_DOG] |
+<script>
+// https://snipp.ru/handbk/js-kbd-codes
+document.onkeyup = function () {
+    var e = e || window.event;
+    if (e.altKey && e.which == 84) {
+    if (menu_is_hidden() === false) {
+        menu_show();
+    } else {
+        menu_hidden();
+    }
+    return false;
+}
+
+}
+</script>

@@ -19,37 +19,6 @@ class Test_Dev:
         _next_test()
         self.path = (Path(__file__).parent / 'dataset/in').__str__()
 
-    @mark.parametrize(['T_in_data', 'T_check_data', 'T_store'], [
-        [
-            ReadTextFile('./dataset/dev/in/Ссылочный блок использование.md',
-                         '6bb9453f0f70c533ce130dbf72d2c896335be90c71c0ab206cac4935cb4e468c'),
-            ReadTextFile('./dataset/dev/out/Ссылочный блок использование.md',
-                         '14ce7f53d427c7e27092317e6bddf74ab13f8a3dd932391a14c5f080c28f5fe2'),
-            ReadTextFile('./dataset/dev/out/ReferenceBlock Store.json',
-                         '6eb3d9e7619e95b75d7a17a61b1b865a1e17cbe7c42001c01b21888246b2fa59')
-        ]
-    ])
-    def test_UseReferenceBlock(self, T_in_data, T_check_data, T_store):
-        _next_test()
-        res = CoreMarkdownDRY.UseReferenceBlock(T_in_data.text, loads(T_store.text))
-        assert res == T_check_data.text
-
-    @mark.parametrize(['T_in_data', 'T_check_data', 'T_check_store'], [
-        [
-            ReadTextFile('./dataset/dev/in/Ссылочный блок init.md',
-                         '1e78bf102fc67858d239183742e6ad4aee9e32eaba00ebd63b25067aea57f7b5'),
-            ReadTextFile('./dataset/dev/out/Ссылочный блок init.html',
-                         'cb273541601713af3b30acbea104b22d534cbcc12f599e570ea70037b730ad62'),
-            ReadTextFile('./dataset/dev/out/ReferenceBlock Store.json',
-                         '6eb3d9e7619e95b75d7a17a61b1b865a1e17cbe7c42001c01b21888246b2fa59')
-        ]
-    ])
-    def test_ReferenceBlock(self, T_in_data, T_check_data, T_check_store):
-        _next_test()
-        res = f"{html_head}{CoreMarkdownDRY.ReferenceBlock(T_in_data.text)}"
-        assert res == T_check_data.text
-        assert dumps(StoreDoc.ReferenceBlock, ensure_ascii=False) == T_check_store.text
-
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/dev/in/Фото галерея.md',
@@ -338,4 +307,49 @@ class Test_Pub:
         assert res == T_check_data.text
         assert dumps(StoreDoc.DropdownBlock, ensure_ascii=False) == T_check_store.text
 
-    # TODO: продолжить в верх DropdownBlock,исправление тестов на публичные примеры
+    @mark.parametrize(['T_in_data', 'T_check_store'], [
+        [
+            ReadTextFile('./dataset/pub/in/ReferenceBlock.md',
+                         '6c454cd3f9956bb26bf15432703329a1e49c50af4cda08795e9880e1e69d78b3'),
+            ReadTextFile('./dataset/pub/out/store/ReferenceBlock.json',
+                         '1a95b66a729a8db3a7d0cc341662bfe84eefffb57a854b2e846d1cdeb5f6f6b7')
+        ]
+    ])
+    def test_ReferenceBlock(self, T_in_data, T_check_store):
+        CoreMarkdownDRY.ReferenceBlock(T_in_data.text)
+        assert dumps(StoreDoc.ReferenceBlock, ensure_ascii=False) == T_check_store.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data', 'T_store'], [
+        [
+            ReadTextFile('./dataset/pub/in/ReferenceBlock.md',
+                         '6c454cd3f9956bb26bf15432703329a1e49c50af4cda08795e9880e1e69d78b3'),
+            ReadTextFile('./dataset/pub/out/ReferenceBlock.md',
+                         '210824208db94fb5d9f4277cc09e4643f894a11685a975a8fe5b8d3fdb95b23c'),
+            ReadTextFile('./dataset/pub/out/store/ReferenceBlock.json',
+                         '1a95b66a729a8db3a7d0cc341662bfe84eefffb57a854b2e846d1cdeb5f6f6b7')
+        ]
+    ])
+    def test_UseReferenceBlock(self, T_in_data, T_check_data, T_store):
+        res = CoreMarkdownDRY.UseReferenceBlock(T_in_data.text, loads(T_store.text))
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data', 'T_check_store'], [
+        [
+            ReadTextFile('./dataset/pub/in/Vars.md',
+                         None),
+            ReadTextFile('./dataset/pub/out/Vars.html',
+                         None),
+            ReadTextFile('./dataset/pub/out/store/Vars.json',
+                         None)
+
+        ]
+    ])
+    def test_Vars(self, T_in_data, T_check_data, T_check_store):
+        """Вложенные обращения к переменным"""
+        res = f"{html_head}{CoreMarkdownDRY.HeaderMain(T_in_data.text)}{HTML_JS.Hotkey.result}"
+        T_check_data.write(res)
+        assert dumps(StoreDoc.HeaderMain.date, ensure_ascii=False) == T_check_store.text
+        assert res == T_check_data.text
+
+    # TODO: продолжить в верх Vars,исправление тестов на публичные примеры
