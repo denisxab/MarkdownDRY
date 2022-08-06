@@ -365,4 +365,5 @@ class Test_Pub:
         # T_check_data.write(res)
         assert res == T_check_data.text
 
-    # TODO: продолжить в верх IndisputableInsertCodeFromFile,исправление тестов на публичные примеры
+    # TODO: продолжить MultiLineTables,исправление тестов на публичные примеры, продумать агрегатные функции к ячейкам таблицы.
+    # TODO: продолжить MultiPageCode
