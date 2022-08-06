@@ -337,18 +337,18 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data', 'T_check_store'], [
         [
             ReadTextFile('./dataset/pub/in/Vars.md',
-                         None),
+                         '9c7c7fb98a49a5e201b3b8617491dbeed6d78f5b07efc5211d9861486b03b6a6'),
             ReadTextFile('./dataset/pub/out/Vars.html',
                          None),
             ReadTextFile('./dataset/pub/out/store/Vars.json',
-                         None)
+                         '08d01840b2d2a8d72e4b2a66fa86aaba06ff44d24fa586b97c3752493891b633')
 
         ]
     ])
     def test_Vars(self, T_in_data, T_check_data, T_check_store):
         """Вложенные обращения к переменным"""
         res = f"{html_head}{CoreMarkdownDRY.HeaderMain(T_in_data.text)}{HTML_JS.Hotkey.result}"
-        T_check_data.write(res)
+        # T_check_data.write(res)
         assert dumps(StoreDoc.HeaderMain.date, ensure_ascii=False) == T_check_store.text
         assert res == T_check_data.text
 
