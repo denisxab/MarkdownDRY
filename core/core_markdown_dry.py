@@ -75,9 +75,12 @@ class REGEX:
     _BaseCodeRef: str = "\[(?P<name>.*)\]\((?P<path>[^#\n]+)#?(?P<main>[^)\n.]+)?\.?(?P<child>[^.\n)]+)?\)"
     # Поиск мест где нужно вставить код из файла
     InsertCodeFromFile: re.Pattern = re.compile(f"!{_BaseCodeRef}")
+    # Бесспорная вставка кода
+    IndisputableInsertCodeFromFile: re.Pattern = re.compile(f"!!{_BaseCodeRef}")
+    # TODO: проверить что `LinkCode` не конфликтует с обычными ссылками
     # Поиск мест где нужно сослаться на код
     LinkCode: re.Pattern = re.compile(_BaseCodeRef)
-    # Поиск якоря в коде
+    # Поиск уникального якоря в коде
     AnchorFromCode: str = '(?<={name}>\n)\n*(?:.\s*(?!<{name}))+'
     # ------------------------
 
@@ -395,9 +398,18 @@ class CoreMarkdownDRY:
     @classmethod
     def InsertCodeFromFile(cls, source_text: str, self_path: str) -> Optional[str]:
         """
-        Вставка кода
+        Вставка кода, не трогает `md` файл, а создается в HTML
         """
         return REGEX.InsertCodeFromFile.sub(lambda t: MDDRY_TO_HTML.InsertCodeFromFile(t, self_path), source_text)
+
+    @classmethod
+    def IndisputableInsertCodeFromFile(cls, source_text: str, self_path: str) -> Optional[str]:
+        """
+        Бесспорная вставка кода, выполняется в начале сборки, изменяет `md` файл, а после этого может
+        быть конвертирован по остальным правилам `MDDRY`
+        """
+        return REGEX.IndisputableInsertCodeFromFile.sub(lambda t: MDDRY_TO_MD.IndisputableInsertCodeFromFile(t, self_path),
+                                                        source_text)
 
     @classmethod
     def LinkCode(cls, source_text: str, self_path: str = None) -> Optional[str]:
@@ -899,3 +911,8 @@ class MDDRY_TO_MD:
         else:
             # Если такого блока нет в хранилище, то возвращаем тот же текст
             return m.group(0)
+
+    @classmethod
+    def IndisputableInsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
+        """Бесспорная вставка кода"""
+        return Path(self_path, m['path']).resolve().read_text()

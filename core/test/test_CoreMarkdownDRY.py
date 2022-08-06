@@ -352,4 +352,17 @@ class Test_Pub:
         assert dumps(StoreDoc.HeaderMain.date, ensure_ascii=False) == T_check_store.text
         assert res == T_check_data.text
 
-    # TODO: продолжить в верх Vars,исправление тестов на публичные примеры
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/IndisputableInsertCodeFromFile.md',
+                         '4d464265bce2b39d1fbf091e58134ee67854025370ad6352b40dd8581c22e671'),
+            ReadTextFile('./dataset/pub/out/IndisputableInsertCodeFromFile.md',
+                         'e96d4ca044661b7dcc35da52164b1206b5e12fa5bd74bf2fa77f8b015510af27'),
+        ]
+    ])
+    def test_IndisputableInsertCodeFromFile(self, T_in_data, T_check_data):
+        res = f"{CoreMarkdownDRY.IndisputableInsertCodeFromFile(T_in_data.text, self.path)}"
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    # TODO: продолжить в верх IndisputableInsertCodeFromFile,исправление тестов на публичные примеры
