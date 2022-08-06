@@ -325,11 +325,11 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data', 'T_check_store'], [
         [
             ReadTextFile('./dataset/pub/in/DropdownBlock.md',
-                         None),
+                         '441bb9cfdad159de4ea24403b1d5cb18132db9bdfaa86799422655d776ec3ba2'),
             ReadTextFile('./dataset/pub/out/DropdownBlock.html',
                          None),
             ReadTextFile('./dataset/pub/out/store/DropdownBlock.json',
-                         None)
+                         '6621f20dc21b13221c3d31983f13bbe337cddeb83c8e07cba69e0ecaf5b76547')
         ]
     ])
     def test_DropdownBlock(self, T_in_data, T_check_data: ReadTextFile, T_check_store):

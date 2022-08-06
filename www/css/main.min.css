@@ -223,18 +223,34 @@ div > pre.code code::before {
   background: #d08770;
 }
 .MarkdownDRY.DropdownBlock .DropdownBlockTitle {
-  color: blue;
+  color: #81a1c1;
 }
 .MarkdownDRY.DropdownBlock .DropdownBlockText {
-  display: none;
-  border: 1px solid #000;
-  background: #ddd;
+  border-radius: 5px;
+  width: 0px;
+  height: 0px;
+  overflow: hidden;
+  transition: height 0.3s;
+  background: #434c5e;
 }
-.MarkdownDRY.DropdownBlock .DropdownBlockTitle:hover + .DropdownBlockText {
-  display: block;
+.MarkdownDRY.DropdownBlock .DropdownBlockTitle:hover + .DropdownBlockText,
+.MarkdownDRY.DropdownBlock .DropdownBlockText:hover {
+  padding: 10px;
+  width: 95%;
+  height: 15%;
+  overflow: auto;
 }
 .MarkdownDRY.DropdownBlock .DropdownBlockText:hover {
-  display: block;
+  padding: 10px;
+  width: 95%;
+  height: 35%;
+  overflow: auto;
+}
+.MarkdownDRY.DropdownBlock .DropdownBlockTitle::after {
+  content: " vvv";
+}
+.MarkdownDRY.DropdownBlock .DropdownBlockTitle::before {
+  content: "vvv ";
 }
 .MarkdownDRY.MultiLineTables > table {
   width: 100%;
