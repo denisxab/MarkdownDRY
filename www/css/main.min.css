@@ -251,51 +251,59 @@ div > pre.code code::before {
   background: #f7f7f7;
 }
 .MarkdownDRY.Slider {
-  background: #000;
+  background: #2e3440;
+  margin: 10px 0px 10px 0px;
   /*Описание группы*/
 }
 .MarkdownDRY.Slider > h2 {
   text-align: center;
-  color: whitesmoke;
+  font-size: medium;
   margin-bottom: 10px;
-  padding-top: 10px;
+  padding: 5px;
   display: block;
 }
 .MarkdownDRY.Slider .carousel-inner {
-  /*Активный элемент*/
+  /* Элемент прокрутки*/
 }
-.MarkdownDRY.Slider .carousel-inner > .carousel-item.active {
+.MarkdownDRY.Slider .carousel-inner > .carousel-item {
   min-height: 400px;
   /*Описание блока*/
-  /*Фото по центру*/
 }
-.MarkdownDRY.Slider .carousel-inner > .carousel-item.active h3 {
+.MarkdownDRY.Slider .carousel-inner > .carousel-item h3 {
   text-align: center;
-  margin-top: 10px;
-  margin-bottom: 50px;
-  color: whitesmoke;
+  padding: 5px 0px 0px 0px;
+  font-size: medium;
+  background: #2e3440;
 }
-.MarkdownDRY.Slider .carousel-inner > .carousel-item.active code {
+.MarkdownDRY.Slider .carousel-inner > .carousel-item code {
   color: white;
   display: block;
   margin-left: 40px;
   margin-right: 40px;
 }
-.MarkdownDRY.Slider .carousel-inner > .carousel-item.active code span {
+.MarkdownDRY.Slider .carousel-inner > .carousel-item code span {
   background: rgb(129, 126, 83);
   border: rgb(129, 126, 83) solid;
 }
-.MarkdownDRY.Slider .carousel-inner > .carousel-item.active img {
+.MarkdownDRY.Slider .carousel-inner > .carousel-item img {
+  /*Фото по центру*/
   margin: 0 auto;
+  -o-object-fit: contain;
+     object-fit: contain;
+  height: 55%;
+  width: 95%;
+  border-radius: 5px;
 }
 .MarkdownDRY.Slider .slider_nav {
-  padding-bottom: 30px;
+  background: #2e3440;
+  padding-bottom: 5px;
   /*Порядковые кнопки переключение блоков*/
 }
 .MarkdownDRY.Slider .slider_nav .carousel-indicators {
   position: static;
   float: left;
   width: 40%;
+  margin-bottom: 0px;
 }
 .MarkdownDRY.Slider .slider_nav .carousel-indicators button {
   width: 15px;

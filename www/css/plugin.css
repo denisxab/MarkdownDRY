@@ -1,4 +1,4 @@
 /* Быстрая анимация для слайдера   */
 .carousel-inner .carousel-item {
-  transition: -webkit-transform 10ms ease;
+  transition: -webkit-transform 0ms;
 }

@@ -13,9 +13,8 @@ $БазовыйЦветПосещеннойСсылки: #81a1c1;
 $ЦветФонаВсплывающегоОкна: #3b4252; //#acb7c7;
 $ЦветФонаПодсказки: #434c5e;
 
-$ЯркоеВыделение:#ebcb8b;
-$ЯркоеВыделение2:#88c0d0;
-
+$ЯркоеВыделение: #ebcb8b;
+$ЯркоеВыделение2: #88c0d0;
 
 // -------------- Базовые настройки тем -----------------
 
@@ -181,7 +180,6 @@ div > pre {
     }
     &.code code {
         counter-increment: listing;
-
     }
     &.code code::before {
         content: counter(listing) ". ";
@@ -194,7 +192,6 @@ div > pre {
         background: $ЦветФонаПодсказки;
         padding-left: 3px;
         margin-right: 10px;
-
     }
 }
 // --------------------------------------------------------
@@ -335,52 +332,60 @@ div > pre {
     }
     // Стили для слайдера
     &.Slider {
-        background: #000;
+        background: $ЦветФона;
+        margin: 10px 0px 10px 0px;
         /*Описание группы*/
         > h2 {
             text-align: center;
-            color: whitesmoke;
+            // color: whitesmoke;
+            font-size: medium;
             margin-bottom: 10px;
-            padding-top: 10px;
+            padding: 5px;
             display: block;
         }
-
         .carousel-inner {
-            /*Активный элемент*/
+            /* Элемент прокрутки*/
             > .carousel-item {
-                &.active {
-                    min-height: 400px;
-                    /*Описание блока*/
-                    h3 {
-                        text-align: center;
-                        margin-top: 10px;
-                        margin-bottom: 50px;
-                        color: whitesmoke;
+                min-height: 400px;
+                /*Описание блока*/
+                h3 {
+                    text-align: center;
+                    padding: 5px 0px 0px 0px;
+                    font-size: medium;
+                    background: $ЦветФона;
+                }
+                // Код
+                code {
+                    color: white;
+                    display: block;
+                    margin-left: 40px;
+                    margin-right: 40px;
+                    span {
+                        background: rgb(129, 126, 83);
+                        border: rgb(129, 126, 83) solid;
                     }
-                    code {
-                        color: white;
-                        display: block;
-                        margin-left: 40px;
-                        margin-right: 40px;
-                        span {
-                            background: rgb(129, 126, 83);
-                            border: rgb(129, 126, 83) solid;
-                        }
-                    }
+                }
+                // Фото
+                img {
                     /*Фото по центру*/
-                    img {
-                        margin: 0 auto;
-                    }
+                    margin: 0 auto;
+                    // Сохранение пропорции у фото
+                    object-fit: contain;
+                    height: 55%;
+                    width: 95%;
+                    border-radius: 5px;
                 }
             }
         }
         // Нижня часть слайдера, отвечает за переключение сайдов
         .slider_nav {
-            padding-bottom: 30px;
+            background: $ЦветФона;
+            padding-bottom: 5px;
             .carousel-indicators {
                 position: static;
                 float: left;
                 width: 40%;
+                margin-bottom: 0px;
                 button {
                     width: 15px;
                     height: 15px;

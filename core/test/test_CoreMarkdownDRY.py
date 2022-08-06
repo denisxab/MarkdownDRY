@@ -68,20 +68,6 @@ class Test_Dev:
 
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
-            ReadTextFile('./dataset/dev/in/Выделение блоков.md',
-                         'd4d824f4816265727c318e863e97d8d4cb33cf15c141564971317c492c33356b'),
-            ReadTextFile('./dataset/dev/out/Выделение блоков.html',
-                         '5fbb33014c57dab06ce16fd6f8d761174ab86b25132c6addad0bdd25addb818c')
-        ]
-    ])
-    def test_HighlightBlock(self, T_in_data, T_check_data: ReadTextFile):
-        _next_test()
-        res = f"{html_head}{CoreMarkdownDRY.HighlightBlock(T_in_data.text)}"
-        # T_check_data.write(res)
-        assert res == T_check_data.text
-
-    @mark.parametrize(['T_in_data', 'T_check_data'], [
-        [
             ReadTextFile('./dataset/dev/in/Фото галерея.md',
                          '503f487023874d1b86bd2909b3b912a7733a7a1a517ee4abc582875fe4995cbc'),
             ReadTextFile('./dataset/dev/out/Фото галерея.html',
@@ -305,4 +291,51 @@ class Test_Pub:
         # T_check_data.write(res)
         assert res == T_check_data.text
 
-    # TODO: продолжить в верх PhotoGallery,исправление тестов на публичные примеры
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/PhotoGallery.md',
+                         '998afda2ac2ddbf0b9ce2c6240b817ed727361d63cd437a21aea6545d450d6e5'),
+            ReadTextFile('./dataset/pub/out/PhotoGallery.html',
+                         None),
+
+        ]
+    ])
+    def test_PhotoGallery(self, T_in_data, T_check_data):
+        res = f"{html_head}{CoreMarkdownDRY.PhotoGallery(T_in_data.text)}"
+        # T_check_data.write(res)
+        """
+        # Конвертировать путь к изображению в base64 для того чтобы хранить фото в самом HTML файле 
+        function toDataURL(url, callback) {
+          var xhr = new XMLHttpRequest();
+          xhr.onload = function() {
+            var reader = new FileReader();
+            reader.onloadend = function() {
+              callback(reader.result);
+            }
+            reader.readAsDataURL(xhr.response);
+          };
+          xhr.open('GET', url);
+          xhr.responseType = 'blob';
+          xhr.send();
+        }
+        
+        toDataURL(a.src, function(dataUrl) {
+          console.log('RESULT:', dataUrl)
+        })
+        """
+        assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/HighlightBlock.md',
+                         None),
+            ReadTextFile('./dataset/pub/out/HighlightBlock.html',
+                         None)
+        ]
+    ])
+    def test_HighlightBlock(self, T_in_data, T_check_data: ReadTextFile):
+        res = f"{html_head}{CoreMarkdownDRY.HighlightBlock(T_in_data.text)}"
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    # TODO: продолжить в верх HighlightBlock,исправление тестов на публичные примеры

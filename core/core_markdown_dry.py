@@ -658,56 +658,45 @@ class MDDRY_TO_HTML:
         body = ''.join(body)
         id_hash = f"i{md5(body.encode()).hexdigest()}"
         bt_down_slide = ''.join(
-            f"""
-<button type="button" data-bs-target="#{id_hash}" data-bs-slide-to="{_index}"{' class="active"' if _index == 0 else ''}></button>
-"""[1:]
-            for _index in
-            range(count_items)
+            f"""<button type="button" data-bs-target="#{id_hash}" data-bs-slide-to="{_index}"{' class="active"' if _index == 0 else ''}></button>"""
+            for _index in range(count_items)
         )
-        return """
-<div class="{class_1} Slider {class_2}">
-<h2>{title}</h2>
-<div id="{id_hash}"
- class="carousel slide"
- data-ride="carousel"
- data-pause="false"
- data-touch="true"
- data-bs-interval="false"
- data-keyboard="true"
->
-<!--
-data-touch="true" -- Должна ли карусель поддерживать смахивание влево/вправо на устройствах с сенсорным экраном.
-data-bs-interval="false" -- отключить авто переключение фото
-data-pause="false" -- убрать авто переключение фото
-data-touch="true" -- переключение фото с помощью клавиш
--->
-<!-- Фото -->
-<div class="carousel-inner">
-    {body}
-</div>
-<div class="slider_nav">
-    <!-- Кнопки переключение с лево и право -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#{id_hash}" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-    <!-- Кнопки снизу -->
-    <div class="carousel-indicators">
-        {bt_down_slide}
+        return f"""
+<div class="{HTML_CLASS.MarkdownDRY.value} Slider {class_2.value}">
+    <h2>{title}</h2>
+    <!--
+    data-touch="true" -- Должна ли карусель поддерживать смахивание влево/вправо на устройствах с сенсорным экраном.
+    data-bs-interval="false" -- отключить авто переключение фото
+    data-pause="false" -- убрать авто переключение фото
+    data-touch="true" -- переключение фото с помощью клавиш
+    -->
+    <div id="{id_hash}"
+        class="carousel slide"
+        data-ride="carousel"
+        data-pause="false"
+        data-touch="true"
+        data-bs-interval="false"
+        data-keyboard="true" >
+
+        <!-- Список элементов для прокрутки -->
+        <div class="carousel-inner">
+            {body}
+        </div>
+        <!-- Навигация по элементам -->
+        <div class="slider_nav">
+            <!-- Кнопки переключение с лево и право -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#{id_hash}" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <!-- Кнопки снизу -->
+            <div class="carousel-indicators">{bt_down_slide}</div>
+            <button class="carousel-control-next" type="button" data-bs-target="#{id_hash}" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
     </div>
-    <button class="carousel-control-next" type="button" data-bs-target="#{id_hash}" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
 </div>
-</div>
-</div>
-"""[1:].format(
-            class_1=HTML_CLASS.MarkdownDRY.value,
-            class_2=class_2.value,
-            id_hash=id_hash,
-            title=title,
-            body=body,
-            bt_down_slide=bt_down_slide,
-        )
+"""[1:]
 
     @classmethod
     def MathSpan(cls, m: re.Match) -> Union[str, bool]:
