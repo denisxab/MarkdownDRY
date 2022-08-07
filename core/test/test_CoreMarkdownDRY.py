@@ -117,19 +117,6 @@ class Test_Dev:
         # T_check_data.write(res)
         assert res == T_check_data.text
 
-    @mark.parametrize(['T_in_data', 'T_check_data'], [
-        [
-            ReadTextFile('./dataset/dev/in/Многострочные таблицы.md',
-                         'ebe0d41edc96e97ad9c59024ecd51d612983869d76a6329db8966287d178d38c'),
-            ReadTextFile('./dataset/dev/out/Многострочные таблицы.html',
-                         '662ccdb7e4fb06bcfa91a7ff936e752bf2c0940eccb9b7f3bba2553a2f3229a4')
-        ]
-    ])
-    def test_MultilineTables(self, T_in_data, T_check_data):
-        _next_test()
-        res = f"{html_head}{CoreMarkdownDRY.MultiLineTables(T_in_data.text)}"
-        assert res == T_check_data.text
-
 
 class Test_Pub:
     """
@@ -360,11 +347,21 @@ class Test_Pub:
         ]
     ])
     def test_MultiPageCode(self, T_in_data, T_check_data: ReadTextFile):
-        _next_test()
         res = f"{html_head}{CoreMarkdownDRY.MultiPageCode(T_in_data.text)}"
         # T_check_data.write(res)
         assert res == T_check_data.text
 
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/MultilineTables.md',
+                         None),
+            ReadTextFile('./dataset/pub/out/MultilineTables.html',
+                         None)
+        ]
+    ])
+    def test_MultilineTables(self, T_in_data, T_check_data):
+        res = f"{html_head}{CoreMarkdownDRY.MultiLineTables(T_in_data.text)}"
+        # T_check_data.write(res)
+        assert res == T_check_data.text
 
     # TODO: продолжить MultiLineTables,исправление тестов на публичные примеры, продумать агрегатные функции к ячейкам таблицы.
-    # TODO: продолжить MultiPageCode

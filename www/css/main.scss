@@ -346,28 +346,57 @@ div > pre {
     }
     // Многострочная таблица
     &.MultiLineTables {
-        > table {
-            width: 100%;
-            margin-bottom: 20px;
-            border: 1px solid #dddddd;
+        // --------------
+        width: 95%;
+        overflow: auto;
+
+        // Таблицы
+        table {
+            margin-top: 5px;
+            margin-left: auto;
+            margin-right: auto;
             border-collapse: collapse;
-            th {
-                font-weight: bold;
-                padding: 5px;
-                background: #9ca8b6;
-                border: 1px solid #dddddd;
-                color: rgb(64, 107, 107);
+            margin-bottom: 20px;
+            // Заголовок таблицы
+            thead {
+                th {
+                    text-align: center;
+                    padding: 10px;
+                    box-shadow: 0px 0px 0px 1px $ЦветФонаВсплывающегоОкна;
+                }
+
+                th:first-child {
+                    border-radius: 10px 0 0 0;
+                }
+
+                th:last-child {
+                    border-radius: 0 10px 0 0;
+                }
             }
-            td {
-                border: 1px solid #dddddd;
-                padding: 5px;
-                color: rgb(64, 107, 107);
-            }
-            tbody tr:nth-child(even) {
-                background: #fff;
-            }
-            tbody tr:nth-child(odd) {
-                background: #f7f7f7;
+
+            // Данные в таблице
+            tbody {
+                tr {
+                    border-left: 0.5px solid $ЦветФона;
+                    border-right: 0.5px solid $ЦветФона;
+                }
+
+                tr:last-of-type {
+                    border-bottom: 0.5px solid $ЦветФона;
+                }
+
+                td {
+                    padding: 10px;
+                    margin: 10px;
+                    border: 2px solid $ЦветФонаВсплывающегоОкна;
+                }
+
+                tr:nth-child(even) {
+                    background: $ЦветФонаВсплывающегоОкна;
+                }
+                tr:nth-child(odd) {
+                    background: $ЦветФонаПодсказки;
+                }
             }
         }
     }
@@ -394,7 +423,7 @@ div > pre {
                     font-size: medium;
                     background: $ЦветФона;
                 }
-                pre{
+                pre {
                     margin: 0 auto;
                     padding: 0px;
                     padding-top: 10px;
@@ -402,9 +431,8 @@ div > pre {
                     width: 95%;
                     margin-top: 10px;
                     margin-bottom: 10px;
-
                 }
-        
+
                 // Фото
                 img {
                     /*Фото по центру*/

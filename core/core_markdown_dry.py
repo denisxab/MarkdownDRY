@@ -898,10 +898,14 @@ class MDDRY_TO_HTML:
         return f"""
 <div class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.MultiLineTables.value}">
 <table>
+<thead>
 <tr>
 {''.join(f'<th>{x}</th>' for x in tb.title)}
 </tr>
+</thead>
+<tbody>
 {''.join(f'<tr>{"".join(f"<td>{y}</td>" for y in x)}</tr>' for x in tb.body)}
+</tbody>
 </table>        
 </div>
 """[1:]

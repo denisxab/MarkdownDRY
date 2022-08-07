@@ -261,29 +261,45 @@ div > pre.code code::before {
 .MarkdownDRY.DropdownBlock .DropdownBlockTitle::before {
   content: "vvv ";
 }
-.MarkdownDRY.MultiLineTables > table {
-  width: 100%;
-  margin-bottom: 20px;
-  border: 1px solid #dddddd;
+.MarkdownDRY.MultiLineTables {
+  width: 95%;
+  overflow: auto;
+}
+.MarkdownDRY.MultiLineTables table {
+  margin-top: 5px;
+  margin-left: auto;
+  margin-right: auto;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
-.MarkdownDRY.MultiLineTables > table th {
-  font-weight: bold;
-  padding: 5px;
-  background: #9ca8b6;
-  border: 1px solid #dddddd;
-  color: rgb(64, 107, 107);
+.MarkdownDRY.MultiLineTables table thead th {
+  text-align: center;
+  padding: 10px;
+  box-shadow: 0px 0px 0px 1px #3b4252;
 }
-.MarkdownDRY.MultiLineTables > table td {
-  border: 1px solid #dddddd;
-  padding: 5px;
-  color: rgb(64, 107, 107);
+.MarkdownDRY.MultiLineTables table thead th:first-child {
+  border-radius: 10px 0 0 0;
 }
-.MarkdownDRY.MultiLineTables > table tbody tr:nth-child(even) {
-  background: #fff;
+.MarkdownDRY.MultiLineTables table thead th:last-child {
+  border-radius: 0 10px 0 0;
 }
-.MarkdownDRY.MultiLineTables > table tbody tr:nth-child(odd) {
-  background: #f7f7f7;
+.MarkdownDRY.MultiLineTables table tbody tr {
+  border-left: 0.5px solid #2e3440;
+  border-right: 0.5px solid #2e3440;
+}
+.MarkdownDRY.MultiLineTables table tbody tr:last-of-type {
+  border-bottom: 0.5px solid #2e3440;
+}
+.MarkdownDRY.MultiLineTables table tbody td {
+  padding: 10px;
+  margin: 10px;
+  border: 2px solid #3b4252;
+}
+.MarkdownDRY.MultiLineTables table tbody tr:nth-child(even) {
+  background: #3b4252;
+}
+.MarkdownDRY.MultiLineTables table tbody tr:nth-child(odd) {
+  background: #434c5e;
 }
 .MarkdownDRY.Slider {
   background: #2e3440;
