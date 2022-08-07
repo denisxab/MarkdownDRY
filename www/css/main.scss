@@ -378,7 +378,6 @@ div > pre {
         /*Описание группы*/
         > h2 {
             text-align: center;
-            // color: whitesmoke;
             font-size: medium;
             margin-bottom: 10px;
             padding: 5px;
@@ -395,17 +394,17 @@ div > pre {
                     font-size: medium;
                     background: $ЦветФона;
                 }
-                // Код
-                code {
-                    color: white;
-                    display: block;
-                    margin-left: 40px;
-                    margin-right: 40px;
-                    span {
-                        background: rgb(129, 126, 83);
-                        border: rgb(129, 126, 83) solid;
-                    }
+                pre{
+                    margin: 0 auto;
+                    padding: 0px;
+                    padding-top: 10px;
+                    height: 55%;
+                    width: 95%;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+
                 }
+        
                 // Фото
                 img {
                     /*Фото по центру*/

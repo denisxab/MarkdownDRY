@@ -1,0 +1,220 @@
+<head>
+    <meta charset="UTF-8">
+    <link href="../../../../../www/css/bootstrap-5.1.3-dist/main.css" rel="stylesheet">
+    <script src="../../../../../www/css/bootstrap-5.1.3-dist/main.js"></script>
+    <link rel="stylesheet" href="../../../../../www/css/main.min.css">
+    <link rel="stylesheet" href="../../../../../www/css/plugin.css">
+</head>
+Камень в огород `HR`
+
+<div class="MarkdownDRY Slider MultiPageCode">
+    <h2>Что они спрашивают на собеседование</h2>
+    <!--
+    data-touch="true" -- Должна ли карусель поддерживать смахивание влево/вправо на устройствах с сенсорным экраном.
+    data-bs-interval="false" -- отключить авто переключение фото
+    data-pause="false" -- убрать авто переключение фото
+    data-touch="true" -- переключение фото с помощью клавиш
+    -->
+    <div id="i341a9972a823f5827b1dc50e0c4ecda7"
+        class="carousel slide"
+        data-ride="carousel"
+        data-pause="false"
+        data-touch="true"
+        data-bs-interval="false"
+        data-keyboard="true" >
+
+        <!-- Список элементов для прокрутки -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+<h3>Пузырьковая сортировка</h3>
+<div>
+<pre class="code python">
+<code><span>def bubble_sort(nums):                                                      </span></code>
+<code>      # Устанавливаем swapped в True, чтобы цикл запустился хотя бы один раз</code>
+<code>      swapped = True</code>
+<code>      while swapped:</code>
+<code>          swapped = False</code>
+<code>          for i in range(len(nums) - 1):</code>
+<code>              if nums[i] > nums[i + 1]:</code>
+<code><span>                  # Меняем элементы                                         </span></code>
+<code>                  nums[i], nums[i + 1] = nums[i + 1], nums[i]</code>
+<code>                  # Устанавливаем swapped в True для следующей итерации</code>
+<code>                  swapped = True</code>
+<code></code>
+<code>  # Проверяем, что оно работает</code>
+<code>  random_list_of_nums = [5, 2, 1, 8, 4]</code>
+<code>  bubble_sort(random_list_of_nums)</code>
+<code>  print(random_list_of_nums)</code>
+
+</pre>
+</div>
+</div>    
+<div class="carousel-item">
+<h3>Сортировка выборкой</h3>
+<div>
+<pre class="code python">
+<code>def selection_sort(nums):</code>
+<code>      # Значение i соответствует кол-ву отсортированных значений</code>
+<code><span>      for i in range(len(nums)):                                               </span></code>
+<code>          # Исходно считаем наименьшим первый элемент</code>
+<code><span>          lowest_value_index = i                                               </span></code>
+<code><span>          # Этот цикл перебирает несортированные элементы                      </span></code>
+<code><span>          for j in range(i + 1, len(nums)):                                    </span></code>
+<code><span>              if nums[j] < nums[lowest_value_index]:                           </span></code>
+<code>                  lowest_value_index = j</code>
+<code>          # Самый маленький элемент меняем с первым в списке</code>
+<code>          nums[i], nums[lowest_value_index] = nums[lowest_value_index], nums[i]</code>
+<code></code>
+<code>  # Проверяем, что оно работает</code>
+<code>  random_list_of_nums = [12, 8, 3, 20, 11]</code>
+<code>  selection_sort(random_list_of_nums)</code>
+<code>  print(random_list_of_nums)</code>
+
+</pre>
+</div>
+</div>    
+<div class="carousel-item">
+<h3>Сортировка вставками</h3>
+<div>
+<pre class="code python">
+<code><span>def insertion_sort(nums):                                                                           </span></code>
+<code><span>      # Сортировку начинаем со второго элемента, т.к. считается, что первый элемент уже отсортирован</span></code>
+<code><span>      for i in range(1, len(nums)):                                                                 </span></code>
+<code><span>          item_to_insert = nums[i]                                                                  </span></code>
+<code><span>          # Сохраняем ссылку на индекс предыдущего элемента                                         </span></code>
+<code>          j = i - 1</code>
+<code>          # Элементы отсортированного сегмента перемещаем вперёд, если они больше</code>
+<code>          # элемента для вставки</code>
+<code>          while j >= 0 and nums[j] > item_to_insert:</code>
+<code>              nums[j + 1] = nums[j]</code>
+<code>              j -= 1</code>
+<code>          # Вставляем элемент</code>
+<code>          nums[j + 1] = item_to_insert</code>
+<code></code>
+<code>  # Проверяем, что оно работает</code>
+<code>  random_list_of_nums = [9, 1, 15, 28, 6]</code>
+<code>  insertion_sort(random_list_of_nums)</code>
+<code>  print(random_list_of_nums)</code>
+
+</pre>
+</div>
+</div>    
+<div class="carousel-item">
+<h3>Пирамидальная сортировка</h3>
+<div>
+<pre class="code python">
+<code>def heapify(nums, heap_size, root_index):</code>
+<code>      # Индекс наибольшего элемента считаем корневым индексом</code>
+<code>      largest = root_index</code>
+<code>      left_child = (2 * root_index) + 1</code>
+<code><span>      right_child = (2 * root_index) + 2                                        </span></code>
+<code><span>                                                                                </span></code>
+<code><span>      # Если левый потомок корня — допустимый индекс, а элемент больше,         </span></code>
+<code><span>      # чем текущий наибольший, обновляем наибольший элемент                    </span></code>
+<code>      if left_child < heap_size and nums[left_child] > nums[largest]:</code>
+<code>          largest = left_child</code>
+<code></code>
+<code>      # То же самое для правого потомка корня</code>
+<code>      if right_child < heap_size and nums[right_child] > nums[largest]:</code>
+<code>          largest = right_child</code>
+<code></code>
+<code>      # Если наибольший элемент больше не корневой, они меняются местами</code>
+<code>      if largest != root_index:</code>
+<code>          nums[root_index], nums[largest] = nums[largest], nums[root_index]</code>
+<code>          # Heapify the new root element to ensure it's the largest</code>
+<code>          heapify(nums, heap_size, largest)</code>
+<code></code>
+<code>  def heap_sort(nums):</code>
+<code>      n = len(nums)</code>
+<code></code>
+<code>      # Создаём Max Heap из списка</code>
+<code>      # Второй аргумент означает остановку алгоритма перед элементом -1, т.е.</code>
+<code>      # перед первым элементом списка</code>
+<code>      # 3-й аргумент означает повторный проход по списку в обратном направлении,</code>
+<code>      # уменьшая счётчик i на 1</code>
+<code>      for i in range(n, -1, -1):</code>
+<code>          heapify(nums, n, i)</code>
+<code></code>
+<code>      # Перемещаем корень Max Heap в конец списка</code>
+<code>      for i in range(n - 1, 0, -1):</code>
+<code>          nums[i], nums[0] = nums[0], nums[i]</code>
+<code>          heapify(nums, i, 0)</code>
+<code></code>
+<code>  # Проверяем, что оно работает</code>
+<code>  random_list_of_nums = [35, 12, 43, 8, 51]</code>
+<code>  heap_sort(random_list_of_nums)</code>
+<code>  print(random_list_of_nums)</code>
+
+</pre>
+</div>
+</div>    
+
+        </div>
+        <!-- Навигация по элементам -->
+        <div class="slider_nav">
+            <!-- Кнопки переключение с лево и право -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#i341a9972a823f5827b1dc50e0c4ecda7" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <!-- Кнопки снизу -->
+            <div class="carousel-indicators"><button type="button" data-bs-target="#i341a9972a823f5827b1dc50e0c4ecda7" data-bs-slide-to="0" class="active"></button><button type="button" data-bs-target="#i341a9972a823f5827b1dc50e0c4ecda7" data-bs-slide-to="1"></button><button type="button" data-bs-target="#i341a9972a823f5827b1dc50e0c4ecda7" data-bs-slide-to="2"></button><button type="button" data-bs-target="#i341a9972a823f5827b1dc50e0c4ecda7" data-bs-slide-to="3"></button></div>
+            <button class="carousel-control-next" type="button" data-bs-target="#i341a9972a823f5827b1dc50e0c4ecda7" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+</div>
+Когда приходишь в их продакшн
+
+<div class="MarkdownDRY Slider MultiPageCode">
+    <h2>В продакшене</h2>
+    <!--
+    data-touch="true" -- Должна ли карусель поддерживать смахивание влево/вправо на устройствах с сенсорным экраном.
+    data-bs-interval="false" -- отключить авто переключение фото
+    data-pause="false" -- убрать авто переключение фото
+    data-touch="true" -- переключение фото с помощью клавиш
+    -->
+    <div id="i17a588fffec904fe5a3a48ba57a6e2b6"
+        class="carousel slide"
+        data-ride="carousel"
+        data-pause="false"
+        data-touch="true"
+        data-bs-interval="false"
+        data-keyboard="true" >
+
+        <!-- Список элементов для прокрутки -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+<h3>Вриант 1</h3>
+<div>
+<pre class="code python">
+<code>random_list_of_nums = sorted([9, 1, 15, 28, 6])</code>
+
+</pre>
+</div>
+</div>    
+<div class="carousel-item">
+<h3>Вариант 2</h3>
+<div>
+<pre class="code python">
+<code>random_list_of_nums = [9, 1, 15, 28, 6].sort()</code>
+
+</pre>
+</div>
+</div>    
+
+        </div>
+        <!-- Навигация по элементам -->
+        <div class="slider_nav">
+            <!-- Кнопки переключение с лево и право -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#i17a588fffec904fe5a3a48ba57a6e2b6" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <!-- Кнопки снизу -->
+            <div class="carousel-indicators"><button type="button" data-bs-target="#i17a588fffec904fe5a3a48ba57a6e2b6" data-bs-slide-to="0" class="active"></button><button type="button" data-bs-target="#i17a588fffec904fe5a3a48ba57a6e2b6" data-bs-slide-to="1"></button></div>
+            <button class="carousel-control-next" type="button" data-bs-target="#i17a588fffec904fe5a3a48ba57a6e2b6" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+</div>

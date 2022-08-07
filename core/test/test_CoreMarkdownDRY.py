@@ -35,21 +35,6 @@ class Test_Dev:
 
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
-            ReadTextFile('./dataset/dev/in/Многостраничные кодблоки.md',
-                         'a198f7638825185af55882584ff42c68b770f138a5719ad84dd2bb3e1aab13f0'),
-            ReadTextFile('./dataset/dev/out/Многостраничные кодблоки.html',
-                         'c75d1dbd988ebd0d4f6c416e601c8a2f9191a95e461c039301312da3461f964f'),
-
-        ]
-    ])
-    def test_MultiPageCode(self, T_in_data, T_check_data: ReadTextFile):
-        _next_test()
-        res = f"{html_head}{CoreMarkdownDRY.MultiPageCode(T_in_data.text)}"
-        # T_check_data.write(res)
-        assert res == T_check_data.text
-
-    @mark.parametrize(['T_in_data', 'T_check_data'], [
-        [
             ReadTextFile('./dataset/dev/in/Вставить кода из файла.md',
                          'c4819749a44277248d9bab900a4113bd69d3f55f47866b4c361d92d790278cec'),
             ReadTextFile('./dataset/dev/out/Вставить кода из файла.html',
@@ -364,6 +349,22 @@ class Test_Pub:
         res = f"{CoreMarkdownDRY.IndisputableInsertCodeFromFile(T_in_data.text, self.path)}"
         # T_check_data.write(res)
         assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/MultiPageCode.md',
+                         '2b5a8a9b312f8d052853f3cd20ba3a792fe97009e2339b97da3a74e24081b0b5'),
+            ReadTextFile('./dataset/pub/out/MultiPageCode.html',
+                         None),
+
+        ]
+    ])
+    def test_MultiPageCode(self, T_in_data, T_check_data: ReadTextFile):
+        _next_test()
+        res = f"{html_head}{CoreMarkdownDRY.MultiPageCode(T_in_data.text)}"
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
 
     # TODO: продолжить MultiLineTables,исправление тестов на публичные примеры, продумать агрегатные функции к ячейкам таблицы.
     # TODO: продолжить MultiPageCode

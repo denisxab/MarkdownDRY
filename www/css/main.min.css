@@ -310,15 +310,14 @@ div > pre.code code::before {
   font-size: medium;
   background: #2e3440;
 }
-.MarkdownDRY.Slider .carousel-inner > .carousel-item code {
-  color: white;
-  display: block;
-  margin-left: 40px;
-  margin-right: 40px;
-}
-.MarkdownDRY.Slider .carousel-inner > .carousel-item code span {
-  background: rgb(129, 126, 83);
-  border: rgb(129, 126, 83) solid;
+.MarkdownDRY.Slider .carousel-inner > .carousel-item pre {
+  margin: 0 auto;
+  padding: 0px;
+  padding-top: 10px;
+  height: 55%;
+  width: 95%;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .MarkdownDRY.Slider .carousel-inner > .carousel-item img {
   /*Фото по центру*/

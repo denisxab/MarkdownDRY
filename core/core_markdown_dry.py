@@ -57,7 +57,7 @@ class REGEX:
 
     # - Многостраничные кодблоки  - #
     MultiPageCodeBody: re.Pattern = re.compile(
-        '(?P<padding>[\n\t ]*)`{3}(?P<lg>[ \w_-]+) *(?:{(?P<mark>[\d,-]+)})? *(?:\[(?P<info>[^\n\]]+)])?\n(?P<code>(?:.\s*(?!`{3}))+)\s*`{3}'
+        '(?P<padding>[\n\t ]*)`{3}(?P<lg>[ \w_-]+) *(?:\[(?P<info>[^\n\]]+)])?(?:{(?P<mark>[\d,-]+)})?\n(?P<code>(?:.\s*(?!`{3}))+)\s*`{3}'
     )
     MultiPageCode: re.Pattern = re.compile(
         '-\s+(?P<name>.+)\s+(?P<body>(?:`{3}.+\n(?:.\s*(?!`{3}))+\s*`{3}\s+)+)'
@@ -426,7 +426,7 @@ class CoreMarkdownDRY:
             <div id="{HTML_CLASS.LinkCodeName.value}"></div>
             <input type="button" id="{HTML_CLASS.LinkCodeWindowButtonHide.value}" value="Скрыть" onclick="{HTML_CLASS.LinkCodeWindow.value}.style.display='none'">
         </div>
-        <pre class="code" id="{HTML_CLASS.LinkCodeWindowBody.value}">
+        <pre class="{HTML_CLASS.code.value}" id="{HTML_CLASS.LinkCodeWindowBody.value}">
         </pre>
     </div>
     <div id="{HTML_CLASS.LinkCodeWindowFooter.value}">
@@ -628,31 +628,41 @@ class MDDRY_TO_HTML:
         """Многостраничные кодблоки"""
         body_code: list[str] = []
         for _i, _x in enumerate(REGEX.MultiPageCodeBody.finditer(m['body'])):
-            mark = _x['mark']
+            # Строки которые нужно выделить
+            mark: Optional[str] = _x['mark']
+            mark: str = mark.strip() if mark else ''
+            # Язык текста
             lange: str = _x['lg'].strip()
+            # Текст
+            code: str = _x['code'].strip()
+            # Если нужно выделить строчки
             if mark:
-                line_code = _x['code'].split('\n')
+                line_code = code.split('\n')
                 max_len = len(max(line_code, key=len))
                 # Позиционно маркировать стоки в коде
                 for _line in mark.split(','):
                     if _line.isnumeric():
-                        _line = int(_line)
+                        _line = int(_line) - 1
                         line_code[_line] = f'<span>{line_code[_line].ljust(max_len)}</span>'
                     else:
                         # Переводим диапазон {3-6} в конкретные числа [3,4,5,6]
                         _start, _end = list(map(int, _line.split('-')))
-                        for _line_range in range(_start, _end + 1):
+                        for _line_range in range(_start - 1, _end):
                             line_code[_line_range] = f'<span>{line_code[_line_range].ljust(max_len)}</span>'
                 # Объедение сточек в цельный текст
                 line_code = '\n'.join(line_code)
+            # Если не нужно выделять строки
             else:
-                line_code = _x['code']
+                line_code = code
+
             body_code.append(f"""
 <div class="carousel-item{' active' if _i == 0 else ''}">
 {f'<h3>{_x["info"]}</h3>' if _x["info"] else ''}
-<pre><code class="{lange}">
-{_x['padding']}{line_code}
-</code></pre>
+<div>
+<pre class="{HTML_CLASS.code.value} {lange}">
+{HTML_CLASS.toCode(line_code)}
+</pre>
+</div>
 </div>    
 """[1:])
         return cls._slide_block(m['name'], body_code, class_2=HTML_CLASS.MultiPageCode)
@@ -788,7 +798,7 @@ class MDDRY_TO_HTML:
         return f"""
 <div class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.InsertCodeFromFile.value}">
 <div>{res.name_re}</div>
-<pre class="code">{HTML_CLASS.toCode(res.text_in_file_cup)}</pre>
+<pre class="{HTML_CLASS.code.value}">{HTML_CLASS.toCode(res.text_in_file_cup)}</pre>
 </div>"""[1:]
 
     @classmethod

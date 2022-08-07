@@ -49,6 +49,7 @@ class HTML_CLASS(Enum):
     Ol = "Ol"
     Ul = "Ul"
     Hr = 'Hr'
+    code="code"
     menu = "menu"
     detail_menu = "detail_menu"
     shot_menu = "shot_menu"
