@@ -14,6 +14,179 @@ from core.core_lang import Lange, ConvertSuffixToLange, AvailableLanguages
 from core.types import BaseCodeRefReturn
 
 
+class AggregateFunc:
+    """
+    Реализация агрегатных функций в таблицах. Функции которые созданы здесь(по правилам которые указаны ниже) будут автоматически добавлены в
+    `Tables.allowed_func` и в регулярное выражения для их поиска `REGEX.MultiLineTablesDepLogicAggregateFunc`
+
+    ------------
+
+    Для создания новой агрегатной функции нужно создать метод по шаблону
+
+    ```
+    @staticmethod
+    def f_ИмяАгрегатнойФункции(_m: re.Match, table_body:list[list[str]])->str:
+        ...
+    ```
+    """
+
+    @staticmethod
+    def main(_m: re.Match, table_body: list[list[str]]):
+        """Точка входа в реализацию логики агрегатных функций"""
+        c_s: int = int(_m['c_s'])
+        c_e: int = int(_m['c_e'])
+        r_s: int = int(_m['r_s'])
+        r_e: int = int(_m['r_e'])
+        date: Optional[list[str]] = None
+        # Если нужно считать столбцы
+        if c_s == c_e:
+            date = [x[c_s - 1].strip() for x in table_body[r_s - 1:r_e]]
+        # Если нужно считать строки
+        elif r_s == r_e:
+            # date = [x[c_s - 1].strip() for x in table_body[r_s - 1:r_e]]
+            ...
+            print()
+        else:
+            logger.warning(f'Строки или столбцы не равны: ({c_s},{c_e},{r_s},{r_e})', 'AggregateFunc.f_avg')
+            return _m.group(0)
+        if date:
+            # После получения списка значений, вызываем указанную агрегатную функцию
+            return AggregateFunc.__dict__[f"f_{_m['func']}"](date)
+        else:
+            logger.warning(f'Диапазон ячеек пуст: ({c_s},{c_e},{r_s},{r_e})', 'AggregateFunc.f_avg')
+            return _m.group(0)
+
+    @staticmethod
+    def f_avg(date: list[str]) -> Union[int, float]:
+        """Среднее значение"""
+        return sum(date) / len(date)
+
+    @staticmethod
+    def f_sum(date: list[str]) -> Union[int, float]:
+        """Сумма"""
+        return sum(date)
+
+
+class Tables:
+    """
+    Структура данных для формирования и хранения Markdown таблицы.
+    """
+    # Доступные агрегатные функции в таблице
+    allowed_func = frozenset(x[2:] for x in AggregateFunc.__dict__.keys() if x.startswith('f_'))
+
+    def __init__(self, max_column: int):
+        # Заголовок
+        self.title: list[str] = []
+        # Тело таблицы
+        self.body: list[list[str]] = [[]]
+        # Сколько максимум колонок в таблице
+        self.max_column = max_column
+        # Внутренний счетчик текущей строки
+        self._next_row = 0
+        # Внутренний счетчик текущего столбца
+        self._next_column = 0
+
+    def EndBuild(self):
+        """
+        Преобразования в таблицы после добавления всех строк и столбцов.
+        """
+        # Переносим заголовки из тела таблицы, в переменную непосредственно для заголовков
+        self.title = self.body.pop(0)
+        # Удаляем строку с тире, которое должно быть под заголовок.
+        self.body.pop(0)
+        # Убираем возможность вызвать эту функцию более одного раза у экземпляра класса
+        self.EndBuild = lambda *args, **kwargs: None
+
+    def EndMultiLaneBuild(self):
+        """
+        Преобразования в таблицы для многострочных строк.
+        """
+        # Массив для результата.
+        res: list[list[str]] = [[]]
+        # Инициализируем первую строку новой таблицы, пустыми столбцами, количество столбцов будет равно
+        # количеству в исходном теле таблицы.
+        for _ in self.body[0]: res[0].append('')
+        # Индекс последнего столба в результирующий таблице
+        _num_col_res = 0
+        for _i, _x in enumerate(self.body[:-1]):
+            # Если в строке у которой первый столбце НЕ начинается на три тире и более, то тогда считаем эту строку с полезными данными
+            if not re.match('\s*-{3,}\s*', self.body[_i][0]):
+                # Перебираем столбцы в исходной таблице, так как это строка многострочная то столбцы будут объединиться
+                # в единую строчку, до того момента пока не встретиться три тире и более
+                for _in, _item in enumerate(self.body[_i]):
+                    res[_num_col_res][_in] += f"{_item}\n"
+            else:
+                # Если в строке первый столбец начинателя на три тире и более, то значит что многострочная строка закончена
+                # и должна быть сформироваться новая строка
+                res.append([])
+                _num_col_res += 1
+                for _ in self.body[_i]:
+                    res[_num_col_res].append('')
+        # Убираем лишний хвост
+        res.pop()
+        # Делаем подмену исходной таблицы на многострочную
+        self.body = res
+
+    def DepLogic(self) -> None:
+        """
+        Реализуем логику агрегатных функций и простого обращения к ячейкам. Вызываем у таблицы после `EndBuild` и/или `EndMultiLaneBuild`
+        """
+
+        # Временное хранение найденного, или не найденного результата
+        tmp_re: Optional[re.Match] = None
+        # Временное хранение арифметического выражения
+        tmp_equations: str = ''
+        for _i_r, _row in enumerate(self.body):
+            for _i_c, _col in enumerate(_row):
+                # Ищем, где есть обращение к агрегатным функциям или ячейкам
+                tmp_re = REGEX.MultiLineTablesDepLogic.search(_col)
+                if tmp_re:
+                    # Получаем результат для агрегатных функций
+                    tmp_equations = REGEX.MultiLineTablesDepLogicAggregateFunc.sub(
+                        lambda m: AggregateFunc.__dict__[f"f_{m['func']}"](m, self.body) if m['func'] else m.group(0),
+                        tmp_re['body']
+                    )
+                    try:
+                        # Получаем арифметическое выражение
+                        tmp_equations = REGEX.MultiLineTablesDepLogicSlot.sub(
+                            lambda m:
+                            self.body[int(m['row']) - 1][int(m['col']) - 1].strip(),
+                            tmp_equations
+                        )
+                    except IndexError:
+                        logger.error(
+                            f'Недосягаемый столбец или строка {tmp_re["body"]}',
+                            'Tables.DepLogic')
+                    except ValueError:
+                        logger.error(
+                            f'Синтаксическая ошибка в ячейке, невозможно конвертировать в число {tmp_re["body"]}',
+                            'Tables.DepLogic')
+                    try:
+                        # Считаем
+                        self.body[_i_r][_i_c] = sympify(tmp_equations).__str__()
+                    except SympifyError:
+                        logger.error(
+                            f'Синтаксическая ошибка в ячейке, не возможно произвести вычисления ячейки: {tmp_equations}',
+                            'Tables.DepLogic')
+
+        print()
+        ...
+
+    def addColumn_IfEndThenNewRow(self, column: str):
+        """
+        :param column: Новый столбец в таблицу
+        """
+        # Добавляем новый столбец в строку,
+        self.body[self._next_row].append(column)
+        self._next_column += 1
+        # Если он будет превышать максимально разрешенное количество столбцов в таблице,
+        # то добавляем этот столбце на новую строку
+        if self._next_column == self.max_column:
+            self._next_column = 0
+            self.body.append([])
+            self._next_row += 1
+
+
 class REGEX:
     """
     Класс для хранения регулярных выражений
@@ -113,6 +286,12 @@ class REGEX:
     MultiLineTablesDepLogic: re.Pattern = re.compile("`~(?P<body>[^`]+)`")
     # Поиск обращения ячейкам таблицы, и замена их на значение этой ячейки
     MultiLineTablesDepLogicSlot: re.Pattern = re.compile("(?P<col>\d+),(?P<row>\d+)")
+    # Доступные агрегатные функции в таблице
+    MultiLineTablesDepLogicAggregateFunc: re.Pattern = re.compile(
+        "(?P<func>{func})\((?P<c_s>\d+),(?P<c_e>\d+),(?P<r_s>\d+),(?P<r_e>\d+)\)".format(
+            func='|'.join(Tables.allowed_func)
+        )
+    )
     # ------------------------
 
     # ---   Markdown    --- #
@@ -142,99 +321,6 @@ class HeaderType(Enum):
     Hide = 1
     # Сколько максимально возможно заголовков
     MaxLvlHeader = 6
-
-
-class Tables:
-    """
-    Структура данных для формирования и хранения Markdown таблицы.
-    """
-
-    def __init__(self, max_column: int):
-        # Заголовок
-        self.title: list[str] = []
-        # Тело таблицы
-        self.body: list[list[str]] = [[]]
-        # Сколько максимум колонок в таблице
-        self.max_column = max_column
-        # Внутренний счетчик текущей строки
-        self._next_row = 0
-        # Внутренний счетчик текущего столбца
-        self._next_column = 0
-
-    def EndBuild(self):
-        """
-        Преобразования в таблицы после добавления всех строк и столбцов.
-        """
-        # Переносим заголовки из тела таблицы, в переменную непосредственно для заголовков
-        self.title = self.body.pop(0)
-        # Удаляем строку с тире, которое должно быть под заголовок.
-        self.body.pop(0)
-        # Убираем возможность вызвать эту функцию более одного раза у экземпляра класса
-        self.EndBuild = lambda *args, **kwargs: None
-
-    def EndMultiLaneBuild(self):
-        """
-        Преобразования в таблицы для многострочных строк.
-        """
-        # Массив для результата.
-        res: list[list[str]] = [[]]
-        # Инициализируем первую строку новой таблицы, пустыми столбцами, количество столбцов будет равно
-        # количеству в исходном теле таблицы.
-        for _ in self.body[0]: res[0].append('')
-        # Индекс последнего столба в результирующий таблице
-        _num_col_res = 0
-        for _i, _x in enumerate(self.body[:-1]):
-            # Если в строке у которой первый столбце НЕ начинается на три тире и более, то тогда считаем эту строку с полезными данными
-            if not re.match('\s*-{3,}\s*', self.body[_i][0]):
-                # Перебираем столбцы в исходной таблице, так как это строка многострочная то столбцы будут объединиться
-                # в единую строчку, до того момента пока не встретиться три тире и более
-                for _in, _item in enumerate(self.body[_i]):
-                    res[_num_col_res][_in] += f"{_item}\n"
-            else:
-                # Если в строке первый столбец начинателя на три тире и более, то значит что многострочная строка закончена
-                # и должна быть сформироваться новая строка
-                res.append([])
-                _num_col_res += 1
-                for _ in self.body[_i]:
-                    res[_num_col_res].append('')
-        # Убираем лишний хвост
-        res.pop()
-        # Делаем подмену исходной таблицы на многострочную
-        self.body = res
-
-    def DepLogic(self) -> None:
-        """
-        Реализуем логику агрегатных функций и простого обращения к ячейкам. Вызываем у таблицы после `EndBuild` и/или `EndMultiLaneBuild`
-        """
-        # Временное хранение найденного, или не найденного результата
-        tmp_re: Optional[re.Match] = None
-        for _i_r, _row in enumerate(self.body):
-            for _i_c, _col in enumerate(_row):
-                # Ищем, где есть обращение к агрегатным функциям или ячейкам
-                tmp_re = REGEX.MultiLineTablesDepLogic.search(_col)
-                if tmp_re:
-                    tmp_re['body']
-
-                    '(\d+,\d+)[\+\-\*\%\^]?'
-
-                    print()
-
-        print()
-        ...
-
-    def addColumn_IfEndThenNewRow(self, column: str):
-        """
-        :param column: Новый столбец в таблицу
-        """
-        # Добавляем новый столбец в строку,
-        self.body[self._next_row].append(column)
-        self._next_column += 1
-        # Если он будет превышать максимально разрешенное количество столбцов в таблице,
-        # то добавляем этот столбце на новую строку
-        if self._next_column == self.max_column:
-            self._next_column = 0
-            self.body.append([])
-            self._next_row += 1
 
 
 class StoreDoc:
