@@ -1,5 +1,6 @@
-import base64
 import re
+from base64 import b64encode
+from decimal import Decimal
 from enum import Enum
 from hashlib import md5
 from pathlib import Path
@@ -25,13 +26,13 @@ class AggregateFunc:
 
     ```
     @staticmethod
-    def f_ИмяАгрегатнойФункции(_m: re.Match, table_body:list[list[str]])->str:
+    def f_ИмяАгрегатнойФункции(cls, date: list[str]):
         ...
     ```
     """
 
-    @staticmethod
-    def main(_m: re.Match, table_body: list[list[str]]):
+    @classmethod
+    def main(cls, _m: re.Match, table_body: list[list[str]]) -> str:
         """Точка входа в реализацию логики агрегатных функций"""
         c_s: int = int(_m['c_s'])
         c_e: int = int(_m['c_e'])
@@ -43,27 +44,32 @@ class AggregateFunc:
             date = [x[c_s - 1].strip() for x in table_body[r_s - 1:r_e]]
         # Если нужно считать строки
         elif r_s == r_e:
-            # date = [x[c_s - 1].strip() for x in table_body[r_s - 1:r_e]]
-            ...
-            print()
+            date = [x.strip() for x in table_body[r_s - 1]][c_s - 1:c_e]
         else:
             logger.warning(f'Строки или столбцы не равны: ({c_s},{c_e},{r_s},{r_e})', 'AggregateFunc.f_avg')
             return _m.group(0)
         if date:
             # После получения списка значений, вызываем указанную агрегатную функцию
-            return AggregateFunc.__dict__[f"f_{_m['func']}"](date)
+            return str(AggregateFunc.__dict__[f"f_{_m['func']}"](cls, date))
         else:
             logger.warning(f'Диапазон ячеек пуст: ({c_s},{c_e},{r_s},{r_e})', 'AggregateFunc.f_avg')
             return _m.group(0)
 
     @staticmethod
-    def f_avg(date: list[str]) -> Union[int, float]:
+    def _toDecimal(date: list[str]) -> list[Decimal]:
+        """Конвертировать список строк в список дробных чисел"""
+        return [Decimal(x) for x in date]
+
+    @staticmethod
+    def f_avg(cls, date: list[str]) -> Decimal:
         """Среднее значение"""
+        date: list[Decimal] = cls._toDecimal(date)
         return sum(date) / len(date)
 
     @staticmethod
-    def f_sum(date: list[str]) -> Union[int, float]:
+    def f_sum(cls, date: list[str]) -> Decimal:
         """Сумма"""
+        date: list[Decimal] = cls._toDecimal(date)
         return sum(date)
 
 
@@ -143,7 +149,7 @@ class Tables:
                 if tmp_re:
                     # Получаем результат для агрегатных функций
                     tmp_equations = REGEX.MultiLineTablesDepLogicAggregateFunc.sub(
-                        lambda m: AggregateFunc.__dict__[f"f_{m['func']}"](m, self.body) if m['func'] else m.group(0),
+                        lambda m: AggregateFunc.main(m, self.body) if m['func'] else m.group(0),
                         tmp_re['body']
                     )
                     try:
@@ -549,7 +555,7 @@ class CoreMarkdownDRY:
 /* -------------------------- Логика для {HTML_CLASS.LinkCode.value} -------------------------- */
 // Переменная для хранения исходного кода из файлов. Храниться в кодировки UTF-8, для экранирования спец символов
 {HTML_CLASS.LinkSourceCode.value}={{
-    {','.join(f'"{k}":decodeURIComponent(escape(atob({REGEX.Qm1}{repr(base64.b64encode(v.encode("utf8")))[2:-1]}{REGEX.Qm1})))' for k, v in StoreDoc.LinkCode.date.items())}
+    {','.join(f'"{k}":decodeURIComponent(escape(atob({REGEX.Qm1}{repr(b64encode(v.encode("utf8")))[2:-1]}{REGEX.Qm1})))' for k, v in StoreDoc.LinkCode.date.items())}
 }};
 {HTML_JS.LinkCode}
 /* --------------------------------------------------------------------------------------------- */

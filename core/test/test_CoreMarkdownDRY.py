@@ -354,7 +354,7 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/MultilineTables.md',
-                         None),
+                         '88ac5f6f043375250bc6191c37d867138c698796c89b4f4eaab56336af568923'),
             ReadTextFile('./dataset/pub/out/MultilineTables.html',
                          None)
         ]
