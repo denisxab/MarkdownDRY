@@ -109,6 +109,10 @@ class REGEX:
     MultiLineTablesMultiLineColumn: re.Pattern = re.compile("(?:- +\|\n)(?P<row>\|(?:.\s*(?!\| -))+)")
     # Регулярное выражения для проверки таблица многострочная или обычная
     MultiLineTablesIsMultyOrStandard: re.Pattern = re.compile("(?<=\|)\s+-+\s+(?=\|)")
+    # Регулярное выражение для поиска агрегатных функций или обращение к ячейкам
+    MultiLineTablesDepLogic: re.Pattern = re.compile("`~(?P<body>[^`]+)`")
+    # Поиск обращения ячейкам таблицы, и замена их на значение этой ячейки
+    MultiLineTablesDepLogicSlot: re.Pattern = re.compile("(?P<col>\d+),(?P<row>\d+)")
     # ------------------------
 
     # ---   Markdown    --- #
@@ -170,7 +174,7 @@ class Tables:
 
     def EndMultiLaneBuild(self):
         """
-        Преобразования в таблицы для многострочных строк
+        Преобразования в таблицы для многострочных строк.
         """
         # Массив для результата.
         res: list[list[str]] = [[]]
@@ -180,7 +184,7 @@ class Tables:
         # Индекс последнего столба в результирующий таблице
         _num_col_res = 0
         for _i, _x in enumerate(self.body[:-1]):
-            # Если в строке у которой первый столбце НЕ начинается на три тире и более, то тогда считаем эту строку многострочной
+            # Если в строке у которой первый столбце НЕ начинается на три тире и более, то тогда считаем эту строку с полезными данными
             if not re.match('\s*-{3,}\s*', self.body[_i][0]):
                 # Перебираем столбцы в исходной таблице, так как это строка многострочная то столбцы будут объединиться
                 # в единую строчку, до того момента пока не встретиться три тире и более
@@ -197,6 +201,26 @@ class Tables:
         res.pop()
         # Делаем подмену исходной таблицы на многострочную
         self.body = res
+
+    def DepLogic(self) -> None:
+        """
+        Реализуем логику агрегатных функций и простого обращения к ячейкам. Вызываем у таблицы после `EndBuild` и/или `EndMultiLaneBuild`
+        """
+        # Временное хранение найденного, или не найденного результата
+        tmp_re: Optional[re.Match] = None
+        for _i_r, _row in enumerate(self.body):
+            for _i_c, _col in enumerate(_row):
+                # Ищем, где есть обращение к агрегатным функциям или ячейкам
+                tmp_re = REGEX.MultiLineTablesDepLogic.search(_col)
+                if tmp_re:
+                    tmp_re['body']
+
+                    '(\d+,\d+)[\+\-\*\%\^]?'
+
+                    print()
+
+        print()
+        ...
 
     def addColumn_IfEndThenNewRow(self, column: str):
         """
@@ -318,7 +342,7 @@ class StoreDoc:
 
 class CoreMarkdownDRY:
     """
-    Фичи MarkdownDRY:
+    MarkdownDRY:
 
     - Объявление Ссылочный блок - CoreMarkdownDRY.ReferenceBlock
     - Использование Ссылочный блок - CoreMarkdownDRY.UseReferenceBlock
@@ -894,6 +918,8 @@ class MDDRY_TO_HTML:
             tb.EndMultiLaneBuild()
         logger.debug(tb.title, flag='MultiLineTables Title')
         logger.debug(tb.body, flag='MultiLineTables Body')
+        # Реализуем логику агрегатных функций и простого обращения к ячейкам. Вызываем у таблицы после `EndBuild` и/или `EndMultiLaneBuild`
+        tb.DepLogic()
         # Формируем таблицу на языке html
         return f"""
 <div class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.MultiLineTables.value}">
