@@ -353,15 +353,13 @@ class Test_Pub:
 
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
-            ReadTextFile('./dataset/pub/in/MultilineTables.md',
+            ReadTextFile('./dataset/pub/in/MultiLineTables.md',
                          '88ac5f6f043375250bc6191c37d867138c698796c89b4f4eaab56336af568923'),
-            ReadTextFile('./dataset/pub/out/MultilineTables.html',
+            ReadTextFile('./dataset/pub/out/MultiLineTables.html',
                          None)
         ]
     ])
-    def test_MultilineTables(self, T_in_data, T_check_data):
+    def test_MultiLineTables(self, T_in_data, T_check_data):
         res = f"{html_head}{CoreMarkdownDRY.MultiLineTables(T_in_data.text)}"
         # T_check_data.write(res)
         assert res == T_check_data.text
-
-    # TODO: продолжить MultiLineTables,исправление тестов на публичные примеры, продумать агрегатные функции к ячейкам таблицы.

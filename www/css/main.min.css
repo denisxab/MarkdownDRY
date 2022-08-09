@@ -57,6 +57,7 @@ h6 {
   border: 1px solid #434c5e;
   border-radius: 10px 0px 0px 0px;
   height: 50%;
+  padding-bottom: 50px;
 }
 #menu #detail_menu {
   height: 100%;
