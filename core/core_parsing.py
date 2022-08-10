@@ -1,10 +1,7 @@
 # TODO: Реализовать конвертацию файла на ``MarkdownDRY` в `HTML`
-import re
 from hashlib import md5
 
-from bs4 import BeautifulSoup
-
-from core.core_html import html_head, HTML_JS
+from core.core_html import html_head, HTML_JS, HtmlTag
 from core.core_markdown import CoreMarkdown
 from core.core_markdown_dry import CoreMarkdownDRY, REGEX
 
@@ -72,25 +69,27 @@ class Parsing:
     def ExcludeComment(self, text: str) -> str:
         """Исключение комментариев из кода"""
 
-        def _self(m: re.Match) -> str:
-            _hash = md5(m['body'].encode()).hexdigest()
-            self.cache_comment[_hash] = m['body']
-            return _hash
+        def ExcludePre(text_html: str) -> str:
+            """
+            Заменяем текст в теге <pre> на хеш сумму данных, а сами данные записывает в `self.cache_comment`,
+            в конце компиляции по этому хешу будут вставлены значения.
+            """
 
-        def ExcludePre(text: str) -> str:
-            """
-            TODO: Оставить текст в теге <pre> без изменений
-            """
-            return f"<pre>{REGEX.TagPre.sub(_self, text)}</pre>"
+            def _repl_tag(repl: str, date: str):
+                """Замена данных на хеш, и запись в `self.cache_comment`"""
+                _hash = md5(date.encode()).hexdigest()
+                self.cache_comment[_hash] = date
+                return repl.format(date=_hash)
+
+            return HtmlTag.SubTag(HtmlTag.ParseTag(text_html, 'pre'), '{date}', text_html, _repl_tag)
 
         def DeleteComment(text: str) -> str:
             """
             TODO Удалить комментарии `%%Текст%%` из текста
             """
-            return text
+            return REGEX.CommentMD.sub(lambda m: f"""<div hidden="">{m['body']}</div>'""", text)
 
-        soup = BeautifulSoup(text, 'lxml')
-
+        # TODO: исключать текст из pre круто но как тогда делать импорт MD файлов ?
         res = ExcludePre(text)
         res = DeleteComment(res)
         return res

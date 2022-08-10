@@ -1,6 +1,11 @@
+import re
+import typing
 from enum import Enum
 
 # Стандартный заголовок
+from hashlib import md5
+from typing import Optional
+
 html_head: str = """
 <head>
     <meta charset="UTF-8">
@@ -49,7 +54,7 @@ class HTML_CLASS(Enum):
     Ol = "Ol"
     Ul = "Ul"
     Hr = 'Hr'
-    code="code"
+    code = "code"
     menu = "menu"
     detail_menu = "detail_menu"
     shot_menu = "shot_menu"
@@ -234,3 +239,94 @@ function OnHide(_event) {{
     }}
 }}
 """[1:]
+
+
+class HtmlTag:
+    """
+    Работа с HTML тегами
+
+
+    HtmlTag.SubTag(HtmlTag.ParseTag('pre'), '<pre>{date}</pre>', text, HtmlTag.PreHash)
+    """
+
+    class HtmlTagType(typing.NamedTuple):
+        """
+        Структура для хранения найденных HTML тегов
+        """
+        text_tag: str
+        start: int
+        end: int
+
+        def __str__(self):
+            return self.text_tag
+
+        def __repr__(self):
+            return self.__str__()
+
+    @staticmethod
+    def PreHash(repl: str, date: str):
+        """Заменить текст на его хеш"""
+        return repl.format(date=md5(date.encode()).hexdigest())
+
+    @staticmethod
+    def SubTag(sub: list[HtmlTagType], repl: str = '', text_html: str = '',
+               repl_callback: typing.Callable = lambda repl, date: repl) -> str:
+        """
+        :param repl_callback: Функция обработчик данных которые будут вставлены за место тело HTML тега
+        :param sub: Структура HtmlTag в которой хранятся найденные теги
+        :param repl: На что заменить
+        :param text_html: Исходный текст HTML
+        :return:
+        """
+
+        res: list[str] = []
+        index_last_end = 0
+        for _x in sub:
+            res.append(f"{text_html[index_last_end:_x.start]}{repl_callback(repl, text_html[_x.start:_x.end])}")
+            index_last_end = _x.end
+        return f"{''.join(res)}{text_html[index_last_end:]}"
+
+    @classmethod
+    def ParseTag(cls, text_html: str, name_tag: str):
+        """
+        Поиск тегов с учетом вложенности, берется самый верхний тег при вложенности
+
+        :param text_html:
+        :param name_tag: Какой тег искать
+        """
+        str_start = f'<{name_tag}>'
+        start_tag = list(str_start)
+        len_start = len(start_tag)
+
+        end_tag = list(f'</{name_tag}>')
+        len_end = len(end_tag)
+
+        res_list: list[cls.HtmlTagType] = []
+
+        def _self(last_start: int = 0):
+            """Рекурсивная функция поиска вложенных тегов"""
+            tmp: list[str] = []
+            start_l: list[tuple[int, int]] = []
+            end_l: list[tuple[int, int]] = []
+            re_str: Optional[re.Match] = re.search(str_start, text_html[last_start:])
+            if re_str:
+                for i, symbl in enumerate(text_html[re_str.start() + last_start:]):
+                    # Ищем начальные теги
+                    if tmp[-len_start:] == start_tag:
+                        start_l.append((i - len_start, i))
+                    # Ищем конченые теги
+                    elif tmp[-len_end:] == end_tag:
+                        end_l.append((i - len_end, i))
+                        # Пройден весь вложенный тег
+                        if len(end_l) == len(start_l):
+                            break
+                    tmp.append(symbl)
+                end_symbols: int = re_str.start() + end_l[-1][-1] + last_start
+                # Сохраняем тело тега
+                res_list.append(
+                    cls.HtmlTagType(text_tag=''.join(tmp), start=(re_str.start() + last_start), end=end_symbols))
+                # Начинаем поиск других тегов
+                _self(last_start=end_symbols)
+
+        _self()
+        return res_list

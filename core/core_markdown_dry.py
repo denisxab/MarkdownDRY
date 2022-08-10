@@ -311,112 +311,13 @@ class REGEX:
     Ol: re.Pattern = re.compile(f'\d+\.\s+(?P<ol>[^\n]+{_MultiLineUl_or_Ol})')
     # Горизонтальная линия
     Hr: re.Pattern = re.compile('-{3,}')
-    # Тег Pre
-    TagPre = re.compile('(?<=<pre>)(?P<body>\n*(?:.\s*(?!\/pre>))+\n*)')
-
-    # TODO: Проверить, и реализовать скрытие тега <pre> из сборки, этот данные будут вставлены в самом конце сборки, чтобы не быть задетыми другими конвекторами
-
-    '''
-    import re
-    from typing import Optional
-    
-    text = """
-    <div>
-        <pre>
-            Need to get this below block !!!111
-    
-            Example of an env file:
-    
-            <pre>
-            !![](./raw/IndisputableInsertCodeFromFile.env)
-            </pre>
-    
-            After parsing this file, we will get a Python dictionary:
-    
-            ```
-            !![](../out/IndisputableInsertCodeFromFile.py)
-            ```
-    
-            Script code:
-    
-            ```
-            !![](./raw/ENV_IndisputableInsertCodeFromFile.py)
-            ```
-        </pre>
-            <pre>
-            Need to get this below block !!!2222
-    
-            Example of an env file:
-    
-            <pre>
-            !![](./raw/IndisputableInsertCodeFromFile.env)
-            </pre>
-    
-            After parsing this file, we will get a Python dictionary:
-    
-            ```
-            !![](../out/IndisputableInsertCodeFromFile.py)
-            ```
-    
-            Script code:
-    
-            ```
-            !![](./raw/ENV_IndisputableInsertCodeFromFile.py)
-            ```
-        </pre>
-    </div>
-    """
-    
-    
-    def ParseTag(name_tag: str = 'pre'):
-        str_start = f'<{name_tag}>'
-        start_tag = list(str_start)
-        len_start = len(start_tag)
-    
-        end_tag = list(f'</{name_tag}>')
-        len_end = len(end_tag)
-    
-        # [(ТекстТега,Старт,Стоп)]
-        res_list: list[tuple[str, int, int]] = []
-    
-        def _self(_text: str, last_start: int = 0):
-            """Рекурсивная функция поиска вложенных тегов"""
-            tmp: list[str] = []
-            start_l: list[tuple[int, int]] = []
-            end_l: list[tuple[int, int]] = []
-            re_str: Optional[re.Match] = re.search(str_start, _text)
-            if re_str:
-                for i, symbl in enumerate(_text[re_str.start():]):
-                    # Ищем начальные теги
-                    if tmp[-len_start:] == start_tag:
-                        start_l.append((i - len_start, i))
-                    # Ищем конченые теги
-                    elif tmp[-len_end:] == end_tag:
-                        end_l.append((i - len_end, i))
-                        # Пройден весь вложенный тег
-                        if len(end_l) == len(start_l):
-                            break
-                    tmp.append(symbl)
-                end_symbols: int = re_str.start() + end_l[-1][-1]
-                # Сохраняем тело тега
-                res_list.append((''.join(tmp), re_str.start() + last_start, end_symbols + last_start))
-                # Начинаем поиск других тегов
-                return _self(_text[end_symbols:], last_start=end_symbols)
-    
-        res = _self(text)
-        return res
-    
-    
-    if __name__ == '__main__':
-        ParseTag('pre')
-    '''
+    # Комментарий %%
+    CommentMD = re.compile('%%(?P<body>\n?(?:.\s*(?!%%))*[^%])%%')
 
     # ----------------------
     Slash: str = "\\"
     Qm1: str = "'"
 
-
-# TODO: Проверить ответ на https://stackoverflow.com/questions/73296883/tell-me-a-regular-expression-to-find-the-data-from-the-tag-from-html
 
 class HeaderType(Enum):
     """
