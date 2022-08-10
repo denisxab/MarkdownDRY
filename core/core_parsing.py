@@ -30,7 +30,7 @@ class Parsing:
             6.  HighlightBlock - Выделение
             7.  PhotoGallery - Фотогалерея
             8.  InsertCodeFromFile - Сначала вставляем в текст данные из других файлов.
-            9.  LinkCode - Ссыки на код
+            9.  LinkCode - Ссылки на код
             10. MultiPageCode - Многостраничные коды
             11. MultiLineTables - Таблицы
 
@@ -71,7 +71,7 @@ class Parsing:
 
         def ExcludePre(text_html: str) -> str:
             """
-            Заменяем текст в теге <pre> на хеш сумму данных, а сами данные записывает в `self.cache_comment`,
+            Заменяем текст в теге `<pre>` на хеш сумму данных, а сами данные записывает в `self.cache_comment`,
             в конце компиляции по этому хешу будут вставлены значения.
             """
 
@@ -85,11 +85,8 @@ class Parsing:
 
         def DeleteComment(text: str) -> str:
             """
-            TODO Удалить комментарии `%%Текст%%` из текста
+            Скрыть комментарии `%%Текст%%` из текста
             """
             return REGEX.CommentMD.sub(lambda m: f"""<div hidden="">{m['body']}</div>'""", text)
 
-        # TODO: исключать текст из pre круто но как тогда делать импорт MD файлов ?
-        res = ExcludePre(text)
-        res = DeleteComment(res)
-        return res
+        return DeleteComment(ExcludePre(text))
