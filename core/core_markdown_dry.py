@@ -314,11 +314,12 @@ class REGEX:
     # Комментарий %%
     CommentMD: re.Pattern = re.compile('%%(?P<body>\n?(?:.\s*(?!%%))*[^%])%%')
     # Строка с кодом
-    CodeLine: re.Pattern = re.compile('`[^`](?P<body>.+)[^`]`')
+    CodeLine: re.Pattern = re.compile('`(?P<body>[^`\n]+)`')
 
     # ----------------------
     Slash: str = "\\"
     Qm1: str = "'"
+    NL: str = '\n'
 
 
 class HeaderType(Enum):
@@ -339,6 +340,8 @@ class StoreDoc:
     """
     ReferenceBlock: dict[str, str] = dict()
     DropdownBlock: dict[str, str] = dict()
+    # Список строк которые нужно вставить в конце сборки
+    LastInsert: list[str] = []
 
     @classmethod
     def clear(cls):
@@ -538,6 +541,17 @@ class CoreMarkdownDRY:
         """
         res = REGEX.LinkCode.sub(lambda t: MDDRY_TO_HTML.LinkCode(t, self_path), source_text)
         # Формируем HTML, Исходный код файла + ссылки
+        StoreDoc.LastInsert.append(f"""
+<script>
+/* -------------------------- Логика для {HTML_CLASS.LinkCode.value} -------------------------- */
+// Переменная для хранения исходного кода из файлов. Храниться в кодировки UTF-8, для экранирования спец символов
+{HTML_CLASS.LinkSourceCode.value}={{
+    {','.join(f'"{k}":decodeURIComponent(escape(atob({REGEX.Qm1}{repr(b64encode(v.encode("utf8")))[2:-1]}{REGEX.Qm1})))' for k, v in StoreDoc.LinkCode.date.items())}
+}};
+{HTML_JS.LinkCode}
+/* --------------------------------------------------------------------------------------------- */
+</script>
+        """[1:])
         return f"""
 <!-- Всплывающие окно с исходным кодом из файла ------------------------------------------ -->
 <div id="{HTML_CLASS.LinkCodeWindow.value}" onclick="OnHide(event)">
@@ -555,15 +569,6 @@ class CoreMarkdownDRY:
 </div>
 <!-- ---------------------------------------------------------------------------------------- -->
 {res}
-<script>
-/* -------------------------- Логика для {HTML_CLASS.LinkCode.value} -------------------------- */
-// Переменная для хранения исходного кода из файлов. Храниться в кодировки UTF-8, для экранирования спец символов
-{HTML_CLASS.LinkSourceCode.value}={{
-    {','.join(f'"{k}":decodeURIComponent(escape(atob({REGEX.Qm1}{repr(b64encode(v.encode("utf8")))[2:-1]}{REGEX.Qm1})))' for k, v in StoreDoc.LinkCode.date.items())}
-}};
-{HTML_JS.LinkCode}
-/* --------------------------------------------------------------------------------------------- */
-</script>
 """[1:]
 
     @classmethod
@@ -651,6 +656,11 @@ class CoreMarkdownDRY:
             _res.append("</ol>")
             return ''.join(_res)
 
+        StoreDoc.LastInsert.append(f"""
+<script>
+{HTML_JS.HeaderMain}
+</script>
+        """[1:])
         # Формируем навигационное оглавление по заголовкам
         return "{menu}{res}".format(menu=f"""
 <div id="{HTML_CLASS.menu.value}">
@@ -666,9 +676,6 @@ class CoreMarkdownDRY:
             {create_table_contents_from_HTML(StoreDoc.HeaderMain.date, '<li><a href="#{header_esp}">{header_raw}</a></li>')}
         </ol>
     </div>
-    <script>
-        {HTML_JS.HeaderMain}
-    </script>
 </div>
 """[1:], res=res)
 

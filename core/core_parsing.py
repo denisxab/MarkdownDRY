@@ -4,7 +4,7 @@ from hashlib import md5
 
 from core.core_html import html_head, HTML_JS, HtmlTag, HTML_CLASS
 from core.core_markdown import CoreMarkdown
-from core.core_markdown_dry import CoreMarkdownDRY, REGEX
+from core.core_markdown_dry import CoreMarkdownDRY, REGEX, StoreDoc
 
 
 class Parsing:
@@ -41,6 +41,7 @@ class Parsing:
             2. Ol, Ul - Нумерованный и не нумерованных список
             3. CodeLine - Строка с кодом
 
+
         :return: Собранный HTML
         """
         return f"{html_head}{self.goEndBuild(self.goMDPars(self.goMDDRYPars(self.text_mddry, path)))}{HTML_JS.Hotkey.result}"
@@ -74,21 +75,26 @@ class Parsing:
     def goEndBuild(self, text: str) -> str:
         """
         Конечный этап сборки
-        :param text:
-        :return:
+
+        1. ReturnValuesWereHiddenFromPreTag
+        2. ReturnLastInsert
         """
 
-        def ReturnValuesWereHiddenFromPreTag() -> str:
+        def ReturnValuesWereHiddenFromPreTag(text_html: str) -> str:
             """
             Вернуть значения, которые были скрыты из тега <pre>
             """
-            nonlocal text
             for k, v in self.cache_comment.items():
-                text = text.replace(k, v)
-            return text
+                text_html = text_html.replace(k, v)
+            return text_html
 
-        res = ReturnValuesWereHiddenFromPreTag()
-        return res
+        def ReturnLastInsert(text_html: str) -> str:
+            """
+            Вставить значение которые были отложены, сейчас это JS код
+            """
+            return f"{text_html}{''.join(StoreDoc.LastInsert)}"
+
+        return ReturnLastInsert(ReturnValuesWereHiddenFromPreTag(text))
 
     def ExcludeComment(self, text: str) -> str:
         """
