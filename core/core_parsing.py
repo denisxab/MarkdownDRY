@@ -69,7 +69,10 @@ class Parsing:
         res = CoreMarkdown.Hr(text)
         res = CoreMarkdown.Ol(res)
         res = CoreMarkdown.Ul(res)
+        # TODO: Добавить тесты для CodeLine
         res = CoreMarkdown.CodeLine(res)
+        # TODO: Добавить тесты для CodeBlock
+        res = CoreMarkdown.CodeBlock(res)  # ```
         return res
 
     def goEndBuild(self, text: str) -> str:

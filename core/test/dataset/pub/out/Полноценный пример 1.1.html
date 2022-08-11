@@ -922,11 +922,14 @@ if __name__ == "__main__":
 
 Вот файл, который будем вставлять, назовем его <span class="CodeLine">./raw/regex_mem.txt</span>
 
-```text
-(?P&ltclass&gt(class[\t ]+.+[\t ]*)(?:\((.+)\))?:\n(?:\t+| {1,4}.*\n+)+)|
-(?P&ltfunc&gt(def[\t ]+.+[\t ]*)\((.+):\n(?:(?:\t+| {1,4}).*\n+)+)|
-(?:\A|\n)\s*(?P&ltvar&gt.+[\t ]*=.+)
-```
+<div>
+<pre class="code text">
+<code>(?P&ltclass&gt(class[\t ]+.+[\t ]*)(?:\((.+)\))?:\n(?:\t+| {1,4}.*\n+)+)|</code>
+<code>(?P&ltfunc&gt(def[\t ]+.+[\t ]*)\((.+):\n(?:(?:\t+| {1,4}).*\n+)+)|</code>
+<code>(?:\A|\n)\s*(?P&ltvar&gt.+[\t ]*=.+)</code>
+</pre>
+</div>
+
 
 <hr>
 

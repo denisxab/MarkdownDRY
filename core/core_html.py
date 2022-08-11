@@ -56,7 +56,6 @@ class HTML_CLASS(Enum):
     CodeLine = "CodeLine"
     Ol = "Ol"
     Ul = "Ul"
-
     Hr = 'Hr'
     code = "code"
     menu = "menu"
@@ -68,7 +67,7 @@ class HTML_CLASS(Enum):
     @staticmethod
     def toCode(text: str) -> str:
         """Конвертировать текст в вид нумерованного кода"""
-        return ''.join(f'<code>{x}</code>\n' for x in text.split('\n'))
+        return ''.join(f'<code>{x}</code>\n' for x in text.split('\n'))[:-1]
 
     @staticmethod
     def ReplaceGtLt(text: str) -> str:

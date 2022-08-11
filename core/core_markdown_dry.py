@@ -315,7 +315,10 @@ class REGEX:
     CommentMD: re.Pattern = re.compile('%%(?P<body>\n?(?:.\s*(?!%%))*[^%])%%')
     # Строка с кодом
     CodeLine: re.Pattern = re.compile('`(?P<body>[^`\n]+)`')
-
+    # Блок с кодом
+    CodeBlock: re.Pattern = re.compile(
+        # Пример взят из `MultiPageCodeBody`
+        '`{3}(?P<lg>[ \w_-]+) *(?:\[(?P<info>[^\n\]]+)])?(?:{(?P<mark>[\d,-]+)})?\n(?P<code>(?:.\s*(?!`{3}))+)\s*`{3}')
     # ----------------------
     Slash: str = "\\"
     Qm1: str = "'"
@@ -756,10 +759,17 @@ class MDDRY_TO_HTML:
         return cls._slide_block(m['name'], body_img, class_2=HTML_CLASS.PhotoGallery)
 
     @classmethod
-    def MultiPageCode(cls, m: re.Match) -> str:
-        """Многостраничные кодблоки"""
-        body_code: list[str] = []
-        for _i, _x in enumerate(REGEX.MultiPageCodeBody.finditer(m['body'])):
+    def PageCode(cls, body: str, regex: re.Pattern) -> [int, str, str, str]:
+        """
+        Блок кодом, доступно:
+
+        1. Указание описание для языка разметки
+        2. Так же происходит выделение строк в коде.
+
+        :param body: Тело с кодом
+        :param regex: Каким регулярным выражение искать
+        """
+        for _index, _x in enumerate(regex.finditer(body)):
             # Строки которые нужно выделить
             mark: Optional[str] = _x['mark']
             mark: str = mark.strip() if mark else ''
@@ -775,21 +785,29 @@ class MDDRY_TO_HTML:
                 for _line in mark.split(','):
                     if _line.isnumeric():
                         _line = int(_line) - 1
+                        # Выделим строку
                         line_code[_line] = f'<span>{line_code[_line].ljust(max_len)}</span>'
                     else:
                         # Переводим диапазон {3-6} в конкретные числа [3,4,5,6]
                         _start, _end = list(map(int, _line.split('-')))
                         for _line_range in range(_start - 1, _end):
+                            # Выделим строку
                             line_code[_line_range] = f'<span>{line_code[_line_range].ljust(max_len)}</span>'
                 # Объедение сточек в цельный текст
                 line_code = '\n'.join(line_code)
             # Если не нужно выделять строки
             else:
                 line_code = code
+            yield _index, lange, line_code, _x["info"]
 
+    @classmethod
+    def MultiPageCode(cls, m: re.Match) -> str:
+        """Многостраничные кодблоки"""
+        body_code: list[str] = []
+        for index, lange, line_code, info in cls.PageCode(m.group(0), REGEX.MultiPageCodeBody):
             body_code.append(f"""
-<div class="carousel-item{' active' if _i == 0 else ''}">
-{f'<h3>{_x["info"]}</h3>' if _x["info"] else ''}
+<div class="carousel-item{' active' if index == 0 else ''}">
+{f'<h3>{info}</h3>' if info else ''}
 <div>
 <pre class="{HTML_CLASS.code.value} {lange}">
 {HTML_CLASS.toCode(line_code)}

@@ -4,7 +4,7 @@ from typing import Optional
 from logsmal import logger
 
 from core.core_html import HTML_CLASS
-from core.core_markdown_dry import REGEX
+from core.core_markdown_dry import REGEX, MDDRY_TO_HTML
 
 
 class MD_TO_HTML:
@@ -54,6 +54,21 @@ class MD_TO_HTML:
         """Строка с кодом"""
         return f'<span class="{HTML_CLASS.CodeLine.value}">{m["body"]}</span>'
 
+    @staticmethod
+    def CodeBlock(m: re.Match) -> str:
+        """Блок с кодом"""
+        body_code: list[str] = []
+        for index, lange, line_code, info in MDDRY_TO_HTML.PageCode(m.group(0), REGEX.CodeBlock):
+            body_code.append(f"""
+<div>
+{f'<h3>{info}</h3>' if info else ''}
+<pre class="{HTML_CLASS.code.value} {lange}">
+{HTML_CLASS.toCode(line_code)}
+</pre>
+</div>
+        """[1:])
+        return ''.join(body_code)
+
 
 class CoreMarkdown:
     """
@@ -96,3 +111,11 @@ class CoreMarkdown:
         """
         logger.debug('Code')
         return REGEX.CodeLine.sub(MD_TO_HTML.CodeLine, source_text)
+
+    @classmethod
+    def CodeBlock(cls, source_text: str) -> Optional[str]:
+        """
+        Блок с кодом
+        """
+        logger.debug('CodeBlock')
+        return REGEX.CodeBlock.sub(MD_TO_HTML.CodeBlock, source_text)
