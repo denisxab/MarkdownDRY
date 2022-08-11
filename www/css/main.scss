@@ -59,7 +59,7 @@ h6 {
         display: inline-block;
         position: absolute;
         right: 10px;
-        font-size:16px;
+        font-size: 16px;
         padding: 4px;
     }
 }
@@ -176,6 +176,15 @@ a {
 
     &:visited {
         color: $БазовыйЦветПосещеннойСсылки;
+    }
+}
+
+// Блок с кодом
+.CodeBlock {
+    // Заголовок кода с блоком
+    div.head {
+        text-align: center;
+            font-weight: bold;
     }
 }
 

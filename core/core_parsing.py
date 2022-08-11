@@ -50,7 +50,6 @@ class Parsing:
         """Парсинг MDDRY"""
         res = CoreMarkdownDRY.IndisputableInsertCodeFromFile(text, path)
         res = self.ExcludeComment(res)
-        # TODO: хочу номер заголовка в правом углу
         res = CoreMarkdownDRY.HeaderMain(res)
         res = CoreMarkdownDRY.ReferenceBlock(res)
         res = CoreMarkdownDRY.MathSpan(res)
@@ -72,7 +71,7 @@ class Parsing:
         # TODO: Добавить тесты для CodeLine
         res = CoreMarkdown.CodeLine(res)
         # TODO: Добавить тесты для CodeBlock
-        res = CoreMarkdown.CodeBlock(res)  # ```
+        res = CoreMarkdown.CodeBlock(res)
         return res
 
     def goEndBuild(self, text: str) -> str:
@@ -105,8 +104,8 @@ class Parsing:
 
         1. ScreeningLt_Gt_Symbol_CodeLine
         2. ExcludePre
-        3. DeleteComment
-        4. ScreeningLt_Gt_Symbol_ALlText
+        3. ScreeningLt_Gt_Symbol_ALlText
+        4. DeleteComment
         """
 
         def ScreeningLt_Gt_Symbol_CodeLine(text_html: str) -> str:
@@ -114,7 +113,7 @@ class Parsing:
             Экранировать символьны меньше больше в обратных кавычках `
             :param text_html:
             """
-            return re.sub('`.+`', lambda m: HTML_CLASS.ReplaceGtLt(m.group(0)), text_html)
+            return re.sub('`[^`]+`', lambda m: HTML_CLASS.ReplaceGtLt(m.group(0)), text_html)
 
         def ExcludePre(text_html: str) -> str:
             """
@@ -139,7 +138,7 @@ class Parsing:
             """
             Скрыть комментарии `%%Текст%%` из текста
             """
-            return REGEX.CommentMD.sub(lambda m: f"""<div hidden="">{m['body']}</div>'""", text_html)
+            return REGEX.CommentMD.sub(lambda m: f"""<div hidden="">{m['body']}</div>""", text_html)
 
         def ScreeningLt_Gt_Symbol_ALlText(text_html: str) -> str:
             """
@@ -149,4 +148,4 @@ class Parsing:
             """
             return HTML_CLASS.ReplaceGtLt(text_html)
 
-        return ScreeningLt_Gt_Symbol_ALlText(DeleteComment(ExcludePre(ScreeningLt_Gt_Symbol_CodeLine(text))))
+        return DeleteComment(ScreeningLt_Gt_Symbol_ALlText(ExcludePre(ScreeningLt_Gt_Symbol_CodeLine(text))))

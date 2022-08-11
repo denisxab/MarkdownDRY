@@ -37,6 +37,7 @@ class HTML_CLASS(Enum):
     PhotoGallery = "PhotoGallery"
     PhotoGalleryBody = "PhotoGalleryBody"
     MultiPageCode = 'MultiPageCode'
+    CodeBlock = 'CodeBlock'
     MathSpan = "MathSpan"
     HiddenHeaders = "HiddenHeaders"
     StandardHeaders = "StandardHeaders"
@@ -63,6 +64,7 @@ class HTML_CLASS(Enum):
     shot_menu = "shot_menu"
     bt_show_menu = "bt_show_menu"
     bt_hidden_menu = "bt_hidden_menu"
+    head = "head"
 
     @staticmethod
     def toCode(text: str) -> str:

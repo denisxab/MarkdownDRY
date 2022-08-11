@@ -60,12 +60,14 @@ class MD_TO_HTML:
         body_code: list[str] = []
         for index, lange, line_code, info in MDDRY_TO_HTML.PageCode(m.group(0), REGEX.CodeBlock):
             body_code.append(f"""
+<div class="{HTML_CLASS.CodeBlock.value}">
+{f'<div class="{HTML_CLASS.head.value}">{info}</div>' if info else ''}
 <div>
-{f'<h3>{info}</h3>' if info else ''}
 <pre class="{HTML_CLASS.code.value} {lange}">
 {HTML_CLASS.toCode(line_code)}
 </pre>
 </div>
+</div>    
         """[1:])
         return ''.join(body_code)
 
