@@ -1,5 +1,4 @@
 # TODO: Реализовать конвертацию файла на ``MarkdownDRY` в `HTML`
-import re
 from hashlib import md5
 
 from core.core_html import html_head, HTML_JS, HtmlTag, HTML_CLASS
@@ -104,8 +103,8 @@ class Parsing:
 
         1. ScreeningLt_Gt_Symbol_CodeLine
         2. ExcludePre
-        3. ScreeningLt_Gt_Symbol_ALlText
-        4. DeleteComment
+        3. DeleteComment
+        4. ScreeningLt_Gt_Symbol_ALlText
         """
 
         def ScreeningLt_Gt_Symbol_CodeLine(text_html: str) -> str:
@@ -113,7 +112,7 @@ class Parsing:
             Экранировать символьны меньше больше в обратных кавычках `
             :param text_html:
             """
-            return re.sub('`[^`]+`', lambda m: HTML_CLASS.ReplaceGtLt(m.group(0)), text_html)
+            return REGEX.CodeLine.sub(lambda m: HTML_CLASS.ReplaceGtLt(m.group(0)), text_html)
 
         def ExcludePre(text_html: str) -> str:
             """
@@ -148,4 +147,4 @@ class Parsing:
             """
             return HTML_CLASS.ReplaceGtLt(text_html)
 
-        return DeleteComment(ScreeningLt_Gt_Symbol_ALlText(ExcludePre(ScreeningLt_Gt_Symbol_CodeLine(text))))
+        return ScreeningLt_Gt_Symbol_ALlText(DeleteComment(ExcludePre(ScreeningLt_Gt_Symbol_CodeLine(text))))
