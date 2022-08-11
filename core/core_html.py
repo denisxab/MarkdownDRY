@@ -32,6 +32,8 @@ class HTML_CLASS(Enum):
     HighlightBlock3 = "HighlightBlock3"
     HighlightTitle = "HighlightTitle"
     HighlightBody = "HighlightBody"
+    mddry_name = "mddry_name"
+    mddry_level = "mddry_level"
     PhotoGallery = "PhotoGallery"
     PhotoGalleryBody = "PhotoGalleryBody"
     MultiPageCode = 'MultiPageCode'
@@ -54,6 +56,7 @@ class HTML_CLASS(Enum):
     CodeLine = "CodeLine"
     Ol = "Ol"
     Ul = "Ul"
+
     Hr = 'Hr'
     code = "code"
     menu = "menu"
@@ -66,6 +69,18 @@ class HTML_CLASS(Enum):
     def toCode(text: str) -> str:
         """Конвертировать текст в вид нумерованного кода"""
         return ''.join(f'<code>{x}</code>\n' for x in text.split('\n'))
+
+    @staticmethod
+    def ReplaceGtLt(text: str) -> str:
+        """
+        Экранировать символы больше меньше для `HTML`
+        """
+        return text.replace('<', '&lt').replace('>', '&gt')
+
+    @staticmethod
+    def ScreeningId(text: str) -> str:
+        """Экранировать текст для `id` в HTML"""
+        return HTML_CLASS.ReplaceGtLt(text.replace('`', '%'))
 
 
 class HTML_JS:

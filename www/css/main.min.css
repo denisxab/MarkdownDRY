@@ -17,6 +17,27 @@ h6 {
   border-radius: 4px 4px 0 0;
   margin: 8px 0px 8px 0px;
 }
+h1 .mddry_name,
+h2 .mddry_name,
+h3 .mddry_name,
+h4 .mddry_name,
+h5 .mddry_name,
+h6 .mddry_name {
+  display: inline-block;
+}
+h1 .mddry_level,
+h2 .mddry_level,
+h3 .mddry_level,
+h4 .mddry_level,
+h5 .mddry_level,
+h6 .mddry_level {
+  text-align: right;
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  font-size: 16px;
+  padding: 4px;
+}
 
 h1 {
   background: #505762;

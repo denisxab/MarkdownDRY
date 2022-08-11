@@ -49,6 +49,19 @@ h6 {
     padding: 3px 0 3px 10px;
     border-radius: 4px 4px 0 0;
     margin: 8px 0px 8px 0px;
+    .mddry_name {
+        // Имя заголовка
+        display: inline-block;
+    }
+    .mddry_level {
+        // Номер заголовка
+        text-align: right;
+        display: inline-block;
+        position: absolute;
+        right: 10px;
+        font-size:16px;
+        padding: 4px;
+    }
 }
 
 h1 {

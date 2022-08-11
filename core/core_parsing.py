@@ -2,7 +2,7 @@
 import re
 from hashlib import md5
 
-from core.core_html import html_head, HTML_JS, HtmlTag
+from core.core_html import html_head, HTML_JS, HtmlTag, HTML_CLASS
 from core.core_markdown import CoreMarkdown
 from core.core_markdown_dry import CoreMarkdownDRY, REGEX
 
@@ -49,6 +49,7 @@ class Parsing:
         """Парсинг MDDRY"""
         res = CoreMarkdownDRY.IndisputableInsertCodeFromFile(text, path)
         res = self.ExcludeComment(res)
+        # TODO: хочу номер заголовка в правом углу
         res = CoreMarkdownDRY.HeaderMain(res)
         res = CoreMarkdownDRY.ReferenceBlock(res)
         res = CoreMarkdownDRY.MathSpan(res)
@@ -104,7 +105,7 @@ class Parsing:
             Экранировать символьны меньше больше в обратных кавычках `
             :param text_html:
             """
-            return re.sub('`.+`', lambda m: m.group(0).replace('<', '&lt').replace('>', '&gt'), text_html)
+            return re.sub('`.+`', lambda m: HTML_CLASS.ReplaceGtLt(m.group(0)), text_html)
 
         def ExcludePre(text_html: str) -> str:
             """
@@ -116,7 +117,7 @@ class Parsing:
                 """Замена данных на хеш, и запись в `self.cache_comment`"""
                 # Экранирование больше меньше в тексте тега <pre>
                 len_name_tag: int = len(name_tag)
-                date = f"<{name_tag}>{date[len_name_tag + 2:-(len_name_tag + 3)].replace('<', '&lt').replace('>', '&gt')}</{name_tag}>"
+                date = f"<{name_tag}>{HTML_CLASS.ReplaceGtLt(date[len_name_tag + 2:-(len_name_tag + 3)])}</{name_tag}>"
                 # Получаем хеш сумму того что получилось
                 _hash = md5(date.encode()).hexdigest()
                 # Записываем в кеш
@@ -137,6 +138,6 @@ class Parsing:
             :param text_html:
             :return:
             """
-            return text_html.replace('<', '&lt').replace('>', '&gt')
+            return HTML_CLASS.ReplaceGtLt(text_html)
 
         return ScreeningLt_Gt_Symbol_ALlText(DeleteComment(ExcludePre(ScreeningLt_Gt_Symbol_CodeLine(text))))

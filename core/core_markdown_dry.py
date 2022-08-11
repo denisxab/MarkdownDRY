@@ -464,8 +464,8 @@ class CoreMarkdownDRY:
         return REGEX.ReferenceBlock.sub(MDDRY_TO_HTML.ReferenceBlock, source_text)
 
     @classmethod
-    def UseReferenceBlock(cls, source_text: str, StoreDocs_ReferenceBlock: StoreDoc.ReferenceBlock = None) -> Optional[
-        str]:
+    def UseReferenceBlock(cls, source_text: str,
+                          StoreDocs_ReferenceBlock: StoreDoc.ReferenceBlock = None) -> Optional[str]:
         """
         Ссылочный блок использование
 
@@ -641,7 +641,12 @@ class CoreMarkdownDRY:
                     _res.append("</ol>")
                 # Не скрытый заголовок попадает в оглавление
                 if _tmp[_index][1][1] != HeaderType.Hide.value:
-                    _res.append(template_li.format(header=_tmp[_index][0]))
+                    _res.append(template_li.format(
+                        # Экранируем символы в id
+                        header_esp=HTML_CLASS.ScreeningId(_tmp[_index][0])
+                        # Вставляем текст как есть
+                        , header_raw=_tmp[_index][0])
+                    )
                 _last = _next
             _res.append("</ol>")
             return ''.join(_res)
@@ -658,7 +663,7 @@ class CoreMarkdownDRY:
     <!-- Темы оглавления -->
     <div id="{HTML_CLASS.detail_menu.value}">
         <ol>
-            {create_table_contents_from_HTML(StoreDoc.HeaderMain.date, '<li><a href="#{header}">{header}</a></li>')}
+            {create_table_contents_from_HTML(StoreDoc.HeaderMain.date, '<li><a href="#{header_esp}">{header_raw}</a></li>')}
         </ol>
     </div>
     <script>
@@ -909,9 +914,9 @@ class MDDRY_TO_HTML:
                 line_start = line_start + tmp_line_start if tmp_line_start else 0
         return BaseCodeRefReturn(name_re=name_re,
                                  # Экранирование угловых скобок для корректной вставки в HTML
-                                 text_in_file_cup=text_in_file_cup.replace('<', '&lt').replace('>', '&gt'),
+                                 text_in_file_cup=HTML_CLASS.ReplaceGtLt(text_in_file_cup),
                                  # Экранирование угловых скобок для корректной вставки в HTML
-                                 text_in_file=text_in_file.replace('<', '&lt').replace('>', '&gt'),
+                                 text_in_file=HTML_CLASS.ReplaceGtLt(text_in_file),
                                  line_start=line_start,
                                  line_end=line_end,
                                  ref=ref,
@@ -960,7 +965,7 @@ class MDDRY_TO_HTML:
         """
 
         # Получаем имя заголовка
-        name_header = m['name']
+        name_raw = m['name']
         # Получим тело заголовка
         body_header: str = m['body']
         # Получаем тип заголовка
@@ -974,7 +979,7 @@ class MDDRY_TO_HTML:
         # Получаем уровень заголовка
         level: Literal[1, 2, 3, 4, 5, 6] = len(m['lvl'])
         # Добавляем заголовок в кеш
-        StoreDoc.HeaderMain.addHeaders(name_header, level, res_HeadersType)
+        StoreDoc.HeaderMain.addHeaders(name_raw, level, res_HeadersType)
 
         #: Поиск инициализации переменных
         def _vars_init(_m: re.Match) -> str:
@@ -987,12 +992,12 @@ class MDDRY_TO_HTML:
 
             В итоге `[=Фамилия]` будет равен Иванов Иван
             """
-            _nested_var = REGEX.VarsGet.sub(lambda _n_v: StoreDoc.HeaderMain.getVar(name_header, _n_v['name']),
+            _nested_var = REGEX.VarsGet.sub(lambda _n_v: StoreDoc.HeaderMain.getVar(name_raw, _n_v['name']),
                                             _m['value'])
             # Переменная с результатом
             res_var = _nested_var if _nested_var else _m['value']
             # Записываем в кеш
-            StoreDoc.HeaderMain.addVar(name_header, _m['name'], res_var)
+            StoreDoc.HeaderMain.addVar(name_raw, _m['name'], res_var)
             # Скрываем из текста инициализацию переменных
             return f"%%{_m['name']}={res_var}%%"
 
@@ -1000,11 +1005,11 @@ class MDDRY_TO_HTML:
             """
             Вставка значений в места, где идет обращение к переменным
             """
-            return StoreDoc.HeaderMain.getVar(name_header, _m['name'], _m.group(0))
+            return StoreDoc.HeaderMain.getVar(name_raw, _m['name'], _m.group(0))
 
         body_header = REGEX.VarsInit.sub(_vars_init, body_header)
         body_header = REGEX.VarsGet.sub(_vars_get, body_header)
-        return f"""<h{level} id="{name_header}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}">{name_header}</h{level}>\n{body_header}\n"""
+        return f"""<h{level} id="{HTML_CLASS.ScreeningId(name_raw)}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}"><div class="{HTML_CLASS.mddry_name.value}">{name_raw}</div><div class="{HTML_CLASS.mddry_level.value}">{level}</div></h{level}>\n{body_header}\n"""
 
     @classmethod
     def MultiLineTables(cls, m: re.Match) -> str:

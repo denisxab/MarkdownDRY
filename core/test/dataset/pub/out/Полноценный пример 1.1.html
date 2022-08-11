@@ -1,18 +1,18 @@
 <head>
-    <meta charSet="UTF-8">
+    <meta charset="UTF-8">
     <link href="../../../../../www/css/bootstrap-5.1.3-dist/main.css" rel="stylesheet">
     <script src="../../../../../www/css/bootstrap-5.1.3-dist/main.js"></script>
     <link rel="stylesheet" href="../../../../../www/css/main.min.css">
     <link rel="stylesheet" href="../../../../../www/css/plugin.css">
 </head>
 <!-- Всплывающие окно с исходным кодом из файла <hr> -->
-<div id="LinkCodeWindow" onClick="OnHide(event)">
+<div id="LinkCodeWindow" onclick="OnHide(event)">
     <div id="LinkCodeWindowDet">
         <div id="LinkCodeWindowButtonTitle">
             <div id="LinkCodeName"></div>
-            <input type="button" id="LinkCodeWindowButtonHide" value="Скрыть" onClick="LinkCodeWindow.style.display='none'">
+            <input type="button" id="LinkCodeWindowButtonHide" value="Скрыть" onclick="LinkCodeWindow.style.display='none'">
         </div>
-        <pre className="code" id="LinkCodeWindowBody">
+        <pre class="code" id="LinkCodeWindowBody">
         </pre>
     </div>
     <div id="LinkCodeWindowFooter">
@@ -23,104 +23,62 @@
 <div id="menu">
     <!-- Скрыть оглавление -->
     <input type="button" id="bt_show_menu" value="<<"
-           onClick="menu_hidden()">
+           onclick="menu_hidden()">
     <!-- Развернуть оглавление -->
     <input type="button" id="bt_hidden_menu" value=">>"
-           onClick="menu_show()"/>
+           onclick="menu_show()"/>
     <!-- Темы оглавления -->
     <div id="detail_menu">
         <ol>
-            <ol>
-                <li><a href="#Причина появления">Причина появления</a></li>
-                <li><a href="#Какие фичи предлагает MarkdownDRY ?">Какие фичи предлагает MarkdownDRY ?</a></li>
-                <ol>
-                    <li><a href="#Список фич">Список фич</a></li>
-                    <ol>
-                        <li><a href="#Переменные - <span class=" CodeLine">ars`">Переменные - `Vars`</a></li>
-                        <ol>
-                            <li><a href="#Синтаксис">Синтаксис</a></li>
-                            <li><a href="#Пример">Пример</a></li>
-                        </ol>
-                        <li><a href="#Ссылочный блок - `ReferenceBlock`">Ссылочный блок - `ReferenceBlock`</a></li>
-                        <li><a href="#Раскрываемые блок - `DropdownBlock`">Раскрываемые блок - `DropdownBlock`</a></li>
-                        <li><a href="#Выделение блоков - `HighlightBlock`">Выделение блоков - `HighlightBlock`</a></li>
-                        <li><a href="#Фото Галерея - `PhotoGallery`">Фото Галерея - `PhotoGallery`</a></li>
-                        <li><a href="#Математический размах - `MathSpan`">Математический размах - `MathSpan`</a></li>
-                        <li><a href="#Скрытые заголовки - `HiddenHeaders`">Скрытые заголовки - `HiddenHeaders`</a></li>
-                        <li><a href="#Ссылки на структурные элементы кода - LinkCode">Ссылки на структурные элементы кода -
-                            LinkCode</a></li>
-                        <ol>
-                            <li><a href="#УникальныйЯкорь">УникальныйЯкорь</a></li>
-                            <li><a href="#Пример ссылки на локальные файлы">Пример ссылки на локальные файлы</a></li>
-                        </ol>
-                        <li><a href="#Обычная функция">Обычная функция</a></li>
-                        <ol>
-                            <li><a href="#Пример ссылки на файл из интернета">Пример ссылки на файл из интернета</a></li>
-                        </ol>
-                        <li><a href="#Экранированная вставить кода из файла - InsertCodeFromFile">Экранированная вставить кода из
-                            файла - InsertCodeFromFile</a></li>
-                        <li><a href="#Бесспорная вставить кода из файла - IndisputableInsertCodeFromFile">Бесспорная вставить кода
-                            из файла - IndisputableInsertCodeFromFile</a></li>
-                        <li><a href="#Многостраничные кодблоки - MultiPageCode">Многостраничные кодблоки - MultiPageCode</a></li>
-                        <li><a href="#Многострочные таблицы - `MultiLineTables`">Многострочные таблицы -
-                            `MultiLineTable</span></a></li>
-                        <li><a href="#Пока не реализовано">Пока не реализовано</a></li>
-                        <ol>
-                            <li><a href="#Выделения изображения">Выделения изображения</a></li>
-                            <li><a href="#Последовательность действий">Последовательность действий</a></li>
-                            <li><a href="#Описание UI виджетов">Описание UI виджетов</a></li>
-                        </ol>
-                    </ol>
+            <ol><li><a href="#Причина появления">Причина появления</a></li><li><a href="#Какие фичи предлагает MarkdownDRY ?">Какие фичи предлагает MarkdownDRY ?</a></li><ol><li><a href="#Список фич">Список фич</a></li><ol><li><a href="#Переменные - %Vars%">Переменные - <span class="CodeLine">ars`</a></li><ol><li><a href="#Синтаксис">Синтаксис</a></li><li><a href="#Пример">Пример</a></li></ol><li><a href="#Ссылочный блок - %ReferenceBlock%">Ссылочный блок - `ReferenceBlock`</a></li><li><a href="#Раскрываемые блок - %DropdownBlock%">Раскрываемые блок - `DropdownBlock`</a></li><li><a href="#Выделение блоков - %HighlightBlock%">Выделение блоков - `HighlightBlock`</a></li><li><a href="#Фото Галерея - %PhotoGallery%">Фото Галерея - `PhotoGallery`</a></li><li><a href="#Математический размах - %MathSpan%">Математический размах - `MathSpan`</a></li><li><a href="#Скрытые заголовки - %HiddenHeaders%">Скрытые заголовки - `HiddenHeaders`</a></li><li><a href="#Ссылки на структурные элементы кода - LinkCode">Ссылки на структурные элементы кода - LinkCode</a></li><ol><li><a href="#УникальныйЯкорь">УникальныйЯкорь</a></li><li><a href="#Пример ссылки на локальные файлы">Пример ссылки на локальные файлы</a></li></ol><li><a href="#Обычная функция">Обычная функция</a></li><ol><li><a href="#Пример ссылки на файл из интернета">Пример ссылки на файл из интернета</a></li></ol><li><a href="#Экранированная вставить кода из файла - InsertCodeFromFile">Экранированная вставить кода из файла - InsertCodeFromFile</a></li><li><a href="#Бесспорная вставить кода из файла - IndisputableInsertCodeFromFile">Бесспорная вставить кода из файла - IndisputableInsertCodeFromFile</a></li><li><a href="#Многостраничные кодблоки - MultiPageCode">Многостраничные кодблоки - MultiPageCode</a></li><li><a href="#Многострочные таблицы - %MultiLineTables%">Многострочные таблицы - `MultiLineTable</span></a></li><li><a href="#Пока не реализовано">Пока не реализовано</a></li><ol><li><a href="#Выделения изображения">Выделения изображения</a></li><li><a href="#Последовательность действий">Последовательность действий</a></li><li><a href="#Описание UI виджетов">Описание UI виджетов</a></li></ol>
+        </ol>
     </div>
     <script>
-        function menu_hidden() {
-            // Скрыть оглавление
-            detail_menu.hidden = false;
-            bt_show_menu.hidden = true;
-            bt_hidden_menu.hidden = false;
-            menu.style.height = '50%';
+        function menu_hidden(){
+    // Скрыть оглавление
+    detail_menu.hidden=false;
+    bt_show_menu.hidden=true;
+    bt_hidden_menu.hidden=false;
+    menu.style.height='50%';
+}
+function menu_show(){
+    // Показать оглавление
+   detail_menu.hidden=true;
+   bt_show_menu.hidden=false;
+   bt_hidden_menu.hidden=true;
+   menu.style.height='50px';
+}
+function menu_is_hidden(){
+    // Узнать скрыто ли оглавление
+    return detail_menu.hidden
+}
+// Изначально скрываем кнопку показа оглавления
+bt_show_menu.hidden = true;
+(function (){
+    // Переход к заголовку по нажатию элемент оглавления.
+    document.querySelectorAll("#detail_menu li").forEach((e) => {
+        e.onclick = ()=>{
+          window.location.href  = e.children[0].href
         }
-
-        function menu_show() {
-            // Показать оглавление
-            detail_menu.hidden = true;
-            bt_show_menu.hidden = false;
-            bt_hidden_menu.hidden = true;
-            menu.style.height = '50px';
-        }
-
-        function menu_is_hidden() {
-            // Узнать скрыто ли оглавление
-            return detail_menu.hidden
-        }
-
-        // Изначально скрываем кнопку показа оглавления
-        bt_show_menu.hidden = true;
-        (function () {
-            // Переход к заголовку по нажатию элемент оглавления.
-            document.querySelectorAll("#detail_menu li").forEach((e) => {
-                    e.onclick = () => {
-                        window.location.href = e.children[0].href
-                    }
-                }
-            );
-        })()
+      }
+    );
+})()
 
     </script>
 </div>
-<h1 id="Причина появления" className="MarkdownDRY StandardHeaders">Причина появления</h1>
+<h1 id="Причина появления" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Причина появления</div><div class="mddry_level">1</div></h1>
 
 
 &ltdiv hidden=""&gt![Привью](./doc/Превью.png)&lt/div&gt'
 
-<span className="CodeLine">arkdow</span> хорош, опрятен, и не многословен, он как сын маминой подруги, среди
-всех остальных языков разметки. В нашем кругу <span className="CodeLine">arkdow</span> заслужил уважение тем
+<span class="CodeLine">arkdow</span> хорош, опрятен, и не многословен, он как сын маминой подруги, среди
+всех остальных языков разметки. В нашем кругу <span class="CodeLine">arkdow</span> заслужил уважение тем
 что он использует спец символы для разметки, а не этот ваш заморский говор. Так
-как <span className="CodeLine">arkdow</span> хорош, и существует достойные редакторы для него, мы решили не
+как <span class="CodeLine">arkdow</span> хорош, и существует достойные редакторы для него, мы решили не
 создавать очередной велосипед, а создать из существующего - электро байк по
-имени <span className="CodeLine">arkdownDR</span>.
+имени <span class="CodeLine">arkdownDR</span>.
 
-Логотип <span className="CodeLine">arkdownDR</span>
+Логотип <span class="CodeLine">arkdownDR</span>
 
 ![](./doc/MarkdownDRY.svg)
 
@@ -128,28 +86,28 @@
 Немного искренности от автора: Это документация написана в юмористическом стили,
 чисто, для того чтобы поднять настроения свои товарищам по клавиатуре.
 Кого-нибудь конечно будет серьезная документация, и стабильные ветки, и об этом
-событии, первыми, вы сможете узнать в группе <span className="CodeLine">DDR</span>, там же вы можете накидать
-багов связанные с <span className="CodeLine">DDRY`, вмести свои предложения для новых `ФИ</span>. Если вы
+событии, первыми, вы сможете узнать в группе <span class="CodeLine">DDR</span>, там же вы можете накидать
+багов связанные с <span class="CodeLine">DDRY`, вмести свои предложения для новых `ФИ</span>. Если вы
 хотите выразить свое неудержимое негативное мнение, то можете это сделать
-группу <span className="CodeLine">Е_ЛЮБЛЮ_MDDR</span>.
+группу <span class="CodeLine">Е_ЛЮБЛЮ_MDDR</span>.
 
 <hr>
 
-Про лицензию: <span className="CodeLine">arkdownDR</span> не имеет ни какой лицензии, и не имеет авторского
+Про лицензию: <span class="CodeLine">arkdownDR</span> не имеет ни какой лицензии, и не имеет авторского
 права, юзайти его в своё удовольствие, и если хотите, делитесь впечатлениями ;)
 
 ![](./doc/License.png)
 
 
-<h1 id="Какие фичи предлагает MarkdownDRY ?" className="MarkdownDRY StandardHeaders">Какие фичи предлагает MarkdownDRY ?</h1>
+<h1 id="Какие фичи предлагает MarkdownDRY ?" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Какие фичи предлагает MarkdownDRY ?</div><div class="mddry_level">1</div></h1>
 
 
-Начнем с того что <span className="CodeLine">arkdownDR</span> как раз имеет такое название, из-за того что
+Начнем с того что <span class="CodeLine">arkdownDR</span> как раз имеет такое название, из-за того что
 следует принципу разработки
-<span className="CodeLine">on’t repeat yourself (DRY; с англ «не повторяйся»</span> и все его фичи направлены
+<span class="CodeLine">on’t repeat yourself (DRY; с англ «не повторяйся»</span> и все его фичи направлены
 во имя этого принципа.
 
-Также, следовательно, из названия <span className="CodeLine">arkdownDRY` совместим с `Markdow</span> и эта
+Также, следовательно, из названия <span class="CodeLine">arkdownDRY` совместим с `Markdow</span> и эта
 связь не только синтаксическая, но и ментальная. Он такой же простой, и с ним
 справиться любая домохозяйка.
 
@@ -158,10 +116,11 @@
 ![](./doc/ОбратнаяСовместимость.png)
 
 
-<h2 id="Список фич" className="MarkdownDRY StandardHeaders">Список фич</h2>
+<h2 id="Список фич" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Список фич</div><div class="mddry_level">2</div></h2>
 
 
-<h3 id="Переменные - <span class=" CodeLine">ars`" className="MarkdownDRY StandardHeaders">Переменные - `Var</span></h3>
+
+<h3 id="Переменные - %Vars%" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Переменные - <span class="CodeLine">ar</span></div><div class="mddry_level">3</div></h3>
 
 
 Вот что думаю - авторы не любят повториться, а читатели любят когда им,
@@ -179,52 +138,48 @@
 ![](./doc/мемVars.png)
 
 
-<h4 id="Синтаксис" className="MarkdownDRY StandardHeaders">Синтаксис</h4>
+<h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
 
 
-Переменные в <span className="CodeLine">arkdownDR</span> похожи на переменные в ЯП, у них есть
-<ul className="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
-    <li>Инициализации. (Похоже на список ссылок которые указывают на какие-то данные)
+Переменные в <span class="CodeLine">arkdownDR</span> похожи на переменные в ЯП, у них есть
+<ul class="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
+<li>Инициализации. (Похоже на список ссылок которые указывают на какие-то данные)
 
-        <pre>
+  <pre>
   - [=ИмяПеременной_1](Любой текст)
   - [=ИмяПеременной_2](Любой текст)
   - [=ИмяПеременной_N](Любой текст)
-  </pre>
-    </li>
+  </pre></li>
 
-    <li>Обращение. (Это просто красивый и не занятый шаблон)
+<li>Обращение. (Это просто красивый и не занятый шаблон)
 
-        <pre>
+  <pre>
   [=ИмяПеременной]
-  </pre>
-    </li>
+  </pre></li>
 
-    <li>Область видимости. Инициализациия переменных и обращения к ним, должно быть в
-        одном файле и в каком-нибудь заголовке(
-        если вам нужна переменная из другого файла, то подумайте, а может вам лучше
-        объединить эти файлы, или же использовать <span className="CodeLine">сылочные блок</span>). Поиск переменных
-        производиться при формировании кеша заголовков который создается при сборке
-        файла.
+<li>Область видимости. Инициализациия переменных и обращения к ним, должно быть в
+  одном файле и в каком-нибудь заголовке(
+  если вам нужна переменная из другого файла, то подумайте, а может вам лучше
+  объединить эти файлы, или же использовать <span class="CodeLine">сылочные блок</span>). Поиск переменных
+  производиться при формировании кеша заголовков который создается при сборке
+  файла.
 
-        Алгоритм поиска - Начинаем искать все заголовки в файле, встречается нам
-        заголовок, из него мы берем название, уровень, и весь текст от начало этого
-        заголовка и до следующего. Весь текст заголовка парсим и ищем инициализацию
-        переменных, если находим их то заносим в кеш текущего заголовка, после этого
-        ищем обращения к переменным, если они есть то начинаем поиск сначала в текущем
-        заголовке, потом в ранее инициализированных заголовков, но не во всех, а
-        только в тех что, выше текущего.
+  Алгоритм поиска - Начинаем искать все заголовки в файле, встречается нам
+  заголовок, из него мы берем название, уровень, и весь текст от начало этого
+  заголовка и до следующего. Весь текст заголовка парсим и ищем инициализацию
+  переменных, если находим их то заносим в кеш текущего заголовка, после этого
+  ищем обращения к переменным, если они есть то начинаем поиск сначала в текущем
+  заголовке, потом в ранее инициализированных заголовков, но не во всех, а
+  только в тех что, выше текущего.
 
-        **В общем не парьтесь, глянете на примеры, попробуйте втянутся, и сразу
-        поймете что к чему тут.**
-    </li>
+  **В общем не парьтесь, глянете на примеры, попробуйте втянутся, и сразу
+  поймете что к чему тут.**</li>
 
-    <li>Переопределение. Тут все по классике, возьмется инициализированная переменная,
-        которая ближе всего к месту обращения.
-    </li>
+<li>Переопределение. Тут все по классике, возьмется инициализированная переменная,
+  которая ближе всего к месту обращения.</li>
 
 
-</ul><h4 id="Пример" className="MarkdownDRY StandardHeaders">Пример</h4>
+</ul><h4 id="Пример" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример</div><div class="mddry_level">4</div></h4>
 
 
 Нам нужно написать документацию для реляционной таблицы. Мы можем облегчить себе
@@ -266,27 +221,25 @@
 
 Итог:
 
-&gt Обратим внимание, что обращение к не инициализированной переменной <span
-        className="CodeLine">=IS_LONELY_DOG</span> останется без изменений.
+&gt Обратим внимание, что обращение к не инициализированной переменной <span class="CodeLine">=IS_LONELY_DOG</span> останется без изменений.
 
 ![](./doc/Vars.png)
 
 
-<h3 id="Ссылочный блок - <span class="
-    CodeLine">eferenceBlock`" className="MarkdownDRY StandardHeaders">Ссылочный блок - `ReferenceBloc</span></h3>
+<h3 id="Ссылочный блок - %ReferenceBlock%" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Ссылочный блок - <span class="CodeLine">eferenceBloc</span></div><div class="mddry_level">3</div></h3>
 
 
 Ссылочные блоки — они нужны, чтобы делать ссылки на блоки текста. Вы можете где
 угодно инициализировать ссылочный блок, и где угодно получить его данные. Имена
-ссылочных блоков должны быть уникальны, они похоже на теги в <span className="CodeLine">arkdow</span> ,
-например если вы будете использоваться редактор <span className="CodeLine">bsidia</span> то в нём есть
+ссылочных блоков должны быть уникальны, они похоже на теги в <span class="CodeLine">arkdow</span> ,
+например если вы будете использоваться редактор <span class="CodeLine">bsidia</span> то в нём есть
 автокомплит и поиск по тегам, эту возможность можно также использовать для
 ссылочных блоков.
 
 ![](./doc/мемReferenceBlock.png)
 
 
-<h4 id="Синтаксис" className="MarkdownDRY StandardHeaders">Синтаксис</h4>
+<h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
 
 
 Инициализация:
@@ -310,15 +263,15 @@
 </pre>
 
 
-<h4 id="Пример" className="MarkdownDRY StandardHeaders">Пример</h4>
+<h4 id="Пример" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример</div><div class="mddry_level">4</div></h4>
 
 
-Так как <span className="CodeLine">arkdownDR</span> должен быть настолько простым, чтобы с ним смогла
+Так как <span class="CodeLine">arkdownDR</span> должен быть настолько простым, чтобы с ним смогла
 справиться любая домохозяйка, сделаем пример для домохозяйки.
 
 Наша гипотетическая домохозяйка, решили переписать сою кулинарную книгу рецепты
 в электронный вид, чтобы поделиться своими знаниями на форуме с другими
-домохозяйками. Она решила выбрать язык разметки <span className="CodeLine">arkdownDR</span>, и это был её
+домохозяйками. Она решила выбрать язык разметки <span class="CodeLine">arkdownDR</span>, и это был её
 осознанный выбор. Она знала что в нем есть ссылочные блоки, и это было ключевым
 моментом в её решение.
 
@@ -401,28 +354,26 @@
 </pre>
 
 
-<h3 id="Раскрываемые блок - <span class="
-    CodeLine">ropdownBlock`" className="MarkdownDRY StandardHeaders">Раскрываемые блок - `DropdownBloc</span></h3>
+<h3 id="Раскрываемые блок - %DropdownBlock%" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Раскрываемые блок - <span class="CodeLine">ropdownBloc</span></div><div class="mddry_level">3</div></h3>
 
 
 Ладно, из-за моих плоских шутейк большая часть аудитории уже ушла, а это значит
 что ты, мой читатель, который дошел до этой строки, особенный! Не такой, как
 все. Поэтому сделаю тебе подарок - буду писать только суть, без демагогии.
 
-Цель <span className="CodeLine">аскрываемого блок</span>, скрыть излишнюю подробность при просмотре документа.
+Цель <span class="CodeLine">аскрываемого блок</span>, скрыть излишнюю подробность при просмотре документа.
 
-Принцип работы <span className="CodeLine">ropdownBloc</span>
+Принцип работы <span class="CodeLine">ropdownBloc</span>
 
 ![](doc/мемDropdownBlock.png)
 
 
-<h4 id="Синтаксис" className="MarkdownDRY StandardHeaders">Синтаксис</h4>
+<h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
 
-<ul className="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
-    <li>Шаблон</li>
+<ul class="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
+<li>Шаблон</li>
 
-</ul>
-<pre>
+</ul><pre>
 ? Описание скрытого блока
 
 Любой многострочный
@@ -432,7 +383,7 @@
 </pre>
 
 
-<h4 id="Пример" className="MarkdownDRY StandardHeaders">Пример</h4>
+<h4 id="Пример" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример</div><div class="mddry_level">4</div></h4>
 
 
 <pre>
@@ -477,19 +428,19 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 ![](./doc/DropdownBlock.png)
 
 
-<h3 id="Выделение блоков - <span class="
-    CodeLine">ighlightBlock`" className="MarkdownDRY StandardHeaders">Выделение блоков - `HighlightBloc</span></h3>
+<h3 id="Выделение блоков - %HighlightBlock%" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Выделение блоков - <span class="CodeLine">ighlightBloc</span></div><div class="mddry_level">3</div></h3>
 
 
-<h4 id="Синтаксис" className="MarkdownDRY StandardHeaders">Синтаксис</h4>
 
-<ul className="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
-    <li>`!` Пример</li>
-    <li>`!!` Информирование</li>
-    <li><span className="CodeLine">!</span> Предупреждение</li>
+<h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
+
+<ul class="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
+<li>`!` Пример</li>
+<li>`!!` Информирование</li>
+<li><span class="CodeLine">!</span> Предупреждение</li>
 
 
-</ul><h4 id="Пример" className="MarkdownDRY StandardHeaders">Пример</h4>
+</ul><h4 id="Пример" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример</div><div class="mddry_level">4</div></h4>
 
 
 <pre>
@@ -526,15 +477,14 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 ![](./doc/HighlightBlock.png)
 
 
-<h3 id="Фото Галерея - <span class="
-    CodeLine">hotoGallery`" className="MarkdownDRY StandardHeaders">Фото Галерея - `PhotoGaller</span></h3>
+<h3 id="Фото Галерея - %PhotoGallery%" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Фото Галерея - <span class="CodeLine">hotoGaller</span></div><div class="mddry_level">3</div></h3>
 
 
 Группировать фотки это круто. Килир-фича когда вам нужно показать
 последовательность действий использования UI, через фото.
 
 
-<h4 id="Синтаксис" className="MarkdownDRY StandardHeaders">Синтаксис</h4>
+<h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
 
 
 Вот так все просто. Делаем список, даем ему имя, и в нем делаем под список со
@@ -548,7 +498,7 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 </pre>
 
 
-<h4 id="Пример" className="MarkdownDRY StandardHeaders">Пример</h4>
+<h4 id="Пример" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример</div><div class="mddry_level">4</div></h4>
 
 
 Перед нами стоит ответственная задача, нужно собрать галерею из негодных и
@@ -581,12 +531,11 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 ![](./doc/PhotoGallery.png)
 
 
-<h3 id="Математический размах - <span class="
-    CodeLine">athSpan`" className="MarkdownDRY StandardHeaders">Математический размах - `MathSpa</span></h3>
+<h3 id="Математический размах - %MathSpan%" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Математический размах - <span class="CodeLine">athSpa</span></div><div class="mddry_level">3</div></h3>
 
 
-А это уже не шутки ... серьезно ! У пользователей <span className="CodeLine">arkdownDR</span> всегда будет под
-рукой <span className="CodeLine">ymP</span>.
+А это уже не шутки ... серьезно ! У пользователей <span class="CodeLine">arkdownDR</span> всегда будет под
+рукой <span class="CodeLine">ymP</span>.
 
 А это значит, что юзеры могут прямо в документации - рассчитывать траекторию
 движения космического аппарата по просторам вселено, с учетом гравитационных
@@ -596,7 +545,7 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 ![](./doc/мемMathSpan.png)
 
 
-<h4 id="Синтаксис" className="MarkdownDRY StandardHeaders">Синтаксис</h4>
+<h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
 
 
 <pre>
@@ -604,7 +553,7 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 </pre>
 
 
-<h4 id="Пример" className="MarkdownDRY StandardHeaders">Пример</h4>
+<h4 id="Пример" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример</div><div class="mddry_level">4</div></h4>
 
 
 <pre>
@@ -663,7 +612,7 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 
 <hr>
 
-(Комбинируем с <span className="CodeLine">ar</span>):
+(Комбинируем с <span class="CodeLine">ar</span>):
 
 <pre>
 # Текст неизвестного рекрутера
@@ -696,17 +645,16 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 <hr>
 
 
-<h3 id="Скрытые заголовки - <span class="
-    CodeLine">iddenHeaders`" className="MarkdownDRY StandardHeaders">Скрытые заголовки - `HiddenHeader</span></h3>
+<h3 id="Скрытые заголовки - %HiddenHeaders%" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Скрытые заголовки - <span class="CodeLine">iddenHeader</span></div><div class="mddry_level">3</div></h3>
 
 
 Бывает нужно, создать заголовок, для того чтобы сослаться на него, и мы не хотим
-чтобы он попадал в оглавление документа. Для этого есть <span className="CodeLine">iddenHeader</span>
+чтобы он попадал в оглавление документа. Для этого есть <span class="CodeLine">iddenHeader</span>
 
 ![](./doc/HiddenHeadersDoc.png)
 
 
-<h4 id="Синтаксис" className="MarkdownDRY StandardHeaders">Синтаксис</h4>
+<h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
 
 
 <pre>
@@ -719,13 +667,13 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 </pre>
 
 
-<h4 id="Пример" className="MarkdownDRY StandardHeaders">Пример</h4>
+<h4 id="Пример" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример</div><div class="mddry_level">4</div></h4>
 
 
 Вот типичная документация проекта, из неё нам нужно скрыть заголовки которые
 подробно описывать ошибки. В оглавление они будут занимать много лишнего места,
 а вот ссылаться на эти заголовки в других местах документации будет полезно.
-Поэтому воспользуемся <span className="CodeLine">iddenHeader</span>
+Поэтому воспользуемся <span class="CodeLine">iddenHeader</span>
 
 
 <pre>
@@ -800,25 +748,24 @@ JavaScript
 ![](./doc/HiddenHeaders.png)
 
 
-<h3 id="Ссылки на структурные элементы кода - LinkCode" className="MarkdownDRY StandardHeaders">Ссылки на структурные элементы
-    кода - LinkCode</h3>
+<h3 id="Ссылки на структурные элементы кода - LinkCode" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Ссылки на структурные элементы кода - LinkCode</div><div class="mddry_level">3</div></h3>
 
 
-Полноценна эта фича, пока доступна только для <span className="CodeLine">ytho</span>, но вы можете
-использовать универсальный вариант такой как <span className="CodeLine">никальныйЯкор</span> для любого
+Полноценна эта фича, пока доступна только для <span class="CodeLine">ytho</span>, но вы можете
+использовать универсальный вариант такой как <span class="CodeLine">никальныйЯкор</span> для любого
 формата данных.
 
 Суть заключается в том, что вы можете делать ссылки на элементы кода такие как:
-<ul className="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
-    <li><span className="CodeLine">лас</span></li>
-    <li><span className="CodeLine">ласс.Мето</span></li>
-    <li><span className="CodeLine">ласс.Атрибу</span></li>
-    <li><span className="CodeLine">ункци</span></li>
-    <li><span className="CodeLine">еременна</span></li>
-    <li><span className="CodeLine">никальныйЯкор</span> отдельная глава *</li>
+<ul class="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
+<li><span class="CodeLine">лас</span></li>
+<li><span class="CodeLine">ласс.Мето</span></li>
+<li><span class="CodeLine">ласс.Атрибу</span></li>
+<li><span class="CodeLine">ункци</span></li>
+<li><span class="CodeLine">еременна</span></li>
+<li><span class="CodeLine">никальныйЯкор</span> отдельная глава *</li>
 
 
-</ul><h4 id="Синтаксис" className="MarkdownDRY StandardHeaders">Синтаксис</h4>
+</ul><h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
 
 
 <pre>
@@ -830,7 +777,7 @@ JavaScript
 </pre>
 
 
-<h4 id="УникальныйЯкорь" className="MarkdownDRY StandardHeaders">УникальныйЯкорь</h4>
+<h4 id="УникальныйЯкорь" class="MarkdownDRY StandardHeaders"><div class="mddry_name">УникальныйЯкорь</div><div class="mddry_level">4</div></h4>
 
 
 Суть в том что мы заключаем нужны текст в "блок", а потом ссылаемся на него. Эта
@@ -855,79 +802,79 @@ JavaScript
 </pre>
 
 
-<h4 id="Пример ссылки на локальные файлы" className="MarkdownDRY StandardHeaders">Пример ссылки на локальные файлы</h4>
+<h4 id="Пример ссылки на локальные файлы" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример ссылки на локальные файлы</div><div class="mddry_level">4</div></h4>
 
 
-Есть файл <span className="CodeLine">ain.p</span>, вот его исходник
+Есть файл <span class="CodeLine">ain.p</span>, вот его исходник
 
 ```
 
-<h1 id="Обычная функция" className="MarkdownDRY StandardHeaders">Обычная функция</h1>
+<h1 id="Обычная функция" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Обычная функция</div><div class="mddry_level">1</div></h1>
 
 from functools import wraps
 
 
 class NeClass:
-name: str = __file__
+    name: str = __file__
 
-def __call__(self, *args, **kwargs):
-"""Доки"""
-return self.name
+    def __call__(self, *args, **kwargs):
+        """Доки"""
+        return self.name
 
 
 def another_function(func):
-"""
-Функция которая принимает другую функцию
-"""
+    """
+    Функция которая принимает другую функцию
+    """
 
-@wraps(func)
-def wrapper():
-"""
-Оберточная функция
-"""
-# Химичим&gt
-val = "The result of %s iSs %ss" % (func(), eval(func()))
-# &ltХимичим
-return val
+    @wraps(func)
+    def wrapper():
+        """
+        Оберточная функция
+        """
+        # Химичим&gt
+        val = "The result of %s iSs %ss" % (func(), eval(func()))
+        # &ltХимичим
+        return val
 
-return wrapper
-
-
-@another_function
-def a_function():
-"""Обычная <span className="CodeLine">ункци</span>"""
-return "1+1"
+    return wrapper
 
 
 @another_function
 def a_function():
-"""Обычная <span className="CodeLine">ункци</span>"""
-return "1+2"
+    """Обычная <span class="CodeLine">ункци</span>"""
+    return "1+1"
 
 
 @another_function
 def a_function():
-"""Обычная <span className="CodeLine">ункци</span>"""
-return "1+3"
+    """Обычная <span class="CodeLine">ункци</span>"""
+    return "1+2"
 
 
 @another_function
 def a_function():
-"""Обычная <span className="CodeLine">ункци</span>"""
-return "1+4"
+    """Обычная <span class="CodeLine">ункци</span>"""
+    return "1+3"
 
 
 @another_function
 def a_function():
-"""Обычная <span className="CodeLine">ункци</span>"""
-return "1+5"
+    """Обычная <span class="CodeLine">ункци</span>"""
+    return "1+4"
+
+
+@another_function
+def a_function():
+    """Обычная <span class="CodeLine">ункци</span>"""
+    return "1+5"
 
 
 __name__ = '__main__'
 
 if __name__ == "__main__":
-print(a_function.__name__)  # a_function
-print(a_function.__doc__)  # Обычная функция
+    print(a_function.__name__)  # a_function
+    print(a_function.__doc__)  # Обычная функция
 
 ```
 
@@ -950,18 +897,18 @@ print(a_function.__doc__)  # Обычная функция
 ![](./doc/LinkCode.png)
 
 
-<h4 id="Пример ссылки на файл из интернета" className="MarkdownDRY StandardHeaders">Пример ссылки на файл из интернета</h4>
+<h4 id="Пример ссылки на файл из интернета" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример ссылки на файл из интернета</div><div class="mddry_level">4</div></h4>
 
 
-У нас есть файл на <span className="CodeLine">itGist` или на `GitHu</span>, или откуда угодно. И нам нужно
+У нас есть файл на <span class="CodeLine">itGist` или на `GitHu</span>, или откуда угодно. И нам нужно
 сделать ссылку на него. Это делается точно так же как и на локальный файл. В
-этом случае исходный код будет загружен при сборке <span className="CodeLine">arkdownDR</span>. Если вам нужно
+этом случае исходный код будет загружен при сборке <span class="CodeLine">arkdownDR</span>. Если вам нужно
 обновить исходный код на актуальный вариант из интернета, то пересоберите
-проект. Ссылки похожие, теперь место пути указываем <span className="CodeLine">R</span>.
+проект. Ссылки похожие, теперь место пути указываем <span class="CodeLine">R</span>.
 
 <hr>
 
-Вот реальный пример, ссылаться мой код из <span className="CodeLine">itGis</span>:
+Вот реальный пример, ссылаться мой код из <span class="CodeLine">itGis</span>:
 
 <pre>
 &ltbr&gt[check_uniq_key](https://gist.githubusercontent.com/denisxab/4290770428d4d34a83624f5343df87fd/raw/3fd17298a2dd382d0a2c52e4e11e2993f9b2da0b/SymmetricCrypto.py#SymmetricCrypto.check_uniq_key)
@@ -975,22 +922,21 @@ print(a_function.__doc__)  # Обычная функция
 ![](./doc/LinkCode_NET_GitGist.png)
 
 
-<h3 id="Экранированная вставить кода из файла - InsertCodeFromFile" className="MarkdownDRY StandardHeaders">Экранированная
-    вставить кода из файла - InsertCodeFromFile</h3>
+<h3 id="Экранированная вставить кода из файла - InsertCodeFromFile" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Экранированная вставить кода из файла - InsertCodeFromFile</div><div class="mddry_level">3</div></h3>
 
 
 Суть в том что мы можем вставлять текст из другого файла, в
-результирующий <span className="CodeLine">TML` файл. В отличие от `IndisputableInsertCodeFromFil</span>
-в <span className="CodeLine">arkdow</span> файл он вставиться. Он будет обработан по стандартной
-логике <span className="CodeLine">arkdow</span> - блока с кодом.
+результирующий <span class="CodeLine">TML` файл. В отличие от `IndisputableInsertCodeFromFil</span>
+в <span class="CodeLine">arkdow</span> файл он вставиться. Он будет обработан по стандартной
+логике <span class="CodeLine">arkdow</span> - блока с кодом.
 
 ![img.png](./doc/InsertCodeFromFile2.png)
 
 
-<h4 id="Синтаксис" className="MarkdownDRY StandardHeaders">Синтаксис</h4>
+<h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
 
 
-Вставить исходный код из файла в <span className="CodeLine">arkdownDR</span>:
+Вставить исходный код из файла в <span class="CodeLine">arkdownDR</span>:
 
 <pre>
 ![Имя Для Ссылки](ПутьКФайлу.py)
@@ -1003,10 +949,10 @@ print(a_function.__doc__)  # Обычная функция
 </pre>
 
 
-<h4 id="Пример" className="MarkdownDRY StandardHeaders">Пример</h4>
+<h4 id="Пример" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример</div><div class="mddry_level">4</div></h4>
 
 
-Вот файл, который будем вставлять, назовем его <span className="CodeLine">/raw/regex_mem.tx</span>
+Вот файл, который будем вставлять, назовем его <span class="CodeLine">/raw/regex_mem.tx</span>
 
 ```text
 (?P&ltclass&gt(class[\t ]+.+[\t ]*)(?:\((.+)\))?:\n(?:\t+| {1,4}.*\n+)+)|
@@ -1029,14 +975,13 @@ print(a_function.__doc__)  # Обычная функция
 ![](./doc/InsertCodeFromFile.png)
 
 
-<h3 id="Бесспорная вставить кода из файла - IndisputableInsertCodeFromFile" className="MarkdownDRY StandardHeaders">Бесспорная
-    вставить кода из файла - IndisputableInsertCodeFromFile</h3>
+<h3 id="Бесспорная вставить кода из файла - IndisputableInsertCodeFromFile" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Бесспорная вставить кода из файла - IndisputableInsertCodeFromFile</div><div class="mddry_level">3</div></h3>
 
 
-<span className="CodeLine">есспорная вставк</span> подразумевает что текст из файла вставиться без всякого
-форматирования в файл <span className="CodeLine">d` который после будет обработан `MarkdownDR</span>. Вообще
+<span class="CodeLine">есспорная вставк</span> подразумевает что текст из файла вставиться без всякого
+форматирования в файл <span class="CodeLine">d` который после будет обработан `MarkdownDR</span>. Вообще
 это самый первый этап конвертации, в нем мы можем просто соединять
-разные <span className="CodeLine">arkdow</span> файлы в один, вставлять текст для примеров из других файлов, и
+разные <span class="CodeLine">arkdow</span> файлы в один, вставлять текст для примеров из других файлов, и
 делать что нраву. Но помните что - "с большой силой, приходит большая
 ответственность"
 
@@ -1046,39 +991,38 @@ print(a_function.__doc__)  # Обычная функция
 тестов. А так как примеры берутся из тестовых данных, то они будут всегда
 актуальны.
 
-Вот в чем разница <span className="CodeLine">nsertCodeFromFile` от `IndisputableInsertCodeFromFil</span> для
+Вот в чем разница <span class="CodeLine">nsertCodeFromFile` от `IndisputableInsertCodeFromFil</span> для
 обычного пользователя, которые пытается вставить исходный без экранирования в
 документацию.
 
 ![](./doc/IndisputableInsertCodeFromFile3.png)
 
 
-<h4 id="Синтаксис" className="MarkdownDRY StandardHeaders">Синтаксис</h4>
+<h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
 
 
 Вот таким образом вы можете вставить исходный код из указанного файл в вашу
-документацию. Этим же способом вы можете реализовать импорт различных <span className="CodeLine">arkdow</span>
-файлов, так как <span className="CodeLine">ndisputableInsertCodeFromFil</span> это самый первый этап
-компиляции, то вставленные(импортирование) <span className="CodeLine">arkdow</span> файлы будут обработаны
-компилятором <span className="CodeLine">arkdownDR</span>.
+документацию. Этим же способом вы можете реализовать импорт различных <span class="CodeLine">arkdow</span>
+файлов, так как <span class="CodeLine">ndisputableInsertCodeFromFil</span> это самый первый этап
+компиляции, то вставленные(импортирование) <span class="CodeLine">arkdow</span> файлы будут обработаны
+компилятором <span class="CodeLine">arkdownDR</span>.
 ![](./doc/IndisputableInsertCodeFromFile.png)
 
-&gt <span
-        className="CodeLine">асширени</span> - лучше не указывать бинарные файлы для вставки. Но если душа просит, то ограничений на это нет.
+&gt <span class="CodeLine">асширени</span> - лучше не указывать бинарные файлы для вставки. Но если душа просит, то ограничений на это нет.
 
 
 Но если вам нужно вставить исходный код, и при этом этот текст не должен быть
-обработан(проигнорирован) компилятором, то заключите его вставку в тег <span className="CodeLine">ltpre&g</span>.
+обработан(проигнорирован) компилятором, то заключите его вставку в тег <span class="CodeLine">ltpre&g</span>.
 Как раз этим способом я пользуюсь в этой документации, для приведения примеров
-на <span className="CodeLine">arkdownDR</span>.
+на <span class="CodeLine">arkdownDR</span>.
 
 ![](./doc/IndisputableInsertCodeFromFile2.png)
 
 
-<h4 id="Пример" className="MarkdownDRY StandardHeaders">Пример</h4>
+<h4 id="Пример" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример</div><div class="mddry_level">4</div></h4>
 
 
-Мы разработали скрипт для парсинга <span className="CodeLine">n</span> файлов, вещь полезная, и важная,
+Мы разработали скрипт для парсинга <span class="CodeLine">n</span> файлов, вещь полезная, и важная,
 поэтому давайте напишем к ней документацию. Самая лучшая документация, это там
 где меньше написано и больше показано, так что давайте сразу приведем пример,
 как скрипт работает.
@@ -1200,11 +1144,11 @@ def read_env_file_and_set_from_venv(file_name: str):
 <hr>
 
 
-<h3 id="Многостраничные кодблоки - MultiPageCode" className="MarkdownDRY StandardHeaders">Многостраничные кодблоки -
-    MultiPageCode</h3>
+<h3 id="Многостраничные кодблоки - MultiPageCode" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Многостраничные кодблоки - MultiPageCode</div><div class="mddry_level">3</div></h3>
 
 
-<h4 id="Синтаксис" className="MarkdownDRY StandardHeaders">Синтаксис</h4>
+
+<h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
 
 
 <pre>
@@ -1218,16 +1162,16 @@ def read_env_file_and_set_from_venv(file_name: str):
 
   ```
 </pre>
-<ul className="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
-    <li><span className="CodeLine">КраткоеИмяДляБлока</span>- Название блока с кодом</li>
+<ul class="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
+<li><span class="CodeLine">КраткоеИмяДляБлока</span>- Название блока с кодом</li>
 
-    <li><span className="CodeLine">ВыделитьСтроки</span> - Выделение строк, можно указывать конкретные строки через
-        запятую(<span className="CodeLine">Число_1,Число_2</span>) или указывать диапазонны через
-        тире <span className="CodeLine">Число_1-Число_2</span>. Эти два варианта можно
-        комбинировать.<span className="CodeLine">Число_1-Число_2,Число_3-Число_4,Число_5,Число_</span></li>
+<li><span class="CodeLine">ВыделитьСтроки</span> - Выделение строк, можно указывать конкретные строки через
+  запятую(<span class="CodeLine">Число_1,Число_2</span>)  или указывать диапазонны через
+  тире <span class="CodeLine">Число_1-Число_2</span>. Эти два варианта можно
+  комбинировать.<span class="CodeLine">Число_1-Число_2,Число_3-Число_4,Число_5,Число_</span></li>
 
 
-</ul><h4 id="Пример" className="MarkdownDRY StandardHeaders">Пример</h4>
+</ul><h4 id="Пример" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример</div><div class="mddry_level">4</div></h4>
 
 
 <pre>
@@ -1358,30 +1302,28 @@ def read_env_file_and_set_from_venv(file_name: str):
 ![](./doc/MultiPageCode.png)
 
 
-<h3 id="Многострочные таблицы - <span class="
-    CodeLine">ultiLineTables`" className="MarkdownDRY StandardHeaders">Многострочные таблицы - `MultiLineTable</span></h3>
+<h3 id="Многострочные таблицы - %MultiLineTables%" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Многострочные таблицы - <span class="CodeLine">ultiLineTable</span></div><div class="mddry_level">3</div></h3>
 
 
 В Многострочные таблицы можно писать
-<ul className="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
-    <li>Переносы строк</li>
-    <li>Фото</li>
-    <li>Блоки с кодом</li>
-    <li>Ссылочные блоки</li>
+<ul class="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
+<li>Переносы строк</li>
+<li>Фото</li>
+<li>Блоки с кодом</li>
+<li>Ссылочные блоки</li>
 
 </ul>Что еще дозволено:
-<ul className="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
-    <li>Доступны агрегатные функции <span className="CodeLine">vg(),sum(</span>для диапазона ячейка.</li>
-    <li>Разрешено обращаться к данным указанных ячеек и производить с ними
-        арифметику (с использованием <span className="CodeLine">ymP</span>). Я не понимаю в чем прикол использовать
-        английский алфавит для столбцов, поэтому у нас будут все равны - числовые
-        столбцы - числовые строки, и начало у них с единицы.
-    </li>
+<ul class="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
+<li>Доступны агрегатные функции <span class="CodeLine">vg(),sum(</span>для диапазона ячейка.</li>
+<li>Разрешено обращаться к данным указанных ячеек и производить с ними
+  арифметику (с использованием <span class="CodeLine">ymP</span>). Я не понимаю в чем прикол использовать
+  английский алфавит для столбцов, поэтому у нас будут все равны - числовые
+  столбцы - числовые строки, и начало у них с единицы.</li>
 
 </ul>![](./doc/MultiLineTablesDoc.png)
 
 
-<h4 id="Синтаксис" className="MarkdownDRY StandardHeaders">Синтаксис</h4>
+<h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
 
 
 Для того чтобы таблица стала многострочной нужно указать в следующем столбце 3
@@ -1401,7 +1343,7 @@ def read_env_file_and_set_from_venv(file_name: str):
 </pre>
 
 
-<h4 id="Пример" className="MarkdownDRY StandardHeaders">Пример</h4>
+<h4 id="Пример" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример</div><div class="mddry_level">4</div></h4>
 
 
 <pre>
@@ -1456,23 +1398,24 @@ def read_env_file_and_set_from_venv(file_name: str):
 ![](./doc/MultiLineTables.png)
 
 
-<h3 id="Пока не реализовано" className="MarkdownDRY StandardHeaders">Пока не реализовано</h3>
+<h3 id="Пока не реализовано" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пока не реализовано</div><div class="mddry_level">3</div></h3>
 
 
-<h4 id="Выделения изображения" className="MarkdownDRY StandardHeaders">Выделения изображения</h4>
+
+<h4 id="Выделения изображения" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Выделения изображения</div><div class="mddry_level">4</div></h4>
 
 
-Нарисовать квадрат(<span className="CodeLine">#</span>)  на изображение
+Нарисовать квадрат(<span class="CodeLine">#</span>)  на изображение
 <pre>
 ![Любое описание[#]1x2x3x4]
 </pre>
-<ul className="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
-    <li>1 = ВерхняяЛеваТочка</li>
-    <li>2 = ВерхняяПраваяТочка</li>
-    <li>3 = НижняяЛеваТочка</li>
-    <li>4 = НижняяПраваяТочка</li>
+<ul class="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
+<li>1 = ВерхняяЛеваТочка</li>
+<li>2 = ВерхняяПраваяТочка</li>
+<li>3 = НижняяЛеваТочка</li>
+<li>4 = НижняяПраваяТочка</li>
 
-</ul>Нарисовать много квадратов(<span className="CodeLine">#</span>)  на изображении - нужно перечислить через
+</ul>Нарисовать много квадратов(<span class="CodeLine">#</span>)  на изображении - нужно перечислить через
 запятую
 <pre>
 ![Любое описание[#]1x2x3x4,1x2x3x4, и.тд.]
@@ -1480,17 +1423,17 @@ def read_env_file_and_set_from_venv(file_name: str):
 
 <hr>
 
-Нарисовать стрелку(<span className="CodeLine">^</span>) на изображение
+Нарисовать стрелку(<span class="CodeLine">^</span>) на изображение
 <pre>
 ![Любое описание[^]1x2x3x4]
 </pre>
-<ul className="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
-    <li>1 = ВерхняяЛеваТочка</li>
-    <li>2 = ВерхняяПраваяТочка</li>
-    <li>3 = НижняяЛеваТочка</li>
-    <li>4 = НижняяПраваяТочка</li>
+<ul class="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
+<li>1 = ВерхняяЛеваТочка</li>
+<li>2 = ВерхняяПраваяТочка</li>
+<li>3 = НижняяЛеваТочка</li>
+<li>4 = НижняяПраваяТочка</li>
 
-</ul>Нарисовать много стрелок(<span className="CodeLine">^</span>)  на изображении - нужно перечислить через
+</ul>Нарисовать много стрелок(<span class="CodeLine">^</span>)  на изображении - нужно перечислить через
 запятую
 <pre>
 ![Любое описание[^]1x2x3x4,1x2x3x4, и.тд.]
@@ -1503,7 +1446,7 @@ def read_env_file_and_set_from_venv(file_name: str):
 </pre>
 
 
-<h4 id="Последовательность действий" className="MarkdownDRY StandardHeaders">Последовательность действий</h4>
+<h4 id="Последовательность действий" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Последовательность действий</div><div class="mddry_level">4</div></h4>
 
 
 Синтаксис:
@@ -1543,11 +1486,11 @@ def read_env_file_and_set_from_venv(file_name: str):
 <hr>
 
 
-<h4 id="Описание UI виджетов" className="MarkdownDRY StandardHeaders">Описание UI виджетов</h4>
+<h4 id="Описание UI виджетов" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Описание UI виджетов</div><div class="mddry_level">4</div></h4>
 
 
 Для нестандартных оформлений нужно использовать html теги, по
-типу <span className="CodeLine">ry_ИмяПлагины`. В данном случае `dry_u</span>.
+типу <span class="CodeLine">ry_ИмяПлагины`. В данном случае `dry_u</span>.
 
 Синтаксис
 
@@ -1561,135 +1504,134 @@ def read_env_file_and_set_from_venv(file_name: str):
 </pre>
 
 
+
 <script>
-    /* <hr> Логика для LinkCode <hr> */
-    // Переменная для хранения исходного кода из файлов. Храниться в кодировки UTF-8, для экранирования спец символов
-    LinkSourceCode = {};
+/* <hr> Логика для LinkCode <hr> */
+// Переменная для хранения исходного кода из файлов. Храниться в кодировки UTF-8, для экранирования спец символов
+LinkSourceCode={
 
-    function AddEventLinkCode() {
-        /* Добавление обработка нажатий на ссылки */
+};
+function AddEventLinkCode() {
+    /* Добавление обработка нажатий на ссылки */
 
-        let elm = document.querySelectorAll(".MarkdownDRY.LinkCode");
-        elm.forEach((e) => {
-            e.addEventListener("click", () => {
-                DisplayLinkCode(e);
-            });
+    let elm = document.querySelectorAll(".MarkdownDRY.LinkCode");
+    elm.forEach((e) => {
+        e.addEventListener("click", () => {
+            DisplayLinkCode(e);
         });
+    });
+}
+AddEventLinkCode();
+function DisplayLinkCode(_elem) {
+    /* Показать всплывающие окно с исходным кодом */
+
+    // Устанавливаем в заголовок всплывающего окна, название ссылки которая вызвала это окно
+    LinkCodeName.textContent=_elem.textContent
+
+    // Установить путь к файлу или ссылку в выплывающие окно
+    LinkCodeWindowPath.textContent=_elem.getAttribute('file')
+
+    // Получаем элемент в котором будет исходный текст из файла
+    let _el = document.querySelector('#LinkCodeWindowBody')
+    const source_text = LinkSourceCode[_elem.getAttribute('file')]
+    if (source_text) {
+        // <hr> Вставка кода в всплывающие окно <hr> //
+        _el.innerHTML = toTag(source_text, 'code', 0, 0, 0, true);
+        // <hr> Выделение кода <hr> //
+        const char_start = _elem.getAttribute('char_start');
+        const char_end = _elem.getAttribute('char_end');
+        if (char_start > 0 && char_end > 0) {
+            // Выделяем текст согласно диапазону из ссылки. Если конечно такой диапазон есть.
+            // Его может не быть если ссылка указывает на несуществующий элемент кода.
+            const highlight_text = toTag(toTag(_el.textContent.slice(char_start, char_end), 'span', 0, 0, 0, true), 'code', true);
+            // Собираем результат, и записываем его в тело всплывающего окна
+            _el.innerHTML = <span class="CodeLine">{toTag(_el.textContent.slice(0, char_start), 'code', null, null, true, true)</span> +
+                <span class="CodeLine">{highlight_text</span> +
+                <span class="CodeLine">{toTag(_el.textContent.slice(char_end, _el.innerHTML.length), 'code', null, true, null, true)</span>
+        }
+        // <hr> //
     }
+    // Делаем видимым окно
+    LinkCodeWindow.style.display = 'block';
+    // Перебираем все строки и ищем начало выделение кода
+    for (let _e of _el.childNodes) {
+        if (_e.childNodes.length > 0 && _e.childNodes[0].tagName === "SPAN") {
+            // Плавная прокрутка к первому выделенному блоку
+            _e.scrollIntoView({ behavior: 'smooth'});
+            break;
+        }
+    }
+}
+function toTag(text, tag, is_skip_first_last, skip_first, skip_last, escaping) {
+    /*Поместить текст в теги
 
-    AddEventLinkCode();
+    is_skip_first_last=true - Если нужно пропустить первый и последний тег.
+    escaping=true -  Экранирование треугольных скобок, если этого не сделать то метод <span class="CodeLine">nnerHTM</span> скроет текст в скобках.
+    */
 
-    function DisplayLinkCode(_elem) {
-        /* Показать всплывающие окно с исходным кодом */
+    let list = [];
+    if (escaping) {
+        text = text.replace(/</g,'&lt').replace(/>/g,'&gt');
+    }
+    const tmp = text.split('\n');
 
-        // Устанавливаем в заголовок всплывающего окна, название ссылки которая вызвала это окно
-        LinkCodeName.textContent = _elem.textContent
+    if (!is_skip_first_last) {
+        if (skip_last) {
+            tmp.slice(0, -1).forEach(
+                (_e) => {
+                    list.push(<span class="CodeLine">${tag}>${_e}</${tag}</span>);
+                }
+            )
+            list.push(<span class="CodeLine">${tag}>${tmp[tmp.length - 1]</span>)
+        } else if (skip_first) {
+            list.push(<span class="CodeLine">/${tag}>${tmp[0]</span>)
+            tmp.slice(1, -1).forEach(
+                (_e) => {
+                    list.push(<span class="CodeLine">${tag}>${_e}</${tag}</span>);
+                }
+            )
+        } else {
+            tmp.forEach(
+                (_e) => {
+                    list.push(<span class="CodeLine">${tag}>${_e}</${tag}</span>);
+                }
+            )
+        }
+    } else {
+        // Если нужно пропустить первый и последний тег
+        list.push(tmp[0])
+        tmp.slice(1).forEach(
+            (_e) => {
+                list.push(<span class="CodeLine">${tag}>${_e}</${tag}</span>);
+            }
+        )
+        // list.push(tmp[tmp.length - 1])
+    }
+    return list.join('\n');
+}
+function OnHide(_event) {
+    /* Скрыть выплывающие окно при нажатии вне его */
 
-        // Установить путь к файлу или ссылку в выплывающие окно
-        LinkCodeWindowPath.textContent = _elem.getAttribute('file')
+    console.log('OnHide');
+    if (_event.target.id === 'LinkCodeWindow') {
+        LinkCodeWindow.style.display = 'none'
+    }
+}
 
-        // Получаем элемент в котором будет исходный текст из файла
-        let _el = document.querySelector('#LinkCodeWindowBody')
-        const source_text = LinkSourceCode[_elem.getAttribute('file')]
-        if (source_text) {
-            // <hr> Вставка кода в всплывающие окно <hr> //
-            _el.innerHTML = toTag(source_text, 'code', 0, 0, 0, true);
-            // <hr> Выделение кода <hr> //
-            const char_start = _elem.getAttribute('char_start');
-            const char_end = _elem.getAttribute('char_end');
-            if (char_start > 0 && char_end > 0) {
-                // Выделяем текст согласно диапазону из ссылки. Если конечно такой диапазон есть.
-                // Его может не быть если ссылка указывает на несуществующий элемент кода.
-                const highlight_text = toTag(toTag(_el.textContent.slice(char_start, char_end), 'span', 0, 0, 0, true), 'code', true);
-                // Собираем результат, и записываем его в тело всплывающего окна
-                _el.innerHTML =
-                    <span class="CodeLine">{toTag(_el.textContent.slice(0, char_start), 'code', null, null, true, true) < /span> +
-                        <span class="CodeLine">{highlight_text</span> +
-                        <span class="CodeLine">{toTag(_el.textContent.slice(char_end, _el.innerHTML.length), 'code', null, true, null, true)</span>
-                    }
-                        // <hr> //
-                        }
-                        // Делаем видимым окно
-                        LinkCodeWindow.style.display = 'block';
-                        // Перебираем все строки и ищем начало выделение кода
-                        for (let _e of _el.childNodes) {
-                        if (_e.childNodes.length > 0 && _e.childNodes[0].tagName === "SPAN") {
-                        // Плавная прокрутка к первому выделенному блоку
-                        _e.scrollIntoView({behavior: 'smooth'});
-                        break;
-                    }
-                    }
-                        }
-                        function toTag(text, tag, is_skip_first_last, skip_first, skip_last, escaping) {
-                        /*Поместить текст в теги
-
-                    is_skip_first_last=true - Если нужно пропустить первый и последний тег.
-                    escaping=true -  Экранирование треугольных скобок, если этого не сделать то метод <span class="CodeLine">nnerHTM</span> скроет текст в скобках.
-                    */
-
-                        let list = [];
-                        if (escaping) {
-                        text = text.replace(/</g,'&lt').replace(/>/g,'&gt');
-                    }
-                        const tmp = text.split('\n');
-
-                        if (!is_skip_first_last) {
-                        if (skip_last) {
-                        tmp.slice(0, -1).forEach(
-                        (_e) => {
-                        list.push(<span class="CodeLine">${tag}>${_e}</${tag}</span>);
-                    }
-                        )
-                        list.push(<span class="CodeLine">${tag}>${tmp[tmp.length - 1]</span>)
-                    } else if (skip_first) {
-                        list.push(<span class="CodeLine">/${tag}>${tmp[0]</span>)
-                        tmp.slice(1, -1).forEach(
-                        (_e) => {
-                        list.push(<span class="CodeLine">${tag}>${_e}</${tag}</span>);
-                    }
-                        )
-                        } else {
-                        tmp.forEach(
-                        (_e) => {
-                        list.push(<span class="CodeLine">${tag}>${_e}</${tag}</span>);
-                    }
-                        )
-                        }
-                        } else {
-                        // Если нужно пропустить первый и последний тег
-                        list.push(tmp[0])
-                        tmp.slice(1).forEach(
-                        (_e) => {
-                        list.push(<span class="CodeLine">${tag}>${_e}</${tag}</span>);
-                    }
-                        )
-                        // list.push(tmp[tmp.length - 1])
-                        }
-                        return list.join('\n');
-                        }
-                        function OnHide(_event) {
-                        /* Скрыть выплывающие окно при нажатии вне его */
-
-                        console.log('OnHide');
-                        if (_event.target.id === 'LinkCodeWindow') {
-                        LinkCodeWindow.style.display = 'none'
-                    }
-                    }
-
-                        /* <hr> */
+/* <hr> */
 </script>
 <script>
-    // https://snipp.ru/handbk/js-kbd-codes
-    document.onkeyup = function () {
-        var e = e || window.event;
-        if (e.altKey && e.which == 84) {
-            if (menu_is_hidden() === false) {
-                menu_show();
-            } else {
-                menu_hidden();
-            }
-            return false;
-        }
-
+// https://snipp.ru/handbk/js-kbd-codes
+document.onkeyup = function () {
+    var e = e || window.event;
+    if (e.altKey && e.which == 84) {
+    if (menu_is_hidden() === false) {
+        menu_show();
+    } else {
+        menu_hidden();
     }
+    return false;
+}
+
+}
 </script>
