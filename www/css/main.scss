@@ -48,6 +48,7 @@ h6 {
     margin: 0;
     padding: 3px 0 3px 10px;
     border-radius: 4px 4px 0 0;
+    margin: 8px 0px 8px 0px;
 }
 
 h1 {
@@ -164,6 +165,25 @@ a {
         color: $БазовыйЦветПосещеннойСсылки;
     }
 }
+
+// Тег PRE
+pre {
+    background: $ЦветФонаВсплывающегоОкна;
+    padding: 10px 0px 10px 15px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+span {
+    // Строка с кодом
+    &.CodeLine {
+        background: $ЦветФонаВсплывающегоОкна;
+        color: $Среднее;
+        border-radius: 8px;
+        padding: 2px;
+    }
+}
+
 // Блок с кодом
 div > pre {
     background: $ЦветФонаВсплывающегоОкна;

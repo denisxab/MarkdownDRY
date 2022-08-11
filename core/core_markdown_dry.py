@@ -312,7 +312,9 @@ class REGEX:
     # Горизонтальная линия
     Hr: re.Pattern = re.compile('-{3,}')
     # Комментарий %%
-    CommentMD = re.compile('%%(?P<body>\n?(?:.\s*(?!%%))*[^%])%%')
+    CommentMD: re.Pattern = re.compile('%%(?P<body>\n?(?:.\s*(?!%%))*[^%])%%')
+    # Строка с кодом
+    CodeLine: re.Pattern = re.compile('`[^`](?P<body>.+)[^`]`')
 
     # ----------------------
     Slash: str = "\\"

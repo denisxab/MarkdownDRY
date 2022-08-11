@@ -46,7 +46,13 @@ class MD_TO_HTML:
 
     @staticmethod
     def Hr(m: re.Match) -> str:
+        """Горизонтальная линия"""
         return '<hr>'
+
+    @staticmethod
+    def CodeLine(m: re.Match) -> str:
+        """Строка с кодом"""
+        return f'<span class="{HTML_CLASS.CodeLine.value}">{m["body"]}</span>'
 
 
 class CoreMarkdown:
@@ -64,7 +70,7 @@ class CoreMarkdown:
         """
         Не нумерованный Список
         """
-        logger.debug(source_text, 'Ul')
+        logger.debug('Ul')
         return REGEX.BaseBlockUl_or_Ol.sub(MD_TO_HTML.Ul, source_text)
 
     @classmethod
@@ -72,7 +78,7 @@ class CoreMarkdown:
         """
         Нумерованный Список
         """
-        logger.debug(source_text, 'Ol')
+        logger.debug('Ol')
         return REGEX.BaseBlockUl_or_Ol.sub(MD_TO_HTML.Ol, source_text)
 
     @classmethod
@@ -80,5 +86,13 @@ class CoreMarkdown:
         """
         Горизонтальная линия
         """
-        logger.debug(source_text, 'Hr')
+        logger.debug('Hr')
         return REGEX.Hr.sub(MD_TO_HTML.Hr, source_text)
+
+    @classmethod
+    def CodeLine(cls, source_text: str) -> Optional[str]:
+        """
+        Строка с кодом
+        """
+        logger.debug('Code')
+        return REGEX.CodeLine.sub(MD_TO_HTML.CodeLine, source_text)

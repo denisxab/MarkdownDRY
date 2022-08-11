@@ -51,6 +51,7 @@ class HTML_CLASS(Enum):
     LinkSourceCode = "LinkSourceCode"
     LinkCodeName = "LinkCodeName"
     MultiLineTables = "MultiLineTables"
+    CodeLine = "CodeLine"
     Ol = "Ol"
     Ul = "Ul"
     Hr = 'Hr'
@@ -63,7 +64,7 @@ class HTML_CLASS(Enum):
 
     @staticmethod
     def toCode(text: str) -> str:
-        """Конвертировать текст в вид для нумерованного кода"""
+        """Конвертировать текст в вид нумерованного кода"""
         return ''.join(f'<code>{x}</code>\n' for x in text.split('\n'))
 
 
@@ -256,6 +257,8 @@ class HtmlTag:
         text_tag: str
         start: int
         end: int
+        # Имя тега
+        name_tag: str
 
         def __str__(self):
             return self.text_tag
@@ -270,19 +273,19 @@ class HtmlTag:
 
     @staticmethod
     def SubTag(sub: list[HtmlTagType], repl: str = '', text_html: str = '',
-               repl_callback: typing.Callable = lambda repl, date: repl) -> str:
+               repl_callback: typing.Callable = lambda repl, date, name_tag: repl) -> str:
         """
         :param repl_callback: Функция обработчик данных которые будут вставлены за место тело HTML тега
         :param sub: Структура HtmlTag в которой хранятся найденные теги
         :param repl: На что заменить
         :param text_html: Исходный текст HTML
-        :return:
         """
 
         res: list[str] = []
         index_last_end = 0
+
         for _x in sub:
-            res.append(f"{text_html[index_last_end:_x.start]}{repl_callback(repl, text_html[_x.start:_x.end])}")
+            res.append(f"{text_html[index_last_end:_x.start]}{repl_callback(repl, text_html[_x.start:_x.end], _x.name_tag)}")
             index_last_end = _x.end
         return f"{''.join(res)}{text_html[index_last_end:]}"
 
@@ -324,7 +327,10 @@ class HtmlTag:
                 end_symbols: int = re_str.start() + end_l[-1][-1] + last_start
                 # Сохраняем тело тега
                 res_list.append(
-                    cls.HtmlTagType(text_tag=''.join(tmp), start=(re_str.start() + last_start), end=end_symbols))
+                    cls.HtmlTagType(text_tag=''.join(tmp),
+                                    start=(re_str.start() + last_start),
+                                    end=end_symbols,
+                                    name_tag=name_tag))
                 # Начинаем поиск других тегов
                 _self(last_start=end_symbols)
 

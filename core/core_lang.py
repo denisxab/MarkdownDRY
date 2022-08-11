@@ -165,7 +165,7 @@ class AvailableLanguages(Enum):
             "".join(f"{x}|" for x in (
                 "jpg", "png", "gif", "bmp", "tiff", "psd", "mp4", "mkv", "avi", "mov", "mpg", "vob", "mp3", "aac", "wav", "flac",
                 "ogg", "mka", "wma", "pdf", "doc", "xls", "ppt", "docx", "odt", "zip", "rar", "7z", "tar", "iso", "mdb", "accde",
-                "frm", "sqlite", "exe", "dll", "so", "jpeg"
+                "frm", "sqlite", "exe", "dll", "so", "jpeg", 'svg'
                 # Можете добавлять сюда дополнительные расширения файлов
             ))[:-1]
         )

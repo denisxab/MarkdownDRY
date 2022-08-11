@@ -1,4 +1,5 @@
 # TODO: Реализовать конвертацию файла на ``MarkdownDRY` в `HTML`
+import re
 from hashlib import md5
 
 from core.core_html import html_head, HTML_JS, HtmlTag
@@ -38,10 +39,11 @@ class Parsing:
 
             1. Hr - Горизонтальная линия
             2. Ol, Ul - Нумерованный и не нумерованных список
+            3. CodeLine - Строка с кодом
 
         :return: Собранный HTML
         """
-        return f"{html_head}{self.goMDPars(self.goMDDRYPars(self.text_mddry, path))}{HTML_JS.Hotkey.result}"
+        return f"{html_head}{self.goEndBuild(self.goMDPars(self.goMDDRYPars(self.text_mddry, path)))}{HTML_JS.Hotkey.result}"
 
     def goMDDRYPars(self, text: str, path: str) -> str:
         """Парсинг MDDRY"""
@@ -56,7 +58,8 @@ class Parsing:
         res = CoreMarkdownDRY.InsertCodeFromFile(res, path)
         res = CoreMarkdownDRY.LinkCode(res)
         res = CoreMarkdownDRY.MultiPageCode(res)
-        res = CoreMarkdownDRY.MultiLineTables(res)
+        # TODO: чето лагает при создание таблиц
+        # res = CoreMarkdownDRY.MultiLineTables(res)
         return res
 
     def goMDPars(self, text: str) -> str:
@@ -64,10 +67,44 @@ class Parsing:
         res = CoreMarkdown.Hr(text)
         res = CoreMarkdown.Ol(res)
         res = CoreMarkdown.Ul(res)
+        res = CoreMarkdown.CodeLine(res)
+        return res
+
+    def goEndBuild(self, text: str) -> str:
+        """
+        Конечный этап сборки
+        :param text:
+        :return:
+        """
+
+        def ReturnValuesWereHiddenFromPreTag() -> str:
+            """
+            Вернуть значения, которые были скрыты из тега <pre>
+            """
+            nonlocal text
+            for k, v in self.cache_comment.items():
+                text = text.replace(k, v)
+            return text
+
+        res = ReturnValuesWereHiddenFromPreTag()
         return res
 
     def ExcludeComment(self, text: str) -> str:
-        """Исключение комментариев из кода"""
+        """
+        Исключение комментариев из кода
+
+        1. ScreeningLt_Gt_Symbol_CodeLine
+        2. ExcludePre
+        3. DeleteComment
+        4. ScreeningLt_Gt_Symbol_ALlText
+        """
+
+        def ScreeningLt_Gt_Symbol_CodeLine(text_html: str) -> str:
+            """
+            Экранировать символьны меньше больше в обратных кавычках `
+            :param text_html:
+            """
+            return re.sub('`.+`', lambda m: m.group(0).replace('<', '&lt').replace('>', '&gt'), text_html)
 
         def ExcludePre(text_html: str) -> str:
             """
@@ -75,18 +112,31 @@ class Parsing:
             в конце компиляции по этому хешу будут вставлены значения.
             """
 
-            def _repl_tag(repl: str, date: str):
+            def _repl_tag(repl: str, date: str, name_tag: str):
                 """Замена данных на хеш, и запись в `self.cache_comment`"""
+                # Экранирование больше меньше в тексте тега <pre>
+                len_name_tag: int = len(name_tag)
+                date = f"<{name_tag}>{date[len_name_tag + 2:-(len_name_tag + 3)].replace('<', '&lt').replace('>', '&gt')}</{name_tag}>"
+                # Получаем хеш сумму того что получилось
                 _hash = md5(date.encode()).hexdigest()
+                # Записываем в кеш
                 self.cache_comment[_hash] = date
                 return repl.format(date=_hash)
 
             return HtmlTag.SubTag(HtmlTag.ParseTag(text_html, 'pre'), '{date}', text_html, _repl_tag)
 
-        def DeleteComment(text: str) -> str:
+        def DeleteComment(text_html: str) -> str:
             """
             Скрыть комментарии `%%Текст%%` из текста
             """
-            return REGEX.CommentMD.sub(lambda m: f"""<div hidden="">{m['body']}</div>'""", text)
+            return REGEX.CommentMD.sub(lambda m: f"""<div hidden="">{m['body']}</div>'""", text_html)
 
-        return DeleteComment(ExcludePre(text))
+        def ScreeningLt_Gt_Symbol_ALlText(text_html: str) -> str:
+            """
+            Экранировать символьны меньше больше во всем тексте
+            :param text_html:
+            :return:
+            """
+            return text_html.replace('<', '&lt').replace('>', '&gt')
+
+        return ScreeningLt_Gt_Symbol_ALlText(DeleteComment(ExcludePre(ScreeningLt_Gt_Symbol_CodeLine(text))))
