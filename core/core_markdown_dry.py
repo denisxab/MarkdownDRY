@@ -321,7 +321,7 @@ class REGEX:
         '`{3}(?P<lg>[ \w_-]+) *(?:\[(?P<info>[^\n\]]+)])?(?:{(?P<mark>[\d,-]+)})?\n(?P<code>(?:.\s*(?!`{3}))+)\s*`{3}')
     # Изображение (не должно быть два восклицательных знаков в начале, так как два восклицательных знака
     # это `IndisputableInsertCodeFromFile`)
-    ImgMd: re.Pattern = re.compile("[^!]!\[(?P<name>[^]]*)]\((?P<path>[^)]*)\)")
+    ImgMd: re.Pattern = re.compile("(?<=[^!])!\[(?P<name>[^]]*)]\((?P<path>[^)]*)\)")
     # ----------------------
     Slash: str = "\\"
     Qm1: str = "'"
