@@ -1,9 +1,11 @@
+import pathlib
 import re
 from typing import Optional
 
 from logsmal import logger
 
 from core.core_html import HTML_CLASS
+from core.core_lang import AvailableLanguages
 from core.core_markdown_dry import REGEX, MDDRY_TO_HTML
 
 
@@ -71,6 +73,20 @@ class MD_TO_HTML:
         """[1:])
         return ''.join(body_code)
 
+    @staticmethod
+    def ImgMd(m: re.Match) -> str:
+        """
+        Изображение
+        """
+        # Описание фото
+        name: str = m['name']
+        # Путь к исходному файлу
+        path_re: pathlib.Path = pathlib.Path(m['path'])
+        # Проверим что это ЕСТЬ бинарный файл, путем просмотра расширения файла. Если это НЕ бинарный файл, то выходим из функции
+        if not AvailableLanguages.Binary.value.search(path_re.suffix):
+            return m.group(0)
+        return f'<div class="{HTML_CLASS.ImgMd.value}"><img src="{path_re.__str__()}" alt="{HTML_CLASS.ScreeningId(name)}"><div class="{HTML_CLASS.ImgMdName.value}">{name}</div></div>'
+
 
 class CoreMarkdown:
     """
@@ -121,3 +137,11 @@ class CoreMarkdown:
         """
         logger.debug('CodeBlock')
         return REGEX.CodeBlock.sub(MD_TO_HTML.CodeBlock, source_text)
+
+    @classmethod
+    def ImgMd(cls, source_text: str) -> Optional[str]:
+        """
+        Изображение
+        """
+        logger.debug('ImgMd')
+        return REGEX.ImgMd.sub(MD_TO_HTML.ImgMd, source_text)

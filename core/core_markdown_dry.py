@@ -319,6 +319,9 @@ class REGEX:
     CodeBlock: re.Pattern = re.compile(
         # Пример взят из `MultiPageCodeBody`
         '`{3}(?P<lg>[ \w_-]+) *(?:\[(?P<info>[^\n\]]+)])?(?:{(?P<mark>[\d,-]+)})?\n(?P<code>(?:.\s*(?!`{3}))+)\s*`{3}')
+    # Изображение (не должно быть два восклицательных знаков в начале, так как два восклицательных знака
+    # это `IndisputableInsertCodeFromFile`)
+    ImgMd: re.Pattern = re.compile("[^!]!\[(?P<name>[^]]*)]\((?P<path>[^)]*)\)")
     # ----------------------
     Slash: str = "\\"
     Qm1: str = "'"
@@ -889,7 +892,7 @@ class MDDRY_TO_HTML:
             return None
         # Путь к исходному файлу
         path_re: Path = Path(m['path'])
-        # Проверим что это не бинарный файл, путем просмотра расширения файла. Если это бинарный файл, то выходим из функции
+        # Проверим что это НЕ бинарный файл, путем просмотра расширения файла. Если это бинарный файл, то выходим из функции
         if AvailableLanguages.Binary.value.search(path_re.suffix):
             return None
         # Язык программирования или разметки

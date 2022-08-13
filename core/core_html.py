@@ -65,6 +65,8 @@ class HTML_CLASS(Enum):
     bt_show_menu = "bt_show_menu"
     bt_hidden_menu = "bt_hidden_menu"
     head = "head"
+    ImgMd = "ImgMd"
+    ImgMdName = "ImgMdName"
 
     @staticmethod
     def toCode(text: str) -> str:
@@ -81,7 +83,7 @@ class HTML_CLASS(Enum):
     @staticmethod
     def ScreeningId(text: str) -> str:
         """Экранировать текст для `id` в HTML"""
-        return HTML_CLASS.ReplaceGtLt(text.replace('`', '%'))
+        return HTML_CLASS.ReplaceGtLt(text.replace('`', '%').replace("'", '%').replace('"', '%'))
 
 
 class HTML_JS:

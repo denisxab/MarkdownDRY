@@ -71,6 +71,9 @@ class Parsing:
         res = CoreMarkdown.CodeLine(res)
         # TODO: Добавить тесты для CodeBlock
         res = CoreMarkdown.CodeBlock(res)
+        # TODO: Добавить тесты для ImageMd
+        res = CoreMarkdown.ImgMd(res)
+
         return res
 
     def goEndBuild(self, text: str) -> str:
@@ -103,8 +106,8 @@ class Parsing:
 
         1. ScreeningLt_Gt_Symbol_CodeLine
         2. ExcludePre
-        3. DeleteComment
-        4. ScreeningLt_Gt_Symbol_ALlText
+        3. ScreeningLt_Gt_Symbol_ALlText
+        4. DeleteComment
         """
 
         def ScreeningLt_Gt_Symbol_CodeLine(text_html: str) -> str:
@@ -147,4 +150,4 @@ class Parsing:
             """
             return HTML_CLASS.ReplaceGtLt(text_html)
 
-        return ScreeningLt_Gt_Symbol_ALlText(DeleteComment(ExcludePre(ScreeningLt_Gt_Symbol_CodeLine(text))))
+        return DeleteComment(ScreeningLt_Gt_Symbol_ALlText(ExcludePre(ScreeningLt_Gt_Symbol_CodeLine(text))))

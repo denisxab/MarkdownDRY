@@ -37,8 +37,7 @@
 <h1 id="Причина появления" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Причина появления</div><div class="mddry_level">1</div></h1>
 
 
-&ltdiv hidden=""&gt![Привью](./doc/Превью.png)&lt/div&gt
-
+<div hidden=""<div class="ImgMd"><img src="doc/Превью.png" alt="Привью"><div class="ImgMdName">Привью</div></div></div>
 
 <span class="CodeLine">Markdown</span> хорош, опрятен, и не многословен, он как сын маминой подруги, среди
 всех остальных языков разметки. В нашем кругу <span class="CodeLine">Markdown</span> заслужил уважение тем
@@ -46,10 +45,7 @@
 как <span class="CodeLine">Markdown</span> хорош, и существует достойные редакторы для него, мы решили не
 создавать очередной велосипед, а создать из существующего - электро байк по
 имени <span class="CodeLine">MarkdownDRY</span>.
-
-Логотип <span class="CodeLine">MarkdownDRY</span>
-
-![](./doc/MarkdownDRY.svg)
+<div class="ImgMd"><img src="doc/MarkdownDRY.svg" alt="Логотип &ltspan class=%CodeLine%&gtMarkdownDRY&lt/span&gt"><div class="ImgMdName">Логотип <span class="CodeLine">MarkdownDRY</span></div></div>
 
 <hr>
 Немного искренности от автора: Это документация написана в юмористическом стили,
@@ -64,8 +60,7 @@
 
 Про лицензию: <span class="CodeLine">MarkdownDRY</span> не имеет ни какой лицензии, и не имеет авторского
 права, юзайти его в своё удовольствие, и если хотите, делитесь впечатлениями ;)
-
-![](./doc/License.png)
+<div class="ImgMd"><img src="doc/License.png" alt="Про лицензию"><div class="ImgMdName">Про лицензию</div></div>
 
 
 <h1 id="Какие фичи предлагает MarkdownDRY ?" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Какие фичи предлагает MarkdownDRY ?</div><div class="mddry_level">1</div></h1>
@@ -81,8 +76,7 @@
 справиться любая домохозяйка.
 
 Вот изображение которые объясняет обратную совместимость.
-
-![](./doc/ОбратнаяСовместимость.png)
+<div class="ImgMd"><img src="doc/ОбратнаяСовместимость.png" alt="Обратная совместимость"><div class="ImgMdName">Обратная совместимость</div></div>
 
 
 <h2 id="Список фич" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Список фич</div><div class="mddry_level">2</div></h2>
@@ -103,8 +97,7 @@
 везде, где это нужно, но не при это без ручного дублирование текста.
 
 Надеюсь я доказал зачем нужны переменные в языке разметки ?
-
-![](./doc/мемVars.png)
+<div class="ImgMd"><img src="doc/мемVars.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
@@ -179,7 +172,7 @@
 &ltbr&gt
 &ltbr&gt| DLL Имя       | Описание           | Тип                             |
 &ltbr&gt| ------------- | ------------------ |---------------------------------|
-&ltbr&gt| Login         | Логин              | [=Строка255] [=ЭтоОбязательно]  |
+&ltbr&gt| Login         | Логин              | [=Строка255] [=ЭтоОбязательно]  | 
 &ltbr&gt| Password      | Пароль             | [=Строка255] [=ЭтоОбязательно]  |
 &ltbr&gt| FIO           | ФИО                | [=Строка255] [=ЭтоОбязательно]  |
 &ltbr&gt| DATE_CREATE   | Дата рождения      | [=Строка8]                      |
@@ -191,8 +184,7 @@
 Итог:
 
 &gt Обратим внимание, что обращение к не инициализированной переменной <span class="CodeLine">[=IS_LONELY_DOG]</span> останется без изменений.
-
-![](./doc/Vars.png)
+<div class="ImgMd"><img src="doc/Vars.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h3 id="Ссылочный блок - %ReferenceBlock%" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Ссылочный блок - <span class="CodeLine">ReferenceBlock</span></div><div class="mddry_level">3</div></h3>
@@ -204,8 +196,7 @@
 например если вы будете использоваться редактор <span class="CodeLine">Obsidian</span> то в нём есть
 автокомплит и поиск по тегам, эту возможность можно также использовать для
 ссылочных блоков.
-
-![](./doc/мемReferenceBlock.png)
+<div class="ImgMd"><img src="doc/мемReferenceBlock.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
@@ -214,9 +205,9 @@
 Инициализация:
 
 <pre>
-[#Имя-Ссылки-На_Блок](
+[#Имя-Ссылки-На_Блок]( 
 
-Любой
+Любой 
 Многострочный текст
 Может быть, тут. Только не забудет поставить два переноса строки до и после текста.
 
@@ -333,8 +324,7 @@
 Цель <span class="CodeLine">раскрываемого блока</span>, скрыть излишнюю подробность при просмотре документа.
 
 Принцип работы <span class="CodeLine">DropdownBlock</span>
-
-![](doc/мемDropdownBlock.png)
+<div class="ImgMd"><img src="doc/мемDropdownBlock.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
@@ -345,7 +335,7 @@
 </ul><pre>
 ? Описание скрытого блока
 
-Любой многострочный
+Любой многострочный 
 Текст
 
 ?
@@ -393,8 +383,7 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 нанесения логотипа Wi-Fi.
 </pre>
 
-<hr>
-![](./doc/DropdownBlock.png)
+<hr><div class="ImgMd"><img src="doc/DropdownBlock.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h3 id="Выделение блоков - %HighlightBlock%" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Выделение блоков - <span class="CodeLine">HighlightBlock</span></div><div class="mddry_level">3</div></h3>
@@ -442,8 +431,7 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 
 </pre>
 
-<hr>
-![](./doc/HighlightBlock.png)
+<hr><div class="ImgMd"><img src="doc/HighlightBlock.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h3 id="Фото Галерея - %PhotoGallery%" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Фото Галерея - <span class="CodeLine">PhotoGallery</span></div><div class="mddry_level">3</div></h3>
@@ -496,8 +484,7 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 
 </pre>
 <hr>
-
-![](./doc/PhotoGallery.png)
+<div class="ImgMd"><img src="doc/PhotoGallery.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h3 id="Математический размах - %MathSpan%" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Математический размах - <span class="CodeLine">MathSpan</span></div><div class="mddry_level">3</div></h3>
@@ -510,8 +497,7 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 движения космического аппарата по просторам вселено, с учетом гравитационных
 маневров около массивных тел. Или же, считать потраченные минуту на задачи
 заказчиков.
-
-![](./doc/мемMathSpan.png)
+<div class="ImgMd"><img src="doc/мемMathSpan.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
@@ -576,8 +562,7 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 &ltbr&gt`=450-120-140-40-100-40`
 
 </pre>
-
-![](./doc/MathSpan_Simpl.png)
+<div class="ImgMd"><img src="doc/MathSpan_Simpl.png" alt=""><div class="ImgMdName"></div></div>
 
 <hr>
 
@@ -608,8 +593,7 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 &ltbr&gtДа премия у нас выдается в дополнительных задачах, это такая у нас фишка :)
 Вы же сами говорили вам нужно опыта поднабраться у нас в компании.
 </pre>
-
-![](./doc/MathSpan.png)
+<div class="ImgMd"><img src="doc/MathSpan.png" alt=""><div class="ImgMdName"></div></div>
 
 <hr>
 
@@ -619,8 +603,7 @@ Scientific and Industrial Research Organization) в Канберре, Австр
 
 Бывает нужно, создать заголовок, для того чтобы сослаться на него, и мы не хотим
 чтобы он попадал в оглавление документа. Для этого есть <span class="CodeLine">HiddenHeaders</span>
-
-![](./doc/HiddenHeadersDoc.png)
+<div class="ImgMd"><img src="doc/HiddenHeadersDoc.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
@@ -713,8 +696,7 @@ JavaScript
 
 <hr>
 
-В итоге:
-![](./doc/HiddenHeaders.png)
+В итоге:<div class="ImgMd"><img src="doc/HiddenHeaders.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h3 id="Ссылки на структурные элементы кода - LinkCode" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Ссылки на структурные элементы кода - LinkCode</div><div class="mddry_level">3</div></h3>
@@ -763,7 +745,7 @@ JavaScript
 <pre>
 УникальноИмяЯкоря&gt
 
-Любой
+Любой 
 Текст
 Можно Вписать
 
@@ -862,8 +844,7 @@ if __name__ == "__main__":
 
 <hr>
 В итоге:
-
-![](./doc/LinkCode.png)
+<div class="ImgMd"><img src="doc/LinkCode.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h4 id="Пример ссылки на файл из интернета" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример ссылки на файл из интернета</div><div class="mddry_level">4</div></h4>
@@ -879,7 +860,7 @@ if __name__ == "__main__":
 
 Вот реальный пример, ссылаться мой код из <span class="CodeLine">GitGist</span>:
 
-<pre>
+<pre> 
 &ltbr&gt[check_uniq_key](https://gist.githubusercontent.com/denisxab/4290770428d4d34a83624f5343df87fd/raw/3fd17298a2dd382d0a2c52e4e11e2993f9b2da0b/SymmetricCrypto.py#SymmetricCrypto.check_uniq_key)
 &ltbr&gt[crypto](https://gist.githubusercontent.com/denisxab/4290770428d4d34a83624f5343df87fd/raw/3fd17298a2dd382d0a2c52e4e11e2993f9b2da0b/SymmetricCrypto.py#SymmetricCrypto.crypto)
 
@@ -887,8 +868,7 @@ if __name__ == "__main__":
 
 <hr>
 В итоге:
-
-![](./doc/LinkCode_NET_GitGist.png)
+<div class="ImgMd"><img src="doc/LinkCode_NET_GitGist.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h3 id="Экранированная вставить кода из файла - InsertCodeFromFile" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Экранированная вставить кода из файла - InsertCodeFromFile</div><div class="mddry_level">3</div></h3>
@@ -898,8 +878,7 @@ if __name__ == "__main__":
 результирующий <span class="CodeLine">HTML</span> файл. В отличие от <span class="CodeLine">IndisputableInsertCodeFromFile</span>
 в <span class="CodeLine">Markdown</span> файл он вставиться. Он будет обработан по стандартной
 логике <span class="CodeLine">Markdown</span> - блока с кодом.
-
-![img.png](./doc/InsertCodeFromFile2.png)
+<div class="ImgMd"><img src="doc/InsertCodeFromFile2.png" alt="img.png"><div class="ImgMdName">img.png</div></div>
 
 
 <h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
@@ -932,8 +911,8 @@ if __name__ == "__main__":
 <code>(?:\A|\n)\s*(?P&ltvar&gt.+[\t ]*=.+)</code>
 </pre>
 </div>
-</div>
-
+</div>    
+        
 
 <hr>
 
@@ -946,8 +925,7 @@ if __name__ == "__main__":
 <hr>
 
 В итоге:
-
-![](./doc/InsertCodeFromFile.png)
+<div class="ImgMd"><img src="doc/InsertCodeFromFile.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h3 id="Бесспорная вставить кода из файла - IndisputableInsertCodeFromFile" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Бесспорная вставить кода из файла - IndisputableInsertCodeFromFile</div><div class="mddry_level">3</div></h3>
@@ -969,8 +947,7 @@ if __name__ == "__main__":
 Вот в чем разница <span class="CodeLine">InsertCodeFromFile</span> от <span class="CodeLine">IndisputableInsertCodeFromFile</span> для
 обычного пользователя, которые пытается вставить исходный без экранирования в
 документацию.
-
-![](./doc/IndisputableInsertCodeFromFile3.png)
+<div class="ImgMd"><img src="doc/IndisputableInsertCodeFromFile3.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
@@ -980,8 +957,7 @@ if __name__ == "__main__":
 документацию. Этим же способом вы можете реализовать импорт различных <span class="CodeLine">Markdown</span>
 файлов, так как <span class="CodeLine">IndisputableInsertCodeFromFile</span> это самый первый этап
 компиляции, то вставленные(импортирование) <span class="CodeLine">Markdown</span> файлы будут обработаны
-компилятором <span class="CodeLine">MarkdownDRY</span>.
-![](./doc/IndisputableInsertCodeFromFile.png)
+компилятором <span class="CodeLine">MarkdownDRY</span>.<div class="ImgMd"><img src="doc/IndisputableInsertCodeFromFile.png" alt=""><div class="ImgMdName"></div></div>
 
 &gt <span class="CodeLine">Расширение</span> - лучше не указывать бинарные файлы для вставки. Но если душа просит, то ограничений на это нет.
 
@@ -990,8 +966,7 @@ if __name__ == "__main__":
 обработан(проигнорирован) компилятором, то заключите его вставку в тег <span class="CodeLine">&ltpre&gt</span>.
 Как раз этим способом я пользуюсь в этой документации, для приведения примеров
 на <span class="CodeLine">MarkdownDRY</span>.
-
-![](./doc/IndisputableInsertCodeFromFile2.png)
+<div class="ImgMd"><img src="doc/IndisputableInsertCodeFromFile2.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h4 id="Пример" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пример</div><div class="mddry_level">4</div></h4>
@@ -1129,12 +1104,12 @@ def read_env_file_and_set_from_venv(file_name: str):
 <pre>
 - Описание
 
-  ```ИмяЯзыка [КраткоеИмяДляБлока_1]{ВыделитьСтроки}
-
+  ```ИмяЯзыка [КраткоеИмяДляБлока_1]{ВыделитьСтроки} 
+  
   ```
 
-  ```ИмяЯзыка [КраткоеИмяДляБлока_N]{ВыделитьСтроки}
-
+  ```ИмяЯзыка [КраткоеИмяДляБлока_N]{ВыделитьСтроки} 
+  
   ```
 </pre>
 <ul class="HTML_CLASS.MarkdownDRY HTML_CLASS.Ul">
@@ -1273,8 +1248,7 @@ def read_env_file_and_set_from_venv(file_name: str):
 
 <hr>
 В итоге:
-
-![](./doc/MultiPageCode.png)
+<div class="ImgMd"><img src="doc/MultiPageCode.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h3 id="Многострочные таблицы - %MultiLineTables%" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Многострочные таблицы - <span class="CodeLine">MultiLineTables</span></div><div class="mddry_level">3</div></h3>
@@ -1295,7 +1269,7 @@ def read_env_file_and_set_from_venv(file_name: str):
   английский алфавит для столбцов, поэтому у нас будут все равны - числовые
   столбцы - числовые строки, и начало у них с единицы.</li>
 
-</ul>![](./doc/MultiLineTablesDoc.png)
+</ul<div class="ImgMd"><img src="doc/MultiLineTablesDoc.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h4 id="Синтаксис" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Синтаксис</div><div class="mddry_level">4</div></h4>
@@ -1369,8 +1343,7 @@ def read_env_file_and_set_from_venv(file_name: str):
 
 <hr>
 В итоге:
-
-![](./doc/MultiLineTables.png)
+<div class="ImgMd"><img src="doc/MultiLineTables.png" alt=""><div class="ImgMdName"></div></div>
 
 
 <h3 id="Пока не реализовано" class="MarkdownDRY StandardHeaders"><div class="mddry_name">Пока не реализовано</div><div class="mddry_level">3</div></h3>
@@ -1451,7 +1424,7 @@ def read_env_file_and_set_from_venv(file_name: str):
  -&gt Справочники
  -![](./asda/asda/dasd.png)&gt  Системные справочники
  -![](./asda/asda/dasd.png)&gt  Системные справочники
- -&gt Классификаторы -&gt адресов/Территориальный участкиs
+ -&gt Классификаторы -&gt адресов/Территориальный участкиs 
  -&gt Классификаторы -![](./asda/asda/dasd.png)&gt адресов/Территориальный участкиs
 &ltdiv class="PP"&gt
     {f'&ltdiv&gt{x.name}\n&ltdiv class="HidImg"&gt&ltsrc url="{x.path}"/&gt&lt/div&gt&lt/div&gt' for x in PP }
@@ -1502,7 +1475,7 @@ function menu_is_hidden(){
 // Изначально скрываем кнопку показа оглавления
 bt_show_menu.hidden = true;
 (function (){
-    // Переход к заголовку по нажатию элемент оглавления.
+    // Переход к заголовку по нажатию элемент оглавления.        
     document.querySelectorAll("#detail_menu li").forEach((e) => {
         e.onclick = ()=>{
           window.location.href  = e.children[0].href
@@ -1516,11 +1489,11 @@ bt_show_menu.hidden = true;
 /* -------------------------- Логика для LinkCode -------------------------- */
 // Переменная для хранения исходного кода из файлов. Храниться в кодировки UTF-8, для экранирования спец символов
 LinkSourceCode={
-
+    
 };
 function AddEventLinkCode() {
     /* Добавление обработка нажатий на ссылки */
-
+    
     let elm = document.querySelectorAll(".MarkdownDRY.LinkCode");
     elm.forEach((e) => {
         e.addEventListener("click", () => {
@@ -1531,10 +1504,10 @@ function AddEventLinkCode() {
 AddEventLinkCode();
 function DisplayLinkCode(_elem) {
     /* Показать всплывающие окно с исходным кодом */
-
+    
     // Устанавливаем в заголовок всплывающего окна, название ссылки которая вызвала это окно
     LinkCodeName.textContent=_elem.textContent
-
+    
     // Установить путь к файлу или ссылку в выплывающие окно
     LinkCodeWindowPath.textContent=_elem.getAttribute('file')
 
@@ -1549,14 +1522,14 @@ function DisplayLinkCode(_elem) {
         const char_end = _elem.getAttribute('char_end');
         if (char_start > 0 && char_end > 0) {
             // Выделяем текст согласно диапазону из ссылки. Если конечно такой диапазон есть.
-            // Его может не быть если ссылка указывает на несуществующий элемент кода.
+            // Его может не быть если ссылка указывает на несуществующий элемент кода.              
             const highlight_text = toTag(toTag(_el.textContent.slice(char_start, char_end), 'span', 0, 0, 0, true), 'code', true);
             // Собираем результат, и записываем его в тело всплывающего окна
             _el.innerHTML = `${toTag(_el.textContent.slice(0, char_start), 'code', null, null, true, true)}` +
                 `${highlight_text}` +
                 `${toTag(_el.textContent.slice(char_end, _el.innerHTML.length), 'code', null, true, null, true)}`
         }
-        // ------------------------------------------------------------- //
+        // ------------------------------------------------------------- //        
     }
     // Делаем видимым окно
     LinkCodeWindow.style.display = 'block';
@@ -1618,7 +1591,7 @@ function toTag(text, tag, is_skip_first_last, skip_first, skip_last, escaping) {
 }
 function OnHide(_event) {
     /* Скрыть выплывающие окно при нажатии вне его */
-
+    
     console.log('OnHide');
     if (_event.target.id === 'LinkCodeWindow') {
         LinkCodeWindow.style.display = 'none'

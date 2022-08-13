@@ -21,12 +21,13 @@ class Test_Pars:
         [
             ReadTextFile('./dataset/pub/Полноценный пример 1.md',
                          None),
-            ReadTextFile('./dataset/pub/out/Полноценный пример 1.html',
+            ReadTextFile('./dataset/pub/Полноценный пример 1.1.html',
                          None),
 
         ]
     ])
     def test_CallParsing(self, T_in_data, T_check_data):
         res = Parsing(T_in_data.text).goPars(self.path)
+        T_check_data.write(res)
         print(res)
         # assert res == T_check_data.text
