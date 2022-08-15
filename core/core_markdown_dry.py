@@ -377,8 +377,8 @@ class StoreDoc:
         """
         Структура для заголовков
         """
-        # Заголовки - ИмяЗаголовка:(УровеньЗаголовка,ТипЗаголовка,{ИмяПеременной:Значение})
-        date: dict[str, tuple[int, HeaderType, dict[str, str]]] = dict()
+        # Заголовки - ИмяЗаголовка:(УровеньЗаголовка,ТипЗаголовка,{ИмяПеременной:(Значение,IdЗаголовка)},IdЗаголовка)
+        date: dict[str, tuple[int, HeaderType, dict[str, str], str]] = dict()
 
         @classmethod
         def clear(cls):
@@ -388,15 +388,27 @@ class StoreDoc:
         def addHeaders(cls, name: str,
                        level: Literal[1, 2, 3, 4, 5, 6],
                        type_header: HeaderType,
+                       id_header: str
                        ):
             """
             Добавить новый заголовок в кеш
 
+            :param id_header: Экранированный уникальный идентификатор заголовка
             :param name: Имя заголовка
             :param level: Уровень заголовка
             :param type_header: Тип заголовка
             """
-            cls.date[name] = (level, type_header.value, dict())
+            last_level: int = 0
+            current_level: int = 0
+            # TODO: доделать получения id по вложенности имени заголовкаов, убрать получения id которые сейчас рандомное
+            for x in reversed(cls.date.items()):
+                current_level = x[1][0]
+                if current_level < last_level:
+                    break
+                elif current_level < level:
+                    last_level = current_level
+
+            cls.date[name] = (level, type_header.value, dict(), id_header)
 
         @classmethod
         def addVar(cls, header: str, name: str, value: str):
@@ -585,7 +597,7 @@ class CoreMarkdownDRY:
         res = REGEX.HeaderMain.sub(MDDRY_TO_HTML.HeaderMain, source_text)
 
         def create_table_contents_from_HTML(
-                hed: dict[str, tuple[int, HeaderType, dict[str, str]]],
+                hed: dict[str, tuple[int, HeaderType, dict[str, str], str]],
                 template_li: str = "<li>{header}</li>") -> str:
             """
             Сделать оглавление в формате HTML
@@ -653,8 +665,8 @@ class CoreMarkdownDRY:
                 # Не скрытый заголовок попадает в оглавление
                 if _tmp[_index][1][1] != HeaderType.Hide.value:
                     _res.append(template_li.format(
-                        # Экранируем символы в id
-                        header_esp=HTML_CLASS.ScreeningId(_tmp[_index][0])
+                        # Экранированный уникальный id заголовка
+                        header_esp=_tmp[_index][1][3]
                         # Вставляем текст как есть
                         , header_raw=_tmp[_index][0])
                     )
@@ -994,6 +1006,8 @@ class MDDRY_TO_HTML:
 
         # Получаем имя заголовка
         name_raw = m['name']
+        # Имя заголовка для вставки в атрибут `id` в `html`, он должен быть экранированный и уникальный.
+        name_from_id = HTML_CLASS.GenerateId(name_raw)
         # Получим тело заголовка
         body_header: str = m['body']
         # Получаем тип заголовка
@@ -1007,7 +1021,7 @@ class MDDRY_TO_HTML:
         # Получаем уровень заголовка
         level: Literal[1, 2, 3, 4, 5, 6] = len(m['lvl'])
         # Добавляем заголовок в кеш
-        StoreDoc.HeaderMain.addHeaders(name_raw, level, res_HeadersType)
+        StoreDoc.HeaderMain.addHeaders(name_raw, level, res_HeadersType, name_from_id)
 
         #: Поиск инициализации переменных
         def _vars_init(_m: re.Match) -> str:
@@ -1037,7 +1051,7 @@ class MDDRY_TO_HTML:
 
         body_header = REGEX.VarsInit.sub(_vars_init, body_header)
         body_header = REGEX.VarsGet.sub(_vars_get, body_header)
-        return f"""<h{level} id="{HTML_CLASS.ScreeningId(name_raw)}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}"><div class="{HTML_CLASS.mddry_name.value}">{name_raw}</div><div class="{HTML_CLASS.mddry_level.value}">{level}</div></h{level}>\n{body_header}\n"""
+        return f"""<h{level} id="{name_from_id}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}"><div class="{HTML_CLASS.mddry_name.value}">{name_raw}</div><span class="{HTML_CLASS.paragraph.value}">¶</span><div class="{HTML_CLASS.mddry_level.value}">{level}</div></h{level}>\n{body_header}\n"""
 
     @classmethod
     def MultiLineTables(cls, m: re.Match) -> str:

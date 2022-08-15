@@ -1,5 +1,6 @@
 import re
 import typing
+import uuid
 from enum import Enum
 
 # Стандартный заголовок
@@ -60,6 +61,7 @@ class HTML_CLASS(Enum):
     Hr = 'Hr'
     code = "code"
     menu = "menu"
+    paragraph = "paragraph"
     detail_menu = "detail_menu"
     shot_menu = "shot_menu"
     bt_show_menu = "bt_show_menu"
@@ -84,6 +86,11 @@ class HTML_CLASS(Enum):
     def ScreeningId(text: str) -> str:
         """Экранировать текст для `id` в HTML"""
         return HTML_CLASS.ReplaceGtLt(text.replace('`', '%').replace("'", '%').replace('"', '%'))
+
+    @classmethod
+    def GenerateId(cls, text: str) -> str:
+        """Экранировать текст для `id` в HTML"""
+        return f"{cls.ScreeningId(text)}_{uuid.uuid4()}"
 
 
 class HTML_JS:
@@ -119,6 +126,8 @@ document.onkeyup = function () {{
 </script>
 """[1:]
 
+    # TODO: Сделать рандомные постфиксы к id заголвокам чтобы они ек ыбло конфликат имен
+
     HeaderMain = f"""
 function {HTML_CLASS.menu.value}_hidden(){{
     // Скрыть оглавление
@@ -142,13 +151,28 @@ function {HTML_CLASS.menu.value}_is_hidden(){{
 {HTML_CLASS.bt_show_menu.value}.hidden = true;
 (function (){{
     // Переход к заголовку по нажатию элемент оглавления.        
-    document.querySelectorAll("#detail_menu li").forEach((e) => {{
+    document.querySelectorAll("#{HTML_CLASS.detail_menu.value} li").forEach((e) => {{
         e.onclick = ()=>{{
           window.location.href  = e.children[0].href
         }}
       }}
     );
 }})()
+function paragraph_logic_show(){{
+    // Показывать символ параграфа при наведение на заголовок, при нажатие на заголвок в url ставиться id заголовка 
+    document.querySelectorAll(".{HTML_CLASS.StandardHeaders.value}").forEach((e)=>{{
+        e.addEventListener("mouseover",()=>{{
+            e.querySelector('.{HTML_CLASS.paragraph.value}').style.visibility='visible';
+        }})
+        e.addEventListener("mouseout",()=>{{
+            e.querySelector('.{HTML_CLASS.paragraph.value}').style.visibility='hidden';
+        }})
+       e.addEventListener("click",()=>{{
+            window.location.href = `#${{e.id}}`
+       }})
+    }});
+}}
+paragraph_logic_show();
 """[1:]
     LinkCode = f"""
 function AddEventLinkCode() {{

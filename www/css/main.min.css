@@ -17,20 +17,28 @@ h6 {
   border-radius: 4px 4px 0 0;
   margin: 8px 0px 8px 0px;
 }
-h1 .mddry_name,
-h2 .mddry_name,
-h3 .mddry_name,
-h4 .mddry_name,
-h5 .mddry_name,
-h6 .mddry_name {
+h1 div.mddry_name,
+h2 div.mddry_name,
+h3 div.mddry_name,
+h4 div.mddry_name,
+h5 div.mddry_name,
+h6 div.mddry_name {
   display: inline-block;
 }
-h1 .mddry_level,
-h2 .mddry_level,
-h3 .mddry_level,
-h4 .mddry_level,
-h5 .mddry_level,
-h6 .mddry_level {
+h1 span.paragraph,
+h2 span.paragraph,
+h3 span.paragraph,
+h4 span.paragraph,
+h5 span.paragraph,
+h6 span.paragraph {
+  visibility: hidden;
+}
+h1 div.mddry_level,
+h2 div.mddry_level,
+h3 div.mddry_level,
+h4 div.mddry_level,
+h5 div.mddry_level,
+h6 div.mddry_level {
   text-align: right;
   display: inline-block;
   position: absolute;
@@ -150,8 +158,10 @@ a:visited {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  max-width: 100%;
-  max-height: 55%;
+  max-width: 55vh;
+  height: auto;
+  -o-object-fit: contain;
+     object-fit: contain;
   border-radius: 10px;
 }
 .ImgMd .ImgMdName {
