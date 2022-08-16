@@ -56,7 +56,7 @@ class Parsing:
         res = CoreMarkdownDRY.HighlightBlock(res)
         res = CoreMarkdownDRY.PhotoGallery(res)
         res = CoreMarkdownDRY.InsertCodeFromFile(res, path)
-        res = CoreMarkdownDRY.LinkCode(res)
+        res = CoreMarkdownDRY.LinkCode(res, path)
         res = CoreMarkdownDRY.MultiPageCode(res)
         # TODO: чето лагает при создание таблиц
         # res = CoreMarkdownDRY.MultiLineTables(res)
@@ -92,13 +92,15 @@ class Parsing:
                 text_html = text_html.replace(k, v)
             return text_html
 
-        def ReturnLastInsert(text_html: str) -> str:
-            """
-            Вставить значение которые были отложены, сейчас это JS код
-            """
-            return f"{text_html}{''.join(StoreDoc.LastInsert)}"
+        return ReturnValuesWereHiddenFromPreTag(f"{text}{self._ReturnLastInsert()}")
 
-        return ReturnLastInsert(ReturnValuesWereHiddenFromPreTag(text))
+    @staticmethod
+    def _ReturnLastInsert() -> str:
+        """
+        Вернуть значение которые были отложены для вставки, сейчас это JS код.
+        Это нужно для того чтобы не было экранирования JS кода при парсинге
+        """
+        return ''.join(StoreDoc.LastInsert)
 
     def ExcludeComment(self, text: str) -> str:
         """

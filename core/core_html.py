@@ -1,6 +1,5 @@
 import re
 import typing
-import uuid
 from enum import Enum
 
 # Стандартный заголовок
@@ -80,17 +79,25 @@ class HTML_CLASS(Enum):
         """
         Экранировать символы больше меньше для `HTML`
         """
-        return text.replace('<', '&lt').replace('>', '&gt')
+        translate_map = {
+            ord("<"): "&lt",
+            ord(">"): "&gt"
+        }
+        return text.translate(translate_map)
 
     @staticmethod
     def ScreeningId(text: str) -> str:
-        """Экранировать текст для `id` в HTML"""
-        return HTML_CLASS.ReplaceGtLt(text.replace('`', '%').replace("'", '%').replace('"', '%'))
-
-    @classmethod
-    def GenerateId(cls, text: str) -> str:
-        """Экранировать текст для `id` в HTML"""
-        return f"{cls.ScreeningId(text)}_{uuid.uuid4()}"
+        """
+        Экранировать текст для `id` в HTML
+        """
+        translate_map = {
+            ord("`"): "%",
+            ord("'"): "%",
+            ord('"'): "%",
+            ord(' '): "_",
+            ord('-'): "_",
+        }
+        return HTML_CLASS.ReplaceGtLt(text.translate(translate_map))
 
 
 class HTML_JS:
@@ -126,8 +133,6 @@ document.onkeyup = function () {{
 </script>
 """[1:]
 
-    # TODO: Сделать рандомные постфиксы к id заголвокам чтобы они ек ыбло конфликат имен
-
     HeaderMain = f"""
 function {HTML_CLASS.menu.value}_hidden(){{
     // Скрыть оглавление
@@ -157,9 +162,10 @@ function {HTML_CLASS.menu.value}_is_hidden(){{
         }}
       }}
     );
-}})()
-function paragraph_logic_show(){{
-    // Показывать символ параграфа при наведение на заголовок, при нажатие на заголвок в url ставиться id заголовка 
+}})();
+(function (){{
+    // Показывать символ параграфа при наведение на заголовок
+    // При нажатие на заголовок в url ставиться id заголовка 
     document.querySelectorAll(".{HTML_CLASS.StandardHeaders.value}").forEach((e)=>{{
         e.addEventListener("mouseover",()=>{{
             e.querySelector('.{HTML_CLASS.paragraph.value}').style.visibility='visible';
@@ -171,8 +177,7 @@ function paragraph_logic_show(){{
             window.location.href = `#${{e.id}}`
        }})
     }});
-}}
-paragraph_logic_show();
+}})();
 """[1:]
     LinkCode = f"""
 function AddEventLinkCode() {{

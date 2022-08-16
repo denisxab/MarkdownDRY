@@ -175,9 +175,6 @@ class Tables:
                             f'Синтаксическая ошибка в ячейке, не возможно произвести вычисления ячейки: {tmp_equations}',
                             'Tables.DepLogic')
 
-        print()
-        ...
-
     def addColumn_IfEndThenNewRow(self, column: str):
         """
         :param column: Новый столбец в таблицу
@@ -256,9 +253,8 @@ class REGEX:
     InsertCodeFromFile: re.Pattern = re.compile(f"!{_BaseCodeRef}")
     # Бесспорная вставка кода
     IndisputableInsertCodeFromFile: re.Pattern = re.compile(f"!!{_BaseCodeRef}")
-    # TODO: проверить что `LinkCode` не конфликтует с обычными ссылками на URL
     # Поиск мест где нужно сослаться на код
-    LinkCode: re.Pattern = re.compile(_BaseCodeRef)
+    LinkCode: re.Pattern = re.compile(f"\+{_BaseCodeRef}")
     # Поиск уникального якоря в коде
     AnchorFromCode: str = '(?<={name}>\n)\n*(?:.\s*(?!<{name}))+'
     # ------------------------
@@ -377,43 +373,56 @@ class StoreDoc:
         """
         Структура для заголовков
         """
+        data_body = tuple[int, HeaderType, dict[str, str], str]
+        data_type = dict[str, data_body]
         # Заголовки - ИмяЗаголовка:(УровеньЗаголовка,ТипЗаголовка,{ИмяПеременной:(Значение,IdЗаголовка)},IdЗаголовка)
-        date: dict[str, tuple[int, HeaderType, dict[str, str], str]] = dict()
+        date: data_type = dict()
 
         @classmethod
         def clear(cls):
+            """Отчистка"""
             cls.date.clear()
 
         @classmethod
-        def addHeaders(cls, name: str,
+        def addHeaders(cls,
+                       name: str,
                        level: Literal[1, 2, 3, 4, 5, 6],
                        type_header: HeaderType,
-                       id_header: str
-                       ):
+                       ) -> str:
             """
             Добавить новый заголовок в кеш
 
-            :param id_header: Экранированный уникальный идентификатор заголовка
             :param name: Имя заголовка
             :param level: Уровень заголовка
             :param type_header: Тип заголовка
+            :return: Уникальный идентификатор заголовка
             """
-            last_level: int = 0
-            current_level: int = 0
-            # TODO: доделать получения id по вложенности имени заголовкаов, убрать получения id которые сейчас рандомное
-            for x in reversed(cls.date.items()):
-                current_level = x[1][0]
-                if current_level < last_level:
-                    break
-                elif current_level < level:
-                    last_level = current_level
 
+            def generate_id_header(date: cls.data_type) -> str:
+                """
+                Создаем уникальный идентификатор заголовка на основе вложенности выше стоящих заголовках
+                """
+                _last: int = level
+                _next: int = 0
+                tmp: list[str] = [name]
+                for k, v in reversed(date.items()):
+                    _next = v[0]
+                    if _next > _last:
+                        continue
+                    elif _last > _next:
+                        tmp.append(k)
+                    _last = _next
+                return ''.join(tmp)
+
+            id_header: str = f"{HTML_CLASS.ScreeningId(name)}_{md5(generate_id_header(cls.date).encode()).hexdigest()}"
             cls.date[name] = (level, type_header.value, dict(), id_header)
+            return id_header
 
         @classmethod
         def addVar(cls, header: str, name: str, value: str):
             """
-            Добавить переменную в кеш
+            Добавить переменную в кеш с заголовками
+
             :param header: Имя Заголовка
             :param name: Имя племенной
             :param value: Значение
@@ -423,6 +432,8 @@ class StoreDoc:
         @classmethod
         def getVar(cls, header: str, name: str, default: Optional[str] = None):
             """
+            Получить значение по имени переменной
+
             :param header: ИмяЗаголовка
             :param name: Имя переменной
             :param default: Значение если ключа нет
@@ -434,9 +445,11 @@ class StoreDoc:
                 # Если не найдено в текущем заголовке, то ищем в вышестоящих заголовках
 
                 # Получаем заголовки в которых объявлена такая переменная
-                _tmp: list[tuple[str, tuple[int, HeaderType, dict[str, str]]]] = [(k, v) for k, v in
-                                                                                  cls.date.items() if
-                                                                                  v[2].get(name)]
+                _tmp: list[tuple[str, cls.data_body]] = [
+                    (k, v)
+                    for k, v in cls.date.items()
+                    if v[2].get(name)
+                ]
                 if _tmp:
                     # Если есть заголовки с такими переменными, то тогда начинаем искать с конца,
                     # до того момента пока следующий заголовок не станет больше предыдущего или равен ему,
@@ -553,7 +566,7 @@ class CoreMarkdownDRY:
                                                         source_text)
 
     @classmethod
-    def LinkCode(cls, source_text: str, self_path: str = None) -> Optional[str]:
+    def LinkCode(cls, source_text: str, self_path: str) -> Optional[str]:
         """
         Ссылка на элементы кода
         """
@@ -656,19 +669,19 @@ class CoreMarkdownDRY:
             _tmp = [(k, v) for k, v in hed.items()]
             _last: int = 0
             _res: list[str] = []
-            for _index in range(len(_tmp)):
-                _next: int = _tmp[_index][1][0]
+            for _val in _tmp:
+                _next: int = _val[1][0]
                 if _next > _last:
                     _res.append("<ol>")
                 elif _next < _last:
                     _res.append("</ol>")
                 # Не скрытый заголовок попадает в оглавление
-                if _tmp[_index][1][1] != HeaderType.Hide.value:
+                if _val[1][1] != HeaderType.Hide.value:
                     _res.append(template_li.format(
                         # Экранированный уникальный id заголовка
-                        header_esp=_tmp[_index][1][3]
+                        header_esp=_val[1][3]
                         # Вставляем текст как есть
-                        , header_raw=_tmp[_index][0])
+                        , header_raw=_val[0])
                     )
                 _last = _next
             _res.append("</ol>")
@@ -1006,8 +1019,6 @@ class MDDRY_TO_HTML:
 
         # Получаем имя заголовка
         name_raw = m['name']
-        # Имя заголовка для вставки в атрибут `id` в `html`, он должен быть экранированный и уникальный.
-        name_from_id = HTML_CLASS.GenerateId(name_raw)
         # Получим тело заголовка
         body_header: str = m['body']
         # Получаем тип заголовка
@@ -1020,8 +1031,8 @@ class MDDRY_TO_HTML:
             res_HeadersTypeHtml = HTML_CLASS.StandardHeaders.value
         # Получаем уровень заголовка
         level: Literal[1, 2, 3, 4, 5, 6] = len(m['lvl'])
-        # Добавляем заголовок в кеш
-        StoreDoc.HeaderMain.addHeaders(name_raw, level, res_HeadersType, name_from_id)
+        # Добавляем заголовок в кеш, получаем id для заголовка
+        name_from_id = StoreDoc.HeaderMain.addHeaders(name_raw, level, res_HeadersType)
 
         #: Поиск инициализации переменных
         def _vars_init(_m: re.Match) -> str:
@@ -1096,6 +1107,12 @@ class MDDRY_TO_MD:
 
     @staticmethod
     def UseReferenceBlock(m: re.Match, StoreDocs_ReferenceBlock: StoreDoc.ReferenceBlock) -> str:
+        """
+        Использование ссылочного блока
+        :param m:
+        :param StoreDocs_ReferenceBlock:
+        :return:
+        """
         # Берем тест блока из хранилища
         res = StoreDocs_ReferenceBlock.get(m['use_ref_block'])
         if res:

@@ -6,6 +6,7 @@ from testfull_pack.file import ReadTextFile
 
 from core.core_html import html_head, HTML_JS
 from core.core_markdown_dry import CoreMarkdownDRY, StoreDoc
+from core.core_parsing import Parsing
 
 
 def _next_test():
@@ -65,7 +66,7 @@ class Test_Dev:
     @mark.parametrize(['T_in_data', 'T_check_data', ], [
         [
             ReadTextFile('./dataset/dev/in/LinkCode.md',
-                         'c77157a38180065e90324d5f4aff8c28cee84c602012c64236417a7b832b5dc6'),
+                         '216b0c263796c34e3cb59f0186804b746ea2b19cf3d4efa76b1a203bce5a0ccf'),
             ReadTextFile('./dataset/dev/out/LinkCode.html',
                          'c9db2874fde90aa14ee3836b829dd4a304f6fdd800a6d5f9732ad258764d9f90'),
 
@@ -144,29 +145,29 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data', ], [
         [
             ReadTextFile('./dataset/pub/in/LinkCode_NET_GitGist.md',
-                         'af1bf1e2543c80163daf049fc8da8eb47d1bca2f4f85d6e0c2505173c878dce6'),
+                         '1b6363a70405c7afa7ba9eef966702df15d6129ede7974e4a9b7b9478f3c75cb'),
             ReadTextFile('./dataset/pub/out/LinkCode_NET_GitGist.html',
-                         None)
+                         '4e5d873cb9bc9a7d0df22853993ecc5650c0dc00358ec6a4d861801608e8a8fb')
         ]
     ])
     def test_LinkCode_NET_GitGist(self, T_in_data, T_check_data):
         """Проверка ссылки ан GitGist"""
-        res = f"{html_head}{CoreMarkdownDRY.LinkCode(T_in_data.text, self.path)}"
+        res = f"{html_head}{CoreMarkdownDRY.LinkCode(T_in_data.text, self.path)}{Parsing._ReturnLastInsert()}"
         # T_check_data.write(res)
         assert res == T_check_data.text
 
     @mark.parametrize(['T_in_data', 'T_check_data', ], [
         [
             ReadTextFile('./dataset/pub/in/LinkCode.md',
-                         '9076c42a3fe2bfddd30108aaa7d29691229d6c078a0b9ca9787c0d650375083b'),
+                         'de14fc7157327ace051259ff96c7f34648daab78c2bad6fc2e8d1991475abace'),
             ReadTextFile('./dataset/pub/out/LinkCode.html',
-                         None),
+                         '9da98369d24ab384b957eb679e6947d6edc7c3098600c39da7038ca4e446e9e2'),
 
         ]
     ])
     def test_LinkCode(self, T_in_data, T_check_data: ReadTextFile):
         """Быстрая проверка"""
-        res = f"{html_head}{CoreMarkdownDRY.LinkCode(T_in_data.text, self.path)}"
+        res = f"{html_head}{CoreMarkdownDRY.LinkCode(T_in_data.text, self.path)}{Parsing._ReturnLastInsert()}"
         # T_check_data.write(res)
         assert res == T_check_data.text
 
