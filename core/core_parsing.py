@@ -72,6 +72,7 @@ class Parsing:
         res = CoreMarkdown.CodeBlock(res)
         # TODO: Добавить тесты для ImageMd
         res = CoreMarkdown.ImgMd(res)
+        # TODO: Реализовать вспомогательный текст (символ `> ` в начале строки)
 
         return res
 
