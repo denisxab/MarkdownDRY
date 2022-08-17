@@ -58,8 +58,7 @@ class Parsing:
         res = CoreMarkdownDRY.InsertCodeFromFile(res, path)
         res = CoreMarkdownDRY.LinkCode(res, path)
         res = CoreMarkdownDRY.MultiPageCode(res)
-        # TODO: чето лагает при создание таблиц
-        # res = CoreMarkdownDRY.MultiLineTables(res)
+        res = CoreMarkdownDRY.MultiLineTables(res)
         return res
 
     def goMDPars(self, text: str) -> str:

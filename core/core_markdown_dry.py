@@ -275,7 +275,10 @@ class REGEX:
 
     # - Многострочные таблицы - #
     # Найти таблицу
-    MultiLineTables: re.Pattern = re.compile("\|(?:.\s*(?!\|\n\n))+\s*\|")
+    MultiLineTables: re.Pattern = re.compile(
+        "(?:(?:\|[^|\n]+)+\|\n){2,}"
+        # "\|(?:.\s*(?!\|\n\n))+\s*\|"
+    )
     # Найти строку
     MultiLineTablesRow: re.Pattern = re.compile("(?P<row>\|.+\|)")
     # Найти столбец
@@ -1093,7 +1096,7 @@ class MDDRY_TO_HTML:
 </tr>
 </thead>
 <tbody>
-{''.join(f'<tr>{"".join(f"<td>{y}</td>" for y in x)}</tr>' for x in tb.body)}
+{''.join(f'<tr>{"".join(f"<td>{y}</td>" for y in x)}</tr>' for x in tb.body).replace(f'{REGEX.NL}',"<br>")}
 </tbody>
 </table>        
 </div>
