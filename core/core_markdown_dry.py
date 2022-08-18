@@ -4,7 +4,7 @@ from decimal import Decimal
 from enum import Enum
 from hashlib import md5
 from pathlib import Path
-from typing import Optional, Union, Literal
+from typing import Optional, Literal
 
 import requests
 from logsmal import logger
@@ -243,7 +243,7 @@ class REGEX:
     # - Математически блок - #
     # Для поиска математических блоков
     MathSpan: re.Pattern = re.compile(
-        '`=(?P<body>[^\n`]+)`'
+        '`(?P<preliminary_response>\d*)=(?P<body>[^\n`]+)`'
     )
     # ------------------------
 
@@ -268,7 +268,10 @@ class REGEX:
     # HeaderType: re.Pattern = re.compile('\s*(?P<hidden>\^)?.+')
 
     #: Поиск инициализированных переменных
-    VarsInit: re.Pattern = re.compile('- \[=(?P<name>[^]]+)]\((?P<value>.+(?!\n))\)')
+    VarsInit: re.Pattern = re.compile(
+        '- \[=(?P<name>[^]]+)]\((?P<value>[^\n]+)\):?(?P<type>[^\n]+)?'
+        # '- \[=(?P<name>[^]]+)]\((?P<value>.+(?!\n))\)'
+    )
     #: Поиск мест, где идет обращение к переменной
     VarsGet: re.Pattern = re.compile('\[=(?P<name>[^]]+)]')
     # ------------------------
@@ -376,7 +379,7 @@ class StoreDoc:
         """
         Структура для заголовков
         """
-        data_body = tuple[int, HeaderType, dict[str, str], str]
+        data_body = tuple[int, HeaderType, dict[str, tuple[str, str]], str]
         data_type = dict[str, data_body]
         # Заголовки - ИмяЗаголовка:(УровеньЗаголовка,ТипЗаголовка,{ИмяПеременной:(Значение,IdЗаголовка)},IdЗаголовка)
         date: data_type = dict()
@@ -422,28 +425,31 @@ class StoreDoc:
             return id_header
 
         @classmethod
-        def addVar(cls, header: str, name: str, value: str):
+        def addVar(cls, header: str, name: str, value: str, type_value: Optional[str]):
             """
             Добавить переменную в кеш с заголовками
 
+            :param type_value: Тип переменной, используется чисто как подсказка для пользователя
             :param header: Имя Заголовка
             :param name: Имя племенной
             :param value: Значение
             """
-            cls.date[header][2][name] = value
+            cls.date[header][2][name] = (value, type_value if type_value else '')
 
         @classmethod
-        def getVar(cls, header: str, name: str, default: Optional[str] = None):
+        def getVar(cls, header: str, name: str, default: Optional[str] = None, context: str = None) -> tuple[str, str]:
             """
             Получить значение по имени переменной
 
-            :param header: ИмяЗаголовка
+            :param header: Имя заголовка
             :param name: Имя переменной
             :param default: Значение если ключа нет
+            :param context: Для подробного вывода ошибок, передаем контекст в котором происходит поиск переменных
+            :return: (ЗначениеПеременной, ТипПеременной)
             """
 
             # Ищем переменные в текущем заголовке
-            _res = cls.date[header][2].get(name, None)
+            _res = cls.date[header][2].get(name, ('', ''))
             if not _res:
                 # Если не найдено в текущем заголовке, то ищем в вышестоящих заголовках
 
@@ -469,7 +475,8 @@ class StoreDoc:
                         _tmp2.append(_tmp[_index])
                     _res = _tmp2[0][1][2][name]
                 else:
-                    return default
+                    logger.error(f"{header=}->{name=}->{context=}", "Переменная не инициализирована")
+                    return default, ''
             return _res
 
 
@@ -902,13 +909,14 @@ class MDDRY_TO_HTML:
 """[1:]
 
     @classmethod
-    def MathSpan(cls, m: re.Match) -> Union[str, bool]:
-        """Для расчетов используем библиотеку SymPy"""
-        text = m['body']
-        try:
-            return f"""<span class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.MathSpan.value}"><span class="math_result">{sympify(text).__str__()}</span>={text}</span>"""
-        except SympifyError:
-            return m.group(0)
+    def MathSpan(cls, m: re.Match) -> str:
+        """
+        Высчитываем математическое выражение с помощью SymPy, и возвращаем результат выражения в виде `HTML`
+        """
+        # TODO: Поддержка типов для результата математического выражения, это должно распространятся также на переменные
+
+        text: str = m['body']
+        return f"""<span class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.MathSpan.value}"><span class="math_result">{MDDRY_TO_MD.MathSpan(m)}</span>={text}</span>"""
 
     @classmethod
     def _BaseCodeRef(cls, m: re.Match, self_path: str) -> Optional[BaseCodeRefReturn]:
@@ -1045,15 +1053,25 @@ class MDDRY_TO_HTML:
 
             - [=Имя](Иван)
             - [=Фамилия]([=Имя] Иванов)
+            - [=Отчество]([=Имя] Иванов Иванович:ТипИмяОтчество)
 
             В итоге `[=Фамилия]` будет равен Иванов Иван
             """
-            _nested_var = REGEX.VarsGet.sub(lambda _n_v: StoreDoc.HeaderMain.getVar(name_raw, _n_v['name']),
-                                            _m['value'])
+
+            # Ищем вложенные переменной и подставляем их значение в текущую переменную.
+            _nested_var = REGEX.VarsGet.sub(lambda _n_v:
+                                            StoreDoc.HeaderMain.getVar(name_raw, _n_v['name'], context=_m.group(0))[0],
+                                            _m['value']
+                                            )
             # Переменная с результатом
             res_var = _nested_var if _nested_var else _m['value']
+            # Проврем на то что в значение есть `MathSpan`
+            is_math_span = REGEX.MathSpan.match(res_var)
+            if is_math_span:
+                # Если есть `MathSpan`, то высчитываем выражение.
+                res_var = MDDRY_TO_MD.MathSpan(is_math_span)
             # Записываем в кеш
-            StoreDoc.HeaderMain.addVar(name_raw, _m['name'], res_var)
+            StoreDoc.HeaderMain.addVar(name_raw, _m['name'], res_var, _m['type'])
             # Скрываем из текста инициализацию переменных
             return f"%%{_m['name']}={res_var}%%"
 
@@ -1061,7 +1079,18 @@ class MDDRY_TO_HTML:
             """
             Вставка значений в места, где идет обращение к переменным
             """
-            return StoreDoc.HeaderMain.getVar(name_raw, _m['name'], _m.group(0))
+            # TODO: придумать как можно в MathSpan запихнуть имя перееденной и её тип, чтобы можно было в HTML посмотреть из
+            #  каких переменных и типов был получен результат.
+            """
+            Предполагаю это можно сделать если 
+            1. Сначала скрыть MathSpan перед вставками переменных
+            2. Вставить значения переменных во всем тексте(кроме MathSpan). Там по сути будет только одна переменна,
+                и там можно просто вставить текст и  через точку - тип переменной 
+            3. Вернуть `MathSpan`
+            3. Начать парсить `MathSpan` и искать в них переменные, делать расчеты и вставки переменных, сохранить куда
+                нибудь имена переменных и их типы, чтобы потом в HTML можно было посмотреть из чего состоит математическое выражение
+            """
+            return '.'.join(StoreDoc.HeaderMain.getVar(name_raw, _m['name'], default=_m.group(0)))
 
         body_header = REGEX.VarsInit.sub(_vars_init, body_header)
         body_header = REGEX.VarsGet.sub(_vars_get, body_header)
@@ -1096,7 +1125,7 @@ class MDDRY_TO_HTML:
 </tr>
 </thead>
 <tbody>
-{''.join(f'<tr>{"".join(f"<td>{y}</td>" for y in x)}</tr>' for x in tb.body).replace(f'{REGEX.NL}',"<br>")}
+{''.join(f'<tr>{"".join(f"<td>{y}</td>" for y in x)}</tr>' for x in tb.body).replace(f'{REGEX.NL}', "<br>")}
 </tbody>
 </table>        
 </div>
@@ -1128,3 +1157,32 @@ class MDDRY_TO_MD:
     def IndisputableInsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
         """Бесспорная вставка кода"""
         return Path(self_path, m['path']).resolve().read_text()
+
+    @classmethod
+    def MathSpan(cls, m: re.Match) -> str:
+        """
+        Высчитываем математическое выражение с помощью SymPy, и возвращаем результат выражения
+        """
+        """
+       Доработать математический размах, сделать подсказку переменной, и её типа,
+       добавить возможность самому писать ответ к выражению, но все равно делать
+       расчеты для проверки правильности указного ответа, если ответы разные то
+       выдавать ошибку сборки!
+       """
+
+        text: str = m['body']
+        preliminary_response: Optional[str] = m['preliminary_response']
+
+        try:
+            res = sympify(text).__str__()
+            # Если есть предварительный ответ, и он не равен ответу от `SymPy`
+            if preliminary_response and preliminary_response != res:
+                # То записываем в лог ошибку и возвращаем выражение без изменений
+                logger.error(f"В уравнение {m.group(0)} ожидался ответ={preliminary_response}, но получен={res}",
+                             "Не равные ответы в `MathSpan`")
+                return m.group(0)
+            else:
+                return res
+        except SympifyError:
+            logger.error(f"{text}", "MathSpan")
+            return m.group(0)

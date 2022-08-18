@@ -219,6 +219,21 @@ class Test_Pub:
 
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
+            ReadTextFile('./dataset/pub/in/MathSpan_Upgrade.md',
+                         None),
+            ReadTextFile('./dataset/pub/out/MathSpan_Upgrade.html',
+                         None),
+
+        ]
+    ])
+    def test_MathSpan_Upgrade(self, T_in_data, T_check_data):
+        # TODO: Сделать апгрейд MathSpan.
+        res = f"{html_head}{CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text))}"
+        # T_check_data.write(res)
+        # assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
             ReadTextFile('./dataset/pub/in/PhotoGallery.md',
                          '998afda2ac2ddbf0b9ce2c6240b817ed727361d63cd437a21aea6545d450d6e5'),
             ReadTextFile('./dataset/pub/out/PhotoGallery.html',

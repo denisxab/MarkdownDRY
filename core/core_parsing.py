@@ -43,6 +43,8 @@ class Parsing:
 
         :return: Собранный HTML
         """
+        # TODO: Сделать два этапа сборки. MDDRY в MD, и MDDRY в HTML. Например, для того чтобы можно было использовать только
+        #  переменные и бесспорные вставки и Математический размах и агрегатные функции в таблицах в MD файлах.
         return f"{html_head}{self.goEndBuild(self.goMDPars(self.goMDDRYPars(self.text_mddry, path)))}{HTML_JS.Hotkey.result}"
 
     def goMDDRYPars(self, text: str, path: str) -> str:
