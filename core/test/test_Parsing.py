@@ -4,7 +4,7 @@ from pytest import mark
 from testfull_pack.file import ReadTextFile
 
 from core.core_markdown_dry import StoreDoc
-from core.core_parsing import Parsing
+from core.core_parsing import ParsingToMarkdown, ParsingToHtml
 
 
 def _next_test():
@@ -21,13 +21,28 @@ class Test_Pars:
         [
             ReadTextFile('./dataset/pub/Полноценный пример 1.md',
                          None),
-            ReadTextFile('./dataset/pub/Полноценный пример 1.1.html',
+            ReadTextFile('./dataset/pub/ParsingToHtml.html',
                          None),
 
         ]
     ])
-    def test_CallParsing(self, T_in_data, T_check_data):
-        res = Parsing(T_in_data.text).goPars(self.path)
+    def test_ParsingToHtml(self, T_in_data, T_check_data):
+        res = ParsingToHtml(T_in_data.text).goPars(self.path)
+        T_check_data.write(res)
+        print(res)
+        # assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/Полноценный пример 1.md',
+                         None),
+            ReadTextFile('./dataset/pub/ParsingToMarkdown.html',
+                         None),
+
+        ]
+    ])
+    def test_ParsingToMarkdown(self, T_in_data, T_check_data):
+        res = ParsingToMarkdown(T_in_data.text).goPars(self.path)
         T_check_data.write(res)
         print(res)
         # assert res == T_check_data.text

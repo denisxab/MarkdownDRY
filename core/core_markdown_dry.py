@@ -501,11 +501,14 @@ class CoreMarkdownDRY:
     """
 
     @classmethod
-    def ReferenceBlock(cls, source_text: str) -> Optional[str]:
+    def ReferenceBlock(cls, source_text: str, type_out: Literal['html', 'md']) -> Optional[str]:
         """
         Ссылочный блок объявление
         """
-        return REGEX.ReferenceBlock.sub(MDDRY_TO_HTML.ReferenceBlock, source_text)
+        if type_out == 'html':
+            return REGEX.ReferenceBlock.sub(MDDRY_TO_HTML.ReferenceBlock, source_text)
+        else:
+            return REGEX.ReferenceBlock.sub(MDDRY_TO_MD.ReferenceBlock, source_text)
 
     @classmethod
     def UseReferenceBlock(cls, source_text: str,
@@ -522,49 +525,65 @@ class CoreMarkdownDRY:
                                            source_text)
 
     @classmethod
-    def DropdownBlock(cls, source_text: str) -> Optional[str]:
+    def DropdownBlock(cls, source_text: str, type_out: Literal['html', 'md']) -> Optional[str]:
         """
         Раскрываемые блок
         """
-        return REGEX.DropdownBlock.sub(MDDRY_TO_HTML.DropdownBlock, source_text)
+        if type_out == 'html':
+            return REGEX.DropdownBlock.sub(MDDRY_TO_HTML.DropdownBlock, source_text)
+        else:
+            return source_text
 
     @classmethod
-    def HighlightBlock(cls, source_text: str) -> Optional[str]:
+    def HighlightBlock(cls, source_text: str, type_out: Literal['html', 'md']) -> Optional[str]:
         """
         Выделенный блок
         """
-        # Поочередно ищем и обрабатываем каждый тип выделения
-        for _i, _pattern in enumerate([REGEX.HighlightBlock1, REGEX.HighlightBlock2, REGEX.HighlightBlock3]):
-            source_text = _pattern.sub(lambda s: MDDRY_TO_HTML.HighlightBlock(s, _i + 1), source_text)
-        return source_text
+        if type_out == 'html':
+            # Поочередно ищем и обрабатываем каждый тип выделения
+            for _i, _pattern in enumerate([REGEX.HighlightBlock1, REGEX.HighlightBlock2, REGEX.HighlightBlock3]):
+                source_text = _pattern.sub(lambda s: MDDRY_TO_HTML.HighlightBlock(s, _i + 1), source_text)
+            return source_text
+        else:
+            return source_text
 
     @classmethod
-    def PhotoGallery(cls, source_text: str) -> Optional[str]:
+    def PhotoGallery(cls, source_text: str, type_out: Literal['html', 'md']) -> Optional[str]:
         """
         Фото Галерея
         """
-        return REGEX.PhotoGallery.sub(MDDRY_TO_HTML.PhotoGallery, source_text)
+        if type_out == 'html':
+            return REGEX.PhotoGallery.sub(MDDRY_TO_HTML.PhotoGallery, source_text)
+        else:
+            return source_text
 
     @classmethod
-    def MultiPageCode(cls, source_text: str) -> Optional[str]:
+    def MultiPageCode(cls, source_text: str, type_out: Literal['html', 'md']) -> Optional[str]:
         """
         Многостраничные кодблоки
         """
-        return REGEX.MultiPageCode.sub(MDDRY_TO_HTML.MultiPageCode, source_text)
+        if type_out == 'html':
+            return REGEX.MultiPageCode.sub(MDDRY_TO_HTML.MultiPageCode, source_text)
+        else:
+            return source_text
 
     @classmethod
-    def MathSpan(cls, source_text: str) -> Optional[str]:
+    def MathSpan(cls, source_text: str, type_out: Literal['html', 'md']) -> Optional[str]:
         """
         Математический размах
         """
+        # TODO: Реализовать type_out: Literal['html', 'md']
         return REGEX.MathSpan.sub(MDDRY_TO_HTML.MathSpan, source_text)
 
     @classmethod
-    def InsertCodeFromFile(cls, source_text: str, self_path: str) -> Optional[str]:
+    def InsertCodeFromFile(cls, source_text: str, self_path: str, type_out: Literal['html', 'md']) -> Optional[str]:
         """
         Вставка кода, не трогает `md` файл, а создается в HTML
         """
-        return REGEX.InsertCodeFromFile.sub(lambda t: MDDRY_TO_HTML.InsertCodeFromFile(t, self_path), source_text)
+        if type_out == 'html':
+            return REGEX.InsertCodeFromFile.sub(lambda t: MDDRY_TO_HTML.InsertCodeFromFile(t, self_path), source_text)
+        else:
+            return REGEX.InsertCodeFromFile.sub(lambda t: MDDRY_TO_MD.InsertCodeFromFile(t, self_path), source_text)
 
     @classmethod
     def IndisputableInsertCodeFromFile(cls, source_text: str, self_path: str) -> Optional[str]:
@@ -576,51 +595,55 @@ class CoreMarkdownDRY:
                                                         source_text)
 
     @classmethod
-    def LinkCode(cls, source_text: str, self_path: str) -> Optional[str]:
+    def LinkCode(cls, source_text: str, self_path: str, type_out: Literal['html', 'md']) -> Optional[str]:
         """
         Ссылка на элементы кода
         """
-        res = REGEX.LinkCode.sub(lambda t: MDDRY_TO_HTML.LinkCode(t, self_path), source_text)
-        # Формируем HTML, Исходный код файла + ссылки
-        StoreDoc.LastInsert.append(f"""
-<script>
-/* -------------------------- Логика для {HTML_CLASS.LinkCode.value} -------------------------- */
-// Переменная для хранения исходного кода из файлов. Храниться в кодировки UTF-8, для экранирования спец символов
-{HTML_CLASS.LinkSourceCode.value}={{
-    {','.join(f'"{k}":decodeURIComponent(escape(atob({REGEX.Qm1}{repr(b64encode(v.encode("utf8")))[2:-1]}{REGEX.Qm1})))' for k, v in StoreDoc.LinkCode.date.items())}
-}};
-{HTML_JS.LinkCode}
-/* --------------------------------------------------------------------------------------------- */
-</script>
-        """[1:])
-        return f"""
-<!-- Всплывающие окно с исходным кодом из файла ------------------------------------------ -->
-<div id="{HTML_CLASS.LinkCodeWindow.value}" onclick="OnHide(event)">
-    <div id="{HTML_CLASS.LinkCodeWindowDet.value}">
-        <div id="{HTML_CLASS.LinkCodeWindowButtonTitle.value}">
-            <div id="{HTML_CLASS.LinkCodeName.value}"></div>
-            <input type="button" id="{HTML_CLASS.LinkCodeWindowButtonHide.value}" value="Скрыть" onclick="{HTML_CLASS.LinkCodeWindow.value}.style.display='none'">
+        if type_out == 'html':
+            res = REGEX.LinkCode.sub(lambda t: MDDRY_TO_HTML.LinkCode(t, self_path), source_text)
+            # Формируем HTML, Исходный код файла + ссылки
+            StoreDoc.LastInsert.append(f"""
+    <script>
+    /* -------------------------- Логика для {HTML_CLASS.LinkCode.value} -------------------------- */
+    // Переменная для хранения исходного кода из файлов. Храниться в кодировки UTF-8, для экранирования спец символов
+    {HTML_CLASS.LinkSourceCode.value}={{
+        {','.join(f'"{k}":decodeURIComponent(escape(atob({REGEX.Qm1}{repr(b64encode(v.encode("utf8")))[2:-1]}{REGEX.Qm1})))' for k, v in StoreDoc.LinkCode.date.items())}
+    }};
+    {HTML_JS.LinkCode}
+    /* --------------------------------------------------------------------------------------------- */
+    </script>
+            """[1:])
+            return f"""
+    <!-- Всплывающие окно с исходным кодом из файла ------------------------------------------ -->
+    <div id="{HTML_CLASS.LinkCodeWindow.value}" onclick="OnHide(event)">
+        <div id="{HTML_CLASS.LinkCodeWindowDet.value}">
+            <div id="{HTML_CLASS.LinkCodeWindowButtonTitle.value}">
+                <div id="{HTML_CLASS.LinkCodeName.value}"></div>
+                <input type="button" id="{HTML_CLASS.LinkCodeWindowButtonHide.value}" value="Скрыть" onclick="{HTML_CLASS.LinkCodeWindow.value}.style.display='none'">
+            </div>
+            <pre class="{HTML_CLASS.code.value}" id="{HTML_CLASS.LinkCodeWindowBody.value}">
+            </pre>
         </div>
-        <pre class="{HTML_CLASS.code.value}" id="{HTML_CLASS.LinkCodeWindowBody.value}">
-        </pre>
+        <div id="{HTML_CLASS.LinkCodeWindowFooter.value}">
+            <div id="{HTML_CLASS.LinkCodeWindowPath.value}"></div>
+        </div>
     </div>
-    <div id="{HTML_CLASS.LinkCodeWindowFooter.value}">
-        <div id="{HTML_CLASS.LinkCodeWindowPath.value}"></div>
-    </div>
-</div>
-<!-- ---------------------------------------------------------------------------------------- -->
-{res}
-"""[1:]
+    <!-- ---------------------------------------------------------------------------------------- -->
+    {res}
+    """[1:]
+        else:
+            return source_text
 
     @classmethod
-    def HeaderMain(cls, source_text: str) -> Optional[str]:
+    def HeaderMain(cls, source_text: str, type_out: Literal['html', 'md']) -> Optional[str]:
         """
         Поиск заголовка и его тела
         """
+        # TODO: реализовать type_out: Literal['html', 'md']
         res = REGEX.HeaderMain.sub(MDDRY_TO_HTML.HeaderMain, source_text)
 
         def create_table_contents_from_HTML(
-                hed: dict[str, tuple[int, HeaderType, dict[str, str], str]],
+                hed: StoreDoc.HeaderMain.data_type,
                 template_li: str = "<li>{header}</li>") -> str:
             """
             Сделать оглавление в формате HTML
@@ -721,11 +744,83 @@ class CoreMarkdownDRY:
 """[1:], res=res)
 
     @classmethod
-    def MultiLineTables(cls, source_text: str) -> Optional[str]:
+    def MultiLineTables(cls, source_text: str, type_out: Literal['html', 'md']) -> Optional[str]:
         """
         Многострочные таблицы, и обычные
         """
+        # TODO: реализовать type_out: Literal['html', 'md']
         return REGEX.MultiLineTables.sub(MDDRY_TO_HTML.MultiLineTables, source_text)
+
+    class DeepLogic:
+        """Углубленная логика MarkdownDRY"""
+
+        @staticmethod
+        def BaseCodeRef(m: re.Match, self_path: str) -> Optional[BaseCodeRefReturn]:
+            """
+            Подготовить параметры для ссылки на код
+            """
+            name_re: str = m['name']
+            main_re: str = m['main']
+            child_re: str = m['child']
+            if not m['path']:
+                return None
+            # Путь к исходному файлу
+            path_re: Path = Path(m['path'])
+            # Проверим что это НЕ бинарный файл, путем просмотра расширения файла. Если это бинарный файл, то выходим из функции
+            if AvailableLanguages.Binary.value.search(path_re.suffix):
+                return None
+            # Язык программирования или разметки
+            lange_file: Lange
+            # Исходный текст кода
+            text_in_file: str
+            # Проверяем куда указывает путь, локально или в интернет
+            path_or_url = re.match('(https|http|ftp|tcp|localhost):', m['path'])
+            if path_or_url:
+                """Это ссылку в интернет"""
+                logger.debug(m['path'], 'URL')
+                lange_file = ConvertSuffixToLange.getlang(path_re.suffix)
+                # Скачиваем исходный текст из интернета
+                text_in_file = requests.get(m['path']).text
+            else:
+                """Это локальный путь"""
+                logger.debug(path_re, 'LOCAL')  # Path(self_path, m['path']).resolve().__str__()
+                lange_file = ConvertSuffixToLange.getlang(path_re.suffix)
+                # Читаем файл по абсолютному пути
+                try:
+                    text_in_file = Path(self_path, path_re).resolve().read_text()
+                except FileNotFoundError as e:
+                    logger.error(f"{path_re}:\n{e}", "LOCAL_BaseCodeRef")  # path_re
+                    return None
+                except TypeError as e:
+                    logger.error(f"{path_re}:\n{e}", "LOCAL_BaseCodeRef")  # path_re
+                    return None
+
+            # Формируем ссылку для `HTML`
+            ref = f"{f'{main_re}' if main_re else ''}{f'.{child_re}' if child_re else ''}"
+            # Переменная для указания начало найденного элемента
+            line_start = 0
+            # Переменная для указания конца найденного элемента
+            line_end = -1
+            # Обрезанный текст
+            text_in_file_cup: str = text_in_file
+            # Если указано, что вставлять, то вставляем этот участок код из файла
+            if main_re:
+                # Если указывает на класс/функцию/переменную
+                text_in_file_cup, line_start, line_end = lange_file.REGEX.class_func_var_anchor(main_re, text_in_file)
+                if child_re:
+                    # Если указывает на метод класса/атрибут класса
+                    text_in_file_cup, tmp_line_start, tmp_line_end = lange_file.REGEX.class_meth_attr(child_re, text_in_file_cup)
+                    # Конец текста
+                    line_end = line_start + tmp_line_end if tmp_line_end else 0
+                    # Начало текст
+                    line_start = line_start + tmp_line_start if tmp_line_start else 0
+            return BaseCodeRefReturn(name_re=name_re,
+                                     text_in_file_cup=text_in_file_cup,
+                                     text_in_file=text_in_file,
+                                     line_start=line_start,
+                                     line_end=line_end,
+                                     ref=ref,
+                                     file=path_re)
 
 
 class MDDRY_TO_HTML:
@@ -919,95 +1014,27 @@ class MDDRY_TO_HTML:
         return f"""<span class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.MathSpan.value}"><span class="math_result">{MDDRY_TO_MD.MathSpan(m)}</span>={text}</span>"""
 
     @classmethod
-    def _BaseCodeRef(cls, m: re.Match, self_path: str) -> Optional[BaseCodeRefReturn]:
-        """Подготовить параметры для ссылки на код"""
-        name_re: str = m['name']
-        main_re: str = m['main']
-        child_re: str = m['child']
-        if not m['path']:
-            return None
-        # Путь к исходному файлу
-        path_re: Path = Path(m['path'])
-        # Проверим что это НЕ бинарный файл, путем просмотра расширения файла. Если это бинарный файл, то выходим из функции
-        if AvailableLanguages.Binary.value.search(path_re.suffix):
-            return None
-        # Язык программирования или разметки
-        lange_file: Lange
-        # Исходный текст кода
-        text_in_file: str
-        # Проверяем куда указывает путь, локально или в интернет
-        path_or_url = re.match('(https|http|ftp|tcp|localhost):', m['path'])
-        if path_or_url:
-            """Это ссылку в интернет"""
-            logger.debug(m['path'], 'URL')
-            lange_file = ConvertSuffixToLange.getlang(path_re.suffix)
-            # Скачиваем исходный текст из интернета
-            text_in_file = requests.get(m['path']).text
-        else:
-            """Это локальный путь"""
-            logger.debug(path_re, 'LOCAL')  # Path(self_path, m['path']).resolve().__str__()
-            lange_file = ConvertSuffixToLange.getlang(path_re.suffix)
-            # Читаем файл по абсолютному пути
-            try:
-                text_in_file = Path(self_path, path_re).resolve().read_text()
-            except FileNotFoundError as e:
-                logger.error(f"{path_re}:\n{e}", "LOCAL_BaseCodeRef")  # path_re
-                return None
-            except TypeError as e:
-                logger.error(f"{path_re}:\n{e}", "LOCAL_BaseCodeRef")  # path_re
-                return None
-
-        # Формируем ссылку для `HTML`
-        ref = f"{f'{main_re}' if main_re else ''}{f'.{child_re}' if child_re else ''}"
-        # Переменная для указания начало найденного элемента
-        line_start = 0
-        # Переменная для указания конца найденного элемента
-        line_end = -1
-        # Обрезанный текст
-        text_in_file_cup: str = text_in_file
-        # Если указано, что вставлять, то вставляем этот участок код из файла
-        if main_re:
-            # Если указывает на класс/функцию/переменную
-            text_in_file_cup, line_start, line_end = lange_file.REGEX.class_func_var_anchor(main_re, text_in_file)
-            if child_re:
-                # Если указывает на метод класса/атрибут класса
-                text_in_file_cup, tmp_line_start, tmp_line_end = lange_file.REGEX.class_meth_attr(child_re, text_in_file_cup)
-                # Конец текста
-                line_end = line_start + tmp_line_end if tmp_line_end else 0
-                # Начало текст
-                line_start = line_start + tmp_line_start if tmp_line_start else 0
-        return BaseCodeRefReturn(name_re=name_re,
-                                 # Экранирование угловых скобок для корректной вставки в HTML
-                                 text_in_file_cup=HTML_CLASS.ReplaceGtLt(text_in_file_cup),
-                                 # Экранирование угловых скобок для корректной вставки в HTML
-                                 text_in_file=HTML_CLASS.ReplaceGtLt(text_in_file),
-                                 line_start=line_start,
-                                 line_end=line_end,
-                                 ref=ref,
-                                 file=path_re)
-
-    @classmethod
     def InsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
         """Вставка кода"""
-        res: BaseCodeRefReturn = cls._BaseCodeRef(m, self_path)
+        res: BaseCodeRefReturn = CoreMarkdownDRY.DeepLogic.BaseCodeRef(m, self_path)
         if not res:
             # Если нет ответа то вернем тот же текст
             return m.group(0)
         return f"""
 <div class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.InsertCodeFromFile.value}">
 <div>{res.name_re}</div>
-<pre class="{HTML_CLASS.code.value}">{HTML_CLASS.toCode(res.text_in_file_cup)}</pre>
+<pre class="{HTML_CLASS.code.value}">{HTML_CLASS.toCode(HTML_CLASS.ReplaceGtLt(res.text_in_file_cup))}</pre>
 </div>"""[1:]
 
     @classmethod
     def LinkCode(cls, m: re.Match, self_path: str) -> Optional[str]:
         """Ссылка на код"""
-        res: BaseCodeRefReturn = cls._BaseCodeRef(m, self_path)
+        res: BaseCodeRefReturn = CoreMarkdownDRY.DeepLogic.BaseCodeRef(m, self_path)
         if not res:
             # Если нет ответа то вернем тот же текст
             return m.group(0)
         # Записать в кеш исходный текст из файла
-        StoreDoc.LinkCode.add(res.file, res.text_in_file)
+        StoreDoc.LinkCode.add(res.file, HTML_CLASS.ReplaceGtLt(res.text_in_file))
         return f"""
 <a href="#" class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.LinkCode.value}" file="{res.file.__str__()}" ref="{res.ref}" char_start="{res.line_start}" char_end="{res.line_end}">{res.name_re}</a>
 """[1:]
@@ -1138,6 +1165,14 @@ class MDDRY_TO_MD:
     """
 
     @staticmethod
+    def ReferenceBlock(m: re.Match) -> str:
+        """Ссылочные блоки"""
+        # Заносим найденные ссылочные блоки в общий кеш документа
+        StoreDoc.ReferenceBlock[m['ref_block_name']] = m['ref_block_text']
+        # Формируем html
+        return m.group(0)
+
+    @staticmethod
     def UseReferenceBlock(m: re.Match, StoreDocs_ReferenceBlock: StoreDoc.ReferenceBlock) -> str:
         """
         Использование ссылочного блока
@@ -1186,3 +1221,12 @@ class MDDRY_TO_MD:
         except SympifyError:
             logger.error(f"{text}", "MathSpan")
             return m.group(0)
+
+    @classmethod
+    def InsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
+        """Вставка кода"""
+        res: BaseCodeRefReturn = CoreMarkdownDRY.DeepLogic.BaseCodeRef(m, self_path)
+        if not res:
+            # Если нет ответа то вернем тот же текст
+            return m.group(0)
+        return f"{res.name_re}\n\n{res.text_in_file_cup}"

@@ -1,24 +1,150 @@
 # TODO: Реализовать конвертацию файла на ``MarkdownDRY` в `HTML`
+
+from abc import abstractmethod
 from hashlib import md5
+from typing import Literal
 
 from core.core_html import html_head, HTML_JS, HtmlTag, HTML_CLASS
 from core.core_markdown import CoreMarkdown
 from core.core_markdown_dry import CoreMarkdownDRY, REGEX, StoreDoc
 
 
-class Parsing:
+class ParsingBase:
     """
-    Класс для парсинга файлов в формате `mddry` и конвертации их в html
+    Базовый класс для парсинга MarkdownDRY
     """
+    #: Хранение комментариев
     cache_comment: dict[str, str] = dict()
 
     def __init__(self, text_mddry: str):
         self.text_mddry: str = text_mddry
 
+    def goMDDRYPars(self, text: str, path: str, type_out: Literal['html', 'md']) -> str:
+        """Парсинг MDDRY"""
+        res = CoreMarkdownDRY.IndisputableInsertCodeFromFile(text, path)
+        res = self.ExcludeComment(res, type_out)
+        res = CoreMarkdownDRY.HeaderMain(res, type_out)
+        # ------
+        res = CoreMarkdownDRY.ReferenceBlock(res, type_out)
+        res = CoreMarkdownDRY.MathSpan(res, type_out)
+        res = CoreMarkdownDRY.DropdownBlock(res, type_out)
+        res = CoreMarkdownDRY.HighlightBlock(res, type_out)
+        res = CoreMarkdownDRY.PhotoGallery(res, type_out)
+        res = CoreMarkdownDRY.InsertCodeFromFile(res, path, type_out)
+        res = CoreMarkdownDRY.LinkCode(res, path, type_out)
+        res = CoreMarkdownDRY.MultiPageCode(res, type_out)
+        res = CoreMarkdownDRY.MultiLineTables(res, type_out)
+        return res
+
+    @staticmethod
+    def goMDPars(text: str) -> str:
+        """Парсинг MD"""
+        res = CoreMarkdown.Hr(text)
+        res = CoreMarkdown.Ol(res)
+        res = CoreMarkdown.Ul(res)
+        # TODO: Добавить тесты для CodeLine
+        res = CoreMarkdown.CodeLine(res)
+        # TODO: Добавить тесты для CodeBlock
+        res = CoreMarkdown.CodeBlock(res)
+        # TODO: Добавить тесты для ImageMd
+        res = CoreMarkdown.ImgMd(res)
+        # TODO: Реализовать вспомогательный текст (символ `> ` в начале строки)
+        return res
+
+    @staticmethod
+    def _ReturnLastInsert() -> str:
+        """
+        Вернуть значение которые были отложены для вставки, сейчас это JS код.
+        Это нужно для того чтобы не было экранирования JS кода при парсинге
+        """
+        return ''.join(StoreDoc.LastInsert)
+
+    def _ReturnValuesWereHiddenFromPreTag(self, text_html: str) -> str:
+        """
+        Вернуть значения, которые были скрыты из тега <pre>
+        """
+        for k, v in self.cache_comment.items():
+            text_html = text_html.replace(k, v)
+        return text_html
+
+    def ExcludeComment(self, text: str, type_out: Literal['html', 'md']) -> str:
+        """
+        Исключение комментариев из кода
+
+        1. ScreeningLt_Gt_Symbol_CodeLine
+        2. ExcludePre
+        3. ScreeningLt_Gt_Symbol_ALlText
+        4. DeleteComment
+        """
+
+        def _ScreeningLt_Gt_Symbol_CodeLine(text_html: str) -> str:
+            """
+            Экранировать символьны меньше и больше, которые находятся в обратных кавычках(`)
+            """
+            return REGEX.CodeLine.sub(lambda m: HTML_CLASS.ReplaceGtLt(m.group(0)), text_html)
+
+        def _ExcludePre(text_html: str) -> str:
+            """
+            Заменяем текст в теге `<pre>` на хеш сумму данных, а сами данные записывает в `self.cache_comment`,
+            в конце компиляции по этому хешу будут вставлены значения.
+
+            Это нужно чтобы текст в теге `<pre>` не обрабатывался компилятором
+            """
+
+            def repl_tag(repl: str, date: str, name_tag: str):
+                """Замена данных на хеш, и запись в `self.cache_comment`"""
+                # Экранирование больше меньше в тексте тега <pre>
+                len_name_tag: int = len(name_tag)
+                date = f"<{name_tag}>{HTML_CLASS.ReplaceGtLt(date[len_name_tag + 2:-(len_name_tag + 3)])}</{name_tag}>"
+                # Получаем хеш сумму того что получилось
+                _hash = md5(date.encode()).hexdigest()
+                # Записываем в кеш
+                self.cache_comment[_hash] = date
+                return repl.format(date=_hash)
+
+            return HtmlTag.SubTag(HtmlTag.ParseTag(text_html, 'pre'), '{date}', text_html, repl_tag)
+
+        def _DeleteComment(text_html: str) -> str:
+            """
+            Скрыть комментарии `%%Текст%%` из текста
+            """
+            return REGEX.CommentMD.sub(lambda m: f"""<div hidden="">{m['body']}</div>""", text_html)
+
+        def _ScreeningLt_Gt_Symbol_ALlText(text_html: str) -> str:
+            """
+            Экранировать символьны меньше больше во всем тексте
+            """
+            return HTML_CLASS.ReplaceGtLt(text_html)
+
+        return _DeleteComment(_ScreeningLt_Gt_Symbol_ALlText(_ExcludePre(_ScreeningLt_Gt_Symbol_CodeLine(text))))
+
+    # ---------------------------------------------#
+
+    @abstractmethod
+    def goPars(self, path: str) -> str:
+        """
+        Этапы конвертации
+        """
+        ...
+
+    @abstractmethod
+    def goEndBuild(self, text: str) -> str:
+        """
+        Конечный этап сборки
+        """
+        ...
+    # ---------------------------------------------#
+
+
+class ParsingToHtml(ParsingBase):
+    """
+    Класс для парсинга файлов в формате `mddry` и конвертации их в html
+    """
+
     def goPars(self, path: str) -> str:
         """
 
-        Этапы конвертации
+        Этапы конвертации в HTML
 
         - `MDDRY`:
 
@@ -45,38 +171,7 @@ class Parsing:
         """
         # TODO: Сделать два этапа сборки. MDDRY в MD, и MDDRY в HTML. Например, для того чтобы можно было использовать только
         #  переменные и бесспорные вставки и Математический размах и агрегатные функции в таблицах в MD файлах.
-        return f"{html_head}{self.goEndBuild(self.goMDPars(self.goMDDRYPars(self.text_mddry, path)))}{HTML_JS.Hotkey.result}"
-
-    def goMDDRYPars(self, text: str, path: str) -> str:
-        """Парсинг MDDRY"""
-        res = CoreMarkdownDRY.IndisputableInsertCodeFromFile(text, path)
-        res = self.ExcludeComment(res)
-        res = CoreMarkdownDRY.HeaderMain(res)
-        res = CoreMarkdownDRY.ReferenceBlock(res)
-        res = CoreMarkdownDRY.MathSpan(res)
-        res = CoreMarkdownDRY.DropdownBlock(res)
-        res = CoreMarkdownDRY.HighlightBlock(res)
-        res = CoreMarkdownDRY.PhotoGallery(res)
-        res = CoreMarkdownDRY.InsertCodeFromFile(res, path)
-        res = CoreMarkdownDRY.LinkCode(res, path)
-        res = CoreMarkdownDRY.MultiPageCode(res)
-        res = CoreMarkdownDRY.MultiLineTables(res)
-        return res
-
-    def goMDPars(self, text: str) -> str:
-        """Парсинг MD"""
-        res = CoreMarkdown.Hr(text)
-        res = CoreMarkdown.Ol(res)
-        res = CoreMarkdown.Ul(res)
-        # TODO: Добавить тесты для CodeLine
-        res = CoreMarkdown.CodeLine(res)
-        # TODO: Добавить тесты для CodeBlock
-        res = CoreMarkdown.CodeBlock(res)
-        # TODO: Добавить тесты для ImageMd
-        res = CoreMarkdown.ImgMd(res)
-        # TODO: Реализовать вспомогательный текст (символ `> ` в начале строки)
-
-        return res
+        return self.goEndBuild(self.goMDPars(self.goMDDRYPars(self.text_mddry, path, 'html')))
 
     def goEndBuild(self, text: str) -> str:
         """
@@ -85,73 +180,22 @@ class Parsing:
         1. ReturnValuesWereHiddenFromPreTag
         2. ReturnLastInsert
         """
+        return f'{html_head}{self._ReturnValuesWereHiddenFromPreTag(f"{text}{self._ReturnLastInsert()}")}{HTML_JS.Hotkey.result}'
 
-        def ReturnValuesWereHiddenFromPreTag(text_html: str) -> str:
-            """
-            Вернуть значения, которые были скрыты из тега <pre>
-            """
-            for k, v in self.cache_comment.items():
-                text_html = text_html.replace(k, v)
-            return text_html
 
-        return ReturnValuesWereHiddenFromPreTag(f"{text}{self._ReturnLastInsert()}")
+class ParsingToMarkdown(ParsingBase):
+    """
+    Класс для парсинга файлов в формате `mddry` и конвертации их в стандартный Markdown
+    """
 
-    @staticmethod
-    def _ReturnLastInsert() -> str:
+    def goPars(self, path: str) -> str:
         """
-        Вернуть значение которые были отложены для вставки, сейчас это JS код.
-        Это нужно для того чтобы не было экранирования JS кода при парсинге
+        Этапы конвертации
         """
-        return ''.join(StoreDoc.LastInsert)
+        return self.goEndBuild(self.goMDPars(self.goMDDRYPars(self.text_mddry, path, 'md')))
 
-    def ExcludeComment(self, text: str) -> str:
+    def goEndBuild(self, text: str) -> str:
         """
-        Исключение комментариев из кода
-
-        1. ScreeningLt_Gt_Symbol_CodeLine
-        2. ExcludePre
-        3. ScreeningLt_Gt_Symbol_ALlText
-        4. DeleteComment
+        Конечный этап сборки
         """
-
-        def ScreeningLt_Gt_Symbol_CodeLine(text_html: str) -> str:
-            """
-            Экранировать символьны меньше больше в обратных кавычках `
-            :param text_html:
-            """
-            return REGEX.CodeLine.sub(lambda m: HTML_CLASS.ReplaceGtLt(m.group(0)), text_html)
-
-        def ExcludePre(text_html: str) -> str:
-            """
-            Заменяем текст в теге `<pre>` на хеш сумму данных, а сами данные записывает в `self.cache_comment`,
-            в конце компиляции по этому хешу будут вставлены значения.
-            """
-
-            def _repl_tag(repl: str, date: str, name_tag: str):
-                """Замена данных на хеш, и запись в `self.cache_comment`"""
-                # Экранирование больше меньше в тексте тега <pre>
-                len_name_tag: int = len(name_tag)
-                date = f"<{name_tag}>{HTML_CLASS.ReplaceGtLt(date[len_name_tag + 2:-(len_name_tag + 3)])}</{name_tag}>"
-                # Получаем хеш сумму того что получилось
-                _hash = md5(date.encode()).hexdigest()
-                # Записываем в кеш
-                self.cache_comment[_hash] = date
-                return repl.format(date=_hash)
-
-            return HtmlTag.SubTag(HtmlTag.ParseTag(text_html, 'pre'), '{date}', text_html, _repl_tag)
-
-        def DeleteComment(text_html: str) -> str:
-            """
-            Скрыть комментарии `%%Текст%%` из текста
-            """
-            return REGEX.CommentMD.sub(lambda m: f"""<div hidden="">{m['body']}</div>""", text_html)
-
-        def ScreeningLt_Gt_Symbol_ALlText(text_html: str) -> str:
-            """
-            Экранировать символьны меньше больше во всем тексте
-            :param text_html:
-            :return:
-            """
-            return HTML_CLASS.ReplaceGtLt(text_html)
-
-        return DeleteComment(ScreeningLt_Gt_Symbol_ALlText(ExcludePre(ScreeningLt_Gt_Symbol_CodeLine(text))))
+        return self._ReturnValuesWereHiddenFromPreTag(text)
