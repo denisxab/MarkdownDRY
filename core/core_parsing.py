@@ -20,12 +20,20 @@ class ParsingBase:
         self.text_mddry: str = text_mddry
 
     def goMDDRYPars(self, text: str, path: str, type_out: Literal['html', 'md']) -> str:
-        """Парсинг MDDRY"""
+        """
+        Парсинг MDDRY
+
+        :param text: Текст который нужно обработать
+        :param path: Корневой путь от которого будет идти построения ссылок на файлы
+        :param type_out: Во что нужно компилировать текст в стандартный `Markdown` или в `HTML`
+        """
         res = CoreMarkdownDRY.IndisputableInsertCodeFromFile(text, path)
         res = self.ExcludeComment(res, type_out)
+        # TODO: Типы переменных, и два варианта парсинга в MD и в HTML
         res = CoreMarkdownDRY.HeaderMain(res, type_out)
-        # ------
         res = CoreMarkdownDRY.ReferenceBlock(res, type_out)
+        # TODO: Проверить как работает UseReferenceBlock, нет примеров использования в документации
+        res = CoreMarkdownDRY.UseReferenceBlock(res)
         res = CoreMarkdownDRY.MathSpan(res, type_out)
         res = CoreMarkdownDRY.DropdownBlock(res, type_out)
         res = CoreMarkdownDRY.HighlightBlock(res, type_out)
@@ -71,10 +79,10 @@ class ParsingBase:
         """
         Исключение комментариев из кода
 
-        1. ScreeningLt_Gt_Symbol_CodeLine
-        2. ExcludePre
-        3. ScreeningLt_Gt_Symbol_ALlText
-        4. DeleteComment
+        1. _ScreeningLt_Gt_Symbol_CodeLine
+        2. _ExcludePre
+        3. _ScreeningLt_Gt_Symbol_ALlText
+        4. _HiddenComment
         """
 
         def _ScreeningLt_Gt_Symbol_CodeLine(text_html: str) -> str:
@@ -104,9 +112,9 @@ class ParsingBase:
 
             return HtmlTag.SubTag(HtmlTag.ParseTag(text_html, 'pre'), '{date}', text_html, repl_tag)
 
-        def _DeleteComment(text_html: str) -> str:
+        def _HiddenComment(text_html: str) -> str:
             """
-            Скрыть комментарии `%%Текст%%` из текста
+            Скрыть комментарии (`%%Текст%%`) из текста
             """
             return REGEX.CommentMD.sub(lambda m: f"""<div hidden="">{m['body']}</div>""", text_html)
 
@@ -116,7 +124,10 @@ class ParsingBase:
             """
             return HTML_CLASS.ReplaceGtLt(text_html)
 
-        return _DeleteComment(_ScreeningLt_Gt_Symbol_ALlText(_ExcludePre(_ScreeningLt_Gt_Symbol_CodeLine(text))))
+        if type_out == 'html':
+            return _HiddenComment(_ScreeningLt_Gt_Symbol_ALlText(_ExcludePre(_ScreeningLt_Gt_Symbol_CodeLine(text))))
+        else:
+            return _HiddenComment(_ExcludePre(text))
 
     # ---------------------------------------------#
 

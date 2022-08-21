@@ -243,7 +243,8 @@ class REGEX:
     # - Математически блок - #
     # Для поиска математических блоков
     MathSpan: re.Pattern = re.compile(
-        '`(?P<preliminary_response>\d*)=(?P<body>[^\n`]+)`'
+        '`(?P<preliminary_response>\d*)=(?P<body>[^\n`]+)`:?(?P<type>[^ \n.,]+)?'
+        # '`(?P<preliminary_response>\d*)=(?P<body>[^\n`]+)`'
     )
     # ------------------------
 
@@ -452,7 +453,8 @@ class StoreDoc:
             _res = cls.date[header][2].get(name, ('', ''))
             if not _res:
                 # Если не найдено в текущем заголовке, то ищем в вышестоящих заголовках
-
+                # TODO: Оптимизировать алгоритм поиска в других заголовка, но перед этим должны быть тесты чтобы
+                #   проверить правильность работы
                 # Получаем заголовки в которых объявлена такая переменная
                 _tmp: list[tuple[str, cls.data_body]] = [
                     (k, v)
@@ -510,13 +512,13 @@ class CoreMarkdownDRY:
         else:
             return REGEX.ReferenceBlock.sub(MDDRY_TO_MD.ReferenceBlock, source_text)
 
-    @classmethod
-    def UseReferenceBlock(cls, source_text: str,
-                          StoreDocs_ReferenceBlock: StoreDoc.ReferenceBlock = None) -> Optional[str]:
+    @staticmethod
+    def UseReferenceBlock(source_text: str,
+                          StoreDocs_ReferenceBlock: StoreDoc.ReferenceBlock = None
+                          ) -> Optional[str]:
         """
         Ссылочный блок использование
 
-        :param source_text:
         :param StoreDocs_ReferenceBlock: Хранилище с объявленными ссылочными блоками
         """
         if not StoreDocs_ReferenceBlock:
@@ -573,7 +575,10 @@ class CoreMarkdownDRY:
         Математический размах
         """
         # TODO: Реализовать type_out: Literal['html', 'md']
-        return REGEX.MathSpan.sub(MDDRY_TO_HTML.MathSpan, source_text)
+        if type_out == 'html':
+            return REGEX.MathSpan.sub(MDDRY_TO_HTML.MathSpan, source_text)
+        else:
+            return source_text
 
     @classmethod
     def InsertCodeFromFile(cls, source_text: str, self_path: str, type_out: Literal['html', 'md']) -> Optional[str]:
@@ -640,108 +645,112 @@ class CoreMarkdownDRY:
         Поиск заголовка и его тела
         """
         # TODO: реализовать type_out: Literal['html', 'md']
-        res = REGEX.HeaderMain.sub(MDDRY_TO_HTML.HeaderMain, source_text)
+        if type_out == 'html':
+            res = REGEX.HeaderMain.sub(MDDRY_TO_HTML.HeaderMain, source_text)
 
-        def create_table_contents_from_HTML(
-                hed: StoreDoc.HeaderMain.data_type,
-                template_li: str = "<li>{header}</li>") -> str:
-            """
-            Сделать оглавление в формате HTML
+            def create_table_contents_from_HTML(
+                    hed: StoreDoc.HeaderMain.data_type,
+                    template_li: str = "<li>{header}</li>"
+            ) -> str:
+                """
+                Сделать оглавление в формате HTML
 
-            :param template_li: Шаблон для элемента оглавления
-            :param hed: ИмяЗаголовка:(УровеньЗаголовка, ЛюбоеЧисло, ЛюбойСловарь)
+                :param template_li: Шаблон для элемента оглавления
+                :param hed: ИмяЗаголовка:(УровеньЗаголовка, ЛюбоеЧисло, ЛюбойСловарь)
 
-            :ПРИМЕР:
+                :ПРИМЕР:
 
-            IN:
-            {
-                'Стек технологий': (1, 0, {}),
-                'БД': (2, 0, {}),
-                'SQL': (3, 0, {}),
-                'NoSQL': (3, 0, {}),
-                'Frontend': (2, 0, {}),
-                'Брокеры сообщений': (2, 0, {}),
-                'Диплой': (2, 0, {}),
-                'Ссылки на документацию': (1, 0, {}),
-                'Ошибки': (1, 0, {}),
-                'Ошибки связанные с API': (2, 1, {}),
-                'Ошибки связанные с БД': (2, 1, {}),
-                'Ошибки в UI': (2, 1, {}),
-                'Ошибки связанные с VPN': (2, 1, {}),
-                'Ошибки связанные с Легаси кодом': (2, 1, {}),
-                'Готовые решения задач': (1, 0, {})
-            }
-            --------------------------------------------------
-            OUT:
-            <ol>
-                <li>Стек технологий</li>
+                IN:
+                {
+                    'Стек технологий': (1, 0, {}),
+                    'БД': (2, 0, {}),
+                    'SQL': (3, 0, {}),
+                    'NoSQL': (3, 0, {}),
+                    'Frontend': (2, 0, {}),
+                    'Брокеры сообщений': (2, 0, {}),
+                    'Диплой': (2, 0, {}),
+                    'Ссылки на документацию': (1, 0, {}),
+                    'Ошибки': (1, 0, {}),
+                    'Ошибки связанные с API': (2, 1, {}),
+                    'Ошибки связанные с БД': (2, 1, {}),
+                    'Ошибки в UI': (2, 1, {}),
+                    'Ошибки связанные с VPN': (2, 1, {}),
+                    'Ошибки связанные с Легаси кодом': (2, 1, {}),
+                    'Готовые решения задач': (1, 0, {})
+                }
+                --------------------------------------------------
+                OUT:
                 <ol>
-                    <li>БД</li>
+                    <li>Стек технологий</li>
                     <ol>
-                        <li>SQL</li>
-                        <li>NoSQL</li>
+                        <li>БД</li>
+                        <ol>
+                            <li>SQL</li>
+                            <li>NoSQL</li>
+                        </ol>
+                        <li>Frontend</li>
+                        <li>Брокеры сообщений</li>
+                        <li>Диплой</li>
                     </ol>
-                    <li>Frontend</li>
-                    <li>Брокеры сообщений</li>
-                    <li>Диплой</li>
+                    <li>Ссылки на документацию</li>
+                    <li>Ошибки</li>
+                    <ol>
+                        <li>Ошибки связанные с API</li>
+                        <li>Ошибки связанные с БД</li>
+                        <li>Ошибки в UI</li>
+                        <li>Ошибки связанные с VPN</li>
+                        <li>Ошибки связанные с Легаси кодом</li>
+                    </ol>
+                    <li>Готовые решения задач</li>
                 </ol>
-                <li>Ссылки на документацию</li>
-                <li>Ошибки</li>
-                <ol>
-                    <li>Ошибки связанные с API</li>
-                    <li>Ошибки связанные с БД</li>
-                    <li>Ошибки в UI</li>
-                    <li>Ошибки связанные с VPN</li>
-                    <li>Ошибки связанные с Легаси кодом</li>
-                </ol>
-                <li>Готовые решения задач</li>
-            </ol>
-            --------------------------------------------------
+                --------------------------------------------------
 
-            """
-            _tmp = [(k, v) for k, v in hed.items()]
-            _last: int = 0
-            _res: list[str] = []
-            for _val in _tmp:
-                _next: int = _val[1][0]
-                if _next > _last:
-                    _res.append("<ol>")
-                elif _next < _last:
-                    _res.append("</ol>")
-                # Не скрытый заголовок попадает в оглавление
-                if _val[1][1] != HeaderType.Hide.value:
-                    _res.append(template_li.format(
-                        # Экранированный уникальный id заголовка
-                        header_esp=_val[1][3]
-                        # Вставляем текст как есть
-                        , header_raw=_val[0])
-                    )
-                _last = _next
-            _res.append("</ol>")
-            return ''.join(_res)
+                """
+                _tmp = [(k, v) for k, v in hed.items()]
+                _last: int = 0
+                _res: list[str] = []
+                for _val in _tmp:
+                    _next: int = _val[1][0]
+                    if _next > _last:
+                        _res.append("<ol>")
+                    elif _next < _last:
+                        _res.append("</ol>")
+                    # Не скрытый заголовок попадает в оглавление
+                    if _val[1][1] != HeaderType.Hide.value:
+                        _res.append(template_li.format(
+                            # Экранированный уникальный id заголовка
+                            header_esp=_val[1][3]
+                            # Вставляем текст как есть
+                            , header_raw=_val[0])
+                        )
+                    _last = _next
+                _res.append("</ol>")
+                return ''.join(_res)
 
-        StoreDoc.LastInsert.append(f"""
-<script>
-{HTML_JS.HeaderMain}
-</script>
-        """[1:])
-        # Формируем навигационное оглавление по заголовкам
-        return "{menu}{res}".format(menu=f"""
-<div id="{HTML_CLASS.menu.value}">
-    <!-- Скрыть оглавление -->
-    <input type="button" id="bt_show_menu" value="<<"
-           onclick="{HTML_CLASS.menu.value}_hidden()">
-    <!-- Развернуть оглавление -->
-    <input type="button" id="bt_hidden_menu" value=">>"
-           onclick="{HTML_CLASS.menu.value}_show()"/>
-    <!-- Темы оглавления -->
-    <div id="{HTML_CLASS.detail_menu.value}">
-        <ol>
-            {create_table_contents_from_HTML(StoreDoc.HeaderMain.date, '<li><a href="#{header_esp}">{header_raw}</a></li>')}
-        </ol>
-    </div>
-</div>
-"""[1:], res=res)
+            StoreDoc.LastInsert.append(f"""
+            <script>
+            {HTML_JS.HeaderMain}
+            </script>
+            """[1:])
+            # Формируем навигационное оглавление по заголовкам
+            return "{menu}{res}".format(menu=f"""
+            <div id="{HTML_CLASS.menu.value}">
+                <!-- Скрыть оглавление -->
+                <input type="button" id="bt_show_menu" value="<<"
+                       onclick="{HTML_CLASS.menu.value}_hidden()">
+                <!-- Развернуть оглавление -->
+                <input type="button" id="bt_hidden_menu" value=">>"
+                       onclick="{HTML_CLASS.menu.value}_show()"/>
+                <!-- Темы оглавления -->
+                <div id="{HTML_CLASS.detail_menu.value}">
+                    <ol>
+                        {create_table_contents_from_HTML(StoreDoc.HeaderMain.date, '<li><a href="#{header_esp}">{header_raw}</a></li>')}
+                    </ol>
+                </div>
+            </div>
+            """[1:], res=res)
+        else:
+            return source_text
 
     @classmethod
     def MultiLineTables(cls, source_text: str, type_out: Literal['html', 'md']) -> Optional[str]:
@@ -749,7 +758,10 @@ class CoreMarkdownDRY:
         Многострочные таблицы, и обычные
         """
         # TODO: реализовать type_out: Literal['html', 'md']
-        return REGEX.MultiLineTables.sub(MDDRY_TO_HTML.MultiLineTables, source_text)
+        if type_out == 'html':
+            return REGEX.MultiLineTables.sub(MDDRY_TO_HTML.MultiLineTables, source_text)
+        else:
+            return source_text
 
     class DeepLogic:
         """Углубленная логика MarkdownDRY"""
@@ -1009,7 +1021,6 @@ class MDDRY_TO_HTML:
         Высчитываем математическое выражение с помощью SymPy, и возвращаем результат выражения в виде `HTML`
         """
         # TODO: Поддержка типов для результата математического выражения, это должно распространятся также на переменные
-
         text: str = m['body']
         return f"""<span class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.MathSpan.value}"><span class="math_result">{MDDRY_TO_MD.MathSpan(m)}</span>={text}</span>"""
 
@@ -1056,7 +1067,7 @@ class MDDRY_TO_HTML:
         """
 
         # Получаем имя заголовка
-        name_raw = m['name']
+        name_head = m['name']
         # Получим тело заголовка
         body_header: str = m['body']
         # Получаем тип заголовка
@@ -1070,42 +1081,59 @@ class MDDRY_TO_HTML:
         # Получаем уровень заголовка
         level: Literal[1, 2, 3, 4, 5, 6] = len(m['lvl'])
         # Добавляем заголовок в кеш, получаем id для заголовка
-        name_from_id = StoreDoc.HeaderMain.addHeaders(name_raw, level, res_HeadersType)
+        name_from_id = StoreDoc.HeaderMain.addHeaders(name_head, level, res_HeadersType)
 
         #: Поиск инициализации переменных
         def _vars_init(_m: re.Match) -> str:
-            # Обработать вложенных переменных, То есть когда мы обращаемся к другой переменной во время инициализации текущей
             """
             Наглядный пример:
 
             - [=Имя](Иван)
             - [=Фамилия]([=Имя] Иванов)
-            - [=Отчество]([=Имя] Иванов Иванович:ТипИмяОтчество)
+            - [=Отчество]([=Имя] Иванов Иванович):ТипИмяОтчество
 
             В итоге `[=Фамилия]` будет равен Иванов Иван
             """
-
-            # Ищем вложенные переменной и подставляем их значение в текущую переменную.
+            # Обработать вложенных переменных, То есть когда мы обращаемся к другой переменной во время инициализации текущей,
+            # ищем вложенные переменной и подставляем их значение в текущую переменную.
             _nested_var = REGEX.VarsGet.sub(lambda _n_v:
-                                            StoreDoc.HeaderMain.getVar(name_raw, _n_v['name'], context=_m.group(0))[0],
+                                            StoreDoc.HeaderMain.getVar(name_head, _n_v['name'], context=_m.group(0))[0],
                                             _m['value']
                                             )
             # Переменная с результатом
             res_var = _nested_var if _nested_var else _m['value']
-            # Проврем на то что в значение есть `MathSpan`
+            # Проврем на возможность наличия в значение математического выражения `MathSpan`
             is_math_span = REGEX.MathSpan.match(res_var)
             if is_math_span:
                 # Если есть `MathSpan`, то высчитываем выражение.
                 res_var = MDDRY_TO_MD.MathSpan(is_math_span)
-            # Записываем в кеш
-            StoreDoc.HeaderMain.addVar(name_raw, _m['name'], res_var, _m['type'])
-            # Скрываем из текста инициализацию переменных
-            return f"%%{_m['name']}={res_var}%%"
+            # Записываем переменные в кеш заголовка
+            StoreDoc.HeaderMain.addVar(name_head, _m['name'], res_var, _m['type'])
+            # Скрываем из выходного текста инициализацию переменных,
+            # все данные о переменных теперь хранятся в `StoreDoc.HeaderMain`
+            return f"%%{_m['name']}={res_var}:{_m['type']}%%"
+
+        def _vars_get_from_math_span(_m: re.Match) -> str:
+            """
+            Вставка значений в места, где идет обращение к переменным,
+            область вставки внутри математического выражению `MathSpan`.
+            """
+            res = []
+
+            def __self(_m2: re.Match) -> str:
+                _res = StoreDoc.HeaderMain.getVar(name_head, _m2['name'], default=_m2.group(0))
+                res.append((_m2['name'], *_res))
+                return _res[0]
+
+            REGEX.VarsGet.sub(__self, _m['body'])
+            return StoreDoc.HeaderMain.getVar(name_head, _m['name'], default=_m.group(0))[0]
 
         def _vars_get(_m: re.Match) -> str:
             """
-            Вставка значений в места, где идет обращение к переменным
+            Вставка значений и тип(переменной) в места, где идет обращение к переменным.
+            Область вставки во всем тексе.
             """
+
             # TODO: придумать как можно в MathSpan запихнуть имя перееденной и её тип, чтобы можно было в HTML посмотреть из
             #  каких переменных и типов был получен результат.
             """
@@ -1117,11 +1145,14 @@ class MDDRY_TO_HTML:
             3. Начать парсить `MathSpan` и искать в них переменные, делать расчеты и вставки переменных, сохранить куда
                 нибудь имена переменных и их типы, чтобы потом в HTML можно было посмотреть из чего состоит математическое выражение
             """
-            return '.'.join(StoreDoc.HeaderMain.getVar(name_raw, _m['name'], default=_m.group(0)))
+            return '.'.join(StoreDoc.HeaderMain.getVar(name_head, _m['name'], default=_m.group(0)))
 
         body_header = REGEX.VarsInit.sub(_vars_init, body_header)
+        # Обрабатываем обращения к переменным которые находятся внутри математического выражения `MathSpan`.
+        body_header = REGEX.MathSpan.sub(_vars_get_from_math_span, body_header)
+        # Обрабатываем обращения во всем тексе.
         body_header = REGEX.VarsGet.sub(_vars_get, body_header)
-        return f"""<h{level} id="{name_from_id}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}"><div class="{HTML_CLASS.mddry_name.value}">{name_raw}</div><span class="{HTML_CLASS.paragraph.value}">¶</span><div class="{HTML_CLASS.mddry_level.value}">{level}</div></h{level}>\n{body_header}\n"""
+        return f"""<h{level} id="{name_from_id}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}"><div class="{HTML_CLASS.mddry_name.value}">{name_head}</div><span class="{HTML_CLASS.paragraph.value}">¶</span><div class="{HTML_CLASS.mddry_level.value}">{level}</div></h{level}>\n{body_header}\n"""
 
     @classmethod
     def MultiLineTables(cls, m: re.Match) -> str:
@@ -1176,14 +1207,11 @@ class MDDRY_TO_MD:
     def UseReferenceBlock(m: re.Match, StoreDocs_ReferenceBlock: StoreDoc.ReferenceBlock) -> str:
         """
         Использование ссылочного блока
-        :param m:
-        :param StoreDocs_ReferenceBlock:
-        :return:
         """
         # Берем тест блока из хранилища
         res = StoreDocs_ReferenceBlock.get(m['use_ref_block'])
         if res:
-            return res + m['sm']
+            return f"{res}{m['sm']}"
         else:
             # Если такого блока нет в хранилище, то возвращаем тот же текст
             return m.group(0)

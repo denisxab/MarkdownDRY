@@ -6,7 +6,7 @@ from testfull_pack.file import ReadTextFile
 
 from core.core_html import html_head, HTML_JS
 from core.core_markdown_dry import CoreMarkdownDRY, StoreDoc
-from core.core_parsing import Parsing
+from core.core_parsing import ParsingToMarkdown,ParsingToHtml,ParsingBase
 
 
 def _next_test():
@@ -152,7 +152,7 @@ class Test_Pub:
     ])
     def test_LinkCode_NET_GitGist(self, T_in_data, T_check_data):
         """Проверка ссылки ан GitGist"""
-        res = f"{html_head}{CoreMarkdownDRY.LinkCode(T_in_data.text, self.path)}{Parsing._ReturnLastInsert()}"
+        res = f"{html_head}{CoreMarkdownDRY.LinkCode(T_in_data.text, self.path)}{ParsingBase._ReturnLastInsert()}"
         # T_check_data.write(res)
         assert res == T_check_data.text
 
@@ -167,7 +167,7 @@ class Test_Pub:
     ])
     def test_LinkCode(self, T_in_data, T_check_data: ReadTextFile):
         """Быстрая проверка"""
-        res = f"{html_head}{CoreMarkdownDRY.LinkCode(T_in_data.text, self.path)}{Parsing._ReturnLastInsert()}"
+        res = f"{html_head}{CoreMarkdownDRY.LinkCode(T_in_data.text, self.path)}{ParsingBase._ReturnLastInsert()}"
         # T_check_data.write(res)
         assert res == T_check_data.text
 
@@ -228,7 +228,7 @@ class Test_Pub:
     ])
     def test_MathSpan_Upgrade(self, T_in_data, T_check_data):
         # TODO: Сделать апгрейд MathSpan.
-        res = f"{html_head}{CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text))}"
+        res = f"{html_head}{CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text, 'html'), 'html')}"
         # T_check_data.write(res)
         # assert res == T_check_data.text
 
