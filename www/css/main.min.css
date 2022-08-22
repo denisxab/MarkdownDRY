@@ -290,6 +290,12 @@ div > pre.code code::before {
   padding: 5px 35px 5px 25px;
   white-space: nowrap;
 }
+.MarkdownDRY.MathSpanBody .MathSpanInfo .MathSpanType {
+  color: #88c0d0;
+  display: inline;
+  position: absolute;
+  right: 5px;
+}
 .MarkdownDRY.MathSpanBody .MathSpan {
   color: #ebcb8b;
   background: #434c5e;

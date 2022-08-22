@@ -361,6 +361,13 @@ div > pre {
             background: $ЦветФонаВсплывающегоОкна;
             padding: 5px 35px 5px 25px;
             white-space: nowrap;
+            // Выделение типа в подсказке
+            .MathSpanType {
+                color: $ЯркоеВыделение2;
+                display: inline;
+                position: absolute;
+                right: 5px;
+            }
         }
         // Математический размах
         .MathSpan {

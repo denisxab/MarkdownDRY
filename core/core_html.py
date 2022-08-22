@@ -43,6 +43,7 @@ class HTML_CLASS(Enum):
     MathSpanInfo = "MathSpanInfo"
     MathSpanBody = "MathSpanBody"
     MathResult = 'MathResult'
+    MathSpanType = 'MathSpanType'
     HiddenHeaders = "HiddenHeaders"
     StandardHeaders = "StandardHeaders"
     InsertCodeFromFile = 'InsertCodeFromFile'
@@ -300,16 +301,16 @@ class HTML_JS:
      // а если её нет, то пропускам такое выражение 
      if (elm.previousElementSibling !== null) {{
           // Наведение на элемент
-          elm.addEventListener("mouseover", () => {{
+          elm.addEventListener("mouseenter", () => {{
             console.log(elm);
             elm.previousElementSibling.style.visibility='visible';
             // Подсказка должна быть по центру математического выражения
             elm.previousElementSibling.style.left = `-${{elm.previousElementSibling.offsetWidth / 3}}px`; 
           }});
           // Покидание элемента
-          elm.previousElementSibling.addEventListener("mouseout", () => {{
+          elm.previousElementSibling.addEventListener("mouseleave", () => {{
             console.log(elm);
-            elm.previousElementSibling.style.visibility='hidden';
+            elm.previousElementSibling.style.visibility='hidden'; 
           }});
       }}
     }})}})();

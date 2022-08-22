@@ -87,7 +87,7 @@
 - Цена со скидкой
     - [весь-летний-сезон-общественно-транспорте-скидка]
 <div class="MarkdownDRY MathSpanBody">
-    
+    <div class="MathSpanInfo">___<div class="MathSpanType">руб</div></div>
     <span class="MathSpan"><span class="MathResult">4</span>=2+2</span>
 </div>
 Как заявлено у электросамоката `kugo m4` его бактерии хватит
@@ -96,7 +96,7 @@
 800. циклов зарядки
 
 <div class="MarkdownDRY MathSpanBody">
-    <div class="MathSpanInfo">=[Сколько-теоретически-можно-проехать-на-одной-батарее]+2+[Билет-в-автобус]:км</div>
+    <div class="MathSpanInfo">=[Сколько-теоретически-можно-проехать-на-одной-батарее]+2+[Билет-в-автобус]<div class="MathSpanType">км</div></div>
     <span class="MathSpan"><span class="MathResult">16062</span>=16000+2+60</span>
 </div> 
 
@@ -107,7 +107,7 @@
 есть за один зарядный цикл мы можем проехать по 35 км. Это получается мы можем
 теоретически проехать
 <div class="MarkdownDRY MathSpanBody">
-    <div class="MathSpanInfo">=[Сколько-теоретически-можно-проехать-на-одной-батарее]:км</div>
+    <div class="MathSpanInfo">=[Сколько-теоретически-можно-проехать-на-одной-батарее]<div class="MathSpanType">км</div></div>
     <span class="MathSpan"><span class="MathResult">16000</span>=16000</span>
 </div> до полной
 замены батарею(притом 800.
@@ -116,7 +116,7 @@
 циклов зарядов можно умножать на два). Цена на новую батарею можно прикинуть так
 `1A` = `1000.руб`:руб, и для замены 18.АмперA батареи нам
 нужно <div class="MarkdownDRY MathSpanBody">
-    <div class="MathSpanInfo">=[Амер-в-батарее]*[Цена-за-один-ампер]</div>
+    <div class="MathSpanInfo">=[Амер-в-батарее]*[Цена-за-один-ампер]<div class="MathSpanType"></div></div>
     <span class="MathSpan"><span class="MathResult">18000</span>=18*1000</span>
 </div>.
 
@@ -124,7 +124,7 @@
 км, и теоретически(если бы лито-ионные аккумуляторы не теряли емкость сами по
 себе от времени) то я бы мог проездить на одной батареи
 еще <div class="MarkdownDRY MathSpanBody">
-    <div class="MathSpanInfo">=([Сколько-теоретически-можно-проехать-на-одной-батарее]-[Сколько-км-я-проезжаю-за-лето])/[Сколько-км-я-проезжаю-за-лето]:лет</div>
+    <div class="MathSpanInfo">=([Сколько-теоретически-можно-проехать-на-одной-батарее]-[Сколько-км-я-проезжаю-за-лето])/[Сколько-км-я-проезжаю-за-лето]<div class="MathSpanType">лет</div></div>
     <span class="MathSpan"><span class="MathResult">15</span>=(16000-1000)/1000</span>
 </div>, ну а в реальности батарея прослужит не более 5 лет, просто из-за
 деградации от времени.
@@ -136,14 +136,14 @@
   только 5.месяц
   месяца
   лета <div class="MarkdownDRY MathSpanBody">
-    <div class="MathSpanInfo">=[весь-летний-сезон-общественно-транспорте-скидка]*[летний-сезон]:рублей</div>
+    <div class="MathSpanInfo">=[весь-летний-сезон-общественно-транспорте-скидка]*[летний-сезон]<div class="MathSpanType">рублей</div></div>
     <span class="MathSpan"><span class="MathResult">86400</span>=17280*5</span>
 </div>
 
 
 - Итого: В выше указных условиях ездить на электросамокате в
   <div class="MarkdownDRY MathSpanBody">
-    <div class="MathSpanInfo">2.84=([весь-летний-сезон-общественно-транспорте-скидка]*[летний-сезон])-([Амер-в-батарее]*[Цена-за-один-ампер])/([Амер-в-батарее]*[Цена-за-один-ампер])</div>
+    <div class="MathSpanInfo">2.84=([весь-летний-сезон-общественно-транспорте-скидка]*[летний-сезон])-([Амер-в-батарее]*[Цена-за-один-ампер])/([Амер-в-батарее]*[Цена-за-один-ампер])<div class="MathSpanType"></div></div>
     <span class="MathSpan"><span class="MathResult">!ERROR!</span>=(17280*5)-(18*1000)/(18*1000)</span>
 </div>
   дешевле чем на общественном транспорте.
@@ -213,16 +213,16 @@ document.querySelectorAll(".MathSpan").forEach((elm) => {
 // а если её нет, то пропускам такое выражение 
 if (elm.previousElementSibling !== null) {
 // Наведение на элемент
-elm.addEventListener("mouseover", () => {
+elm.addEventListener("mouseenter", () => {
 console.log(elm);
 elm.previousElementSibling.style.visibility='visible';
 // Подсказка должна быть по центру математического выражения
 elm.previousElementSibling.style.left = `-${elm.previousElementSibling.offsetWidth / 3}px`; 
 });
 // Покидание элемента
-elm.previousElementSibling.addEventListener("mouseout", () => {
+elm.previousElementSibling.addEventListener("mouseleave", () => {
 console.log(elm);
-elm.previousElementSibling.style.visibility='hidden';
+elm.previousElementSibling.style.visibility='hidden'; 
 });
 }
 })})();

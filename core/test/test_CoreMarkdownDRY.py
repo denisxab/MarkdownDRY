@@ -161,7 +161,7 @@ class Test_Pub_To_HTML:
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/MathSpan_Upgrade.md',
-                         '006319752222cdef78feaf0c968d317a6fd4c7e63f8d80f2721b5ea670fb7091'),
+                         None),
             ReadTextFile('./dataset/pub/out/MathSpan_Upgrade.html',
                          None),
 
@@ -215,7 +215,7 @@ class Test_Pub_To_MD:
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/MathSpan_Upgrade.md',
-                         '006319752222cdef78feaf0c968d317a6fd4c7e63f8d80f2721b5ea670fb7091'),
+                         None),
             ReadTextFile('./dataset/pub/out/MathSpan_Upgrade.md',
                          None),
         ]

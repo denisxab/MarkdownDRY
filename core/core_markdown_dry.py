@@ -454,8 +454,7 @@ class StoreDoc:
             _res = cls.date[header][2].get(name, ('', ''))
             if not _res:
                 # Если не найдено в текущем заголовке, то ищем в вышестоящих заголовках
-                # TODO: Оптимизировать алгоритм поиска в других заголовка, но перед этим должны быть тесты чтобы
-                #   проверить правильность работы
+
                 # Получаем заголовки в которых объявлена такая переменная
                 _tmp: list[tuple[str, cls.data_body]] = [
                     (k, v)
@@ -1024,11 +1023,12 @@ class MDDRY_TO_HTML:
         :param info: Информацией о математическом выражение, например из каких переменных состоит математическое выражение
         """
         text: str = body if body else m['body']
+        type_math_span: str = m["type"] if m["type"] else ''
         # Ответ, Выражение
         res: tuple[str, str] = MDDRY_TO_MD.MathSpan(m, body)
         return f"""
 <div class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.MathSpanBody.value}">
-    {f'<div class="{HTML_CLASS.MathSpanInfo.value}">{info}</div>' if info else ''}
+    {f'<div class="{HTML_CLASS.MathSpanInfo.value}">{info if info else "_" * len(type_math_span)}<div class="{HTML_CLASS.MathSpanType.value}">{type_math_span}</div></div>'}
     <span class="{HTML_CLASS.MathSpan.value}"><span class="{HTML_CLASS.MathResult.value}">{res[0]}</span>={res[1]}</span>
 </div>"""[1:]
 
@@ -1138,7 +1138,10 @@ class MDDRY_TO_HTML:
             res = REGEX.VarsGet.sub(_self, _m['body'])
             if is_math_span:
                 if type_out == 'html':
-                    return MDDRY_TO_HTML.MathSpan(_m, body=res, info=_m.group(0).replace('[=', '[').replace('`', ''))
+                    return MDDRY_TO_HTML.MathSpan(_m,
+                                                  body=res,
+                                                  info=re.sub(':[^ \n.,]+', '', _m.group(0)).replace('[=', '[').replace('`', '')
+                                                  )
                 else:
                     return '='.join(MDDRY_TO_MD.MathSpan(_m, body=res))
             else:
