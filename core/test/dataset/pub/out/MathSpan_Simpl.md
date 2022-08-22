@@ -1,10 +1,3 @@
-<head>
-    <meta charset="UTF-8">
-    <link href="../../../../../www/css/bootstrap-5.1.3-dist/main.css" rel="stylesheet">
-    <script src="../../../../../www/css/bootstrap-5.1.3-dist/main.js"></script>
-    <link rel="stylesheet" href="../../../../../www/css/main.min.css">
-    <link rel="stylesheet" href="../../../../../www/css/plugin.css">
-</head>
 <br># Увлекательная история о том, как я весело провел свое лето в офисе.
 <br>
 <br>04.08.2022
@@ -16,10 +9,7 @@
 <br>-[x] 20 http://support/TicketID=10101;ArticleID=253507#253373
 <br>-[x] 100 http://support/TicketID=10101;ArticleID=253504#253500
 
-<br><div class="MarkdownDRY MathSpanBody">
-    
-    <span class="MathSpan"><span class="MathResult">10</span>=450-30-30-140-120-100-20</span>
-</div>
+<br>10=450-30-30-140-120-100-20
 
 <hr>
 
@@ -31,10 +21,7 @@
 <br>-[x] 160 http://support/TicketID=10101
 <br>-[x] 40 http://support/TicketID=10101#247112
 
-<br><div class="MarkdownDRY MathSpanBody">
-    
-    <span class="MathSpan"><span class="MathResult">10</span>=450-20-100-120-160-40</span>
-</div>
+<br>10=450-20-100-120-160-40
 
 <hr>
 
@@ -46,10 +33,7 @@
 <br>-[x] 60 http://support/TicketID=10101#250129
 <br>-[x] 60 http://support/TicketID=10101;ArticleID=253164
 
-<br><div class="MarkdownDRY MathSpanBody">
-    
-    <span class="MathSpan"><span class="MathResult">10</span>=450-20-20-20-160-100-60-60</span>
-</div>
+<br>10=450-20-20-20-160-100-60-60
 
 <hr>
 
@@ -61,7 +45,4 @@
 <br>-[x] 100 http://support/TicketID=10101
 <br>-[x] 40 http://support/TicketID=10101#252945
 
-<br><div class="MarkdownDRY MathSpanBody">
-    
-    <span class="MathSpan"><span class="MathResult">10</span>=450-120-140-40-100-40</span>
-</div>
+<br>10=450-120-140-40-100-40

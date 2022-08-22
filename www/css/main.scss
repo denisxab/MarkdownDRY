@@ -27,6 +27,7 @@ body {
     background: $ЦветФона;
     color: $БазовыйЦветТекста;
     padding-left: 15px;
+    width: 100%;
 }
 
 // Заголовки
@@ -328,6 +329,8 @@ div > pre {
 }
 //----------------------------------------------------------------------------
 
+//----------------------------------------------------------------------------
+
 .MarkdownDRY {
     // Вставленный код
     &.InsertCodeFromFile {
@@ -340,18 +343,37 @@ div > pre {
             text-align: center;
         }
     }
-    // Математический размах
-    &.MathSpan {
-        color: $ЯркоеВыделение;
-        background: $ЦветФонаПодсказки;
-        border-radius: 6px;
-        padding: 2px 4px 2px 4px;
-        // Выделить ответ
-        .math_result {
-            color: $ЯркоеВыделение2;
+
+    &.MathSpanBody {
+        display: inline-block;
+        position: relative;
+        // Подсказка к математическому выражению
+        .MathSpanInfo {
+            text-align: center;
+            border-radius: 6px;
+            padding-bottom: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 100%;
+            left: -10%;
+            visibility: hidden;
+            color: $ЯркоеВыделение;
+            background: $ЦветФонаВсплывающегоОкна;
+            padding: 5px 35px 5px 25px;
+            white-space: nowrap;
+        }
+        // Математический размах
+        .MathSpan {
+            color: $ЯркоеВыделение;
+            background: $ЦветФонаПодсказки;
+            border-radius: 6px;
+            padding: 2px 4px 2px 4px;
+            // Выделить ответ
+            .MathResult {
+                color: $ЯркоеВыделение2;
+            }
         }
     }
-
     // Выделяемый блок
     &.HighlightBlock {
         padding: 10px;

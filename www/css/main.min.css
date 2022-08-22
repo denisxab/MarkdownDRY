@@ -3,6 +3,7 @@ body {
   background: #2e3440;
   color: #eceff4;
   padding-left: 15px;
+  width: 100%;
 }
 
 h1,
@@ -271,13 +272,31 @@ div > pre.code code::before {
   font-size: medium;
   text-align: center;
 }
-.MarkdownDRY.MathSpan {
+.MarkdownDRY.MathSpanBody {
+  display: inline-block;
+  position: relative;
+}
+.MarkdownDRY.MathSpanBody .MathSpanInfo {
+  text-align: center;
+  border-radius: 6px;
+  padding-bottom: 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: -10%;
+  visibility: hidden;
+  color: #ebcb8b;
+  background: #3b4252;
+  padding: 5px 35px 5px 25px;
+  white-space: nowrap;
+}
+.MarkdownDRY.MathSpanBody .MathSpan {
   color: #ebcb8b;
   background: #434c5e;
   border-radius: 6px;
   padding: 2px 4px 2px 4px;
 }
-.MarkdownDRY.MathSpan .math_result {
+.MarkdownDRY.MathSpanBody .MathSpan .MathResult {
   color: #88c0d0;
 }
 .MarkdownDRY.HighlightBlock {

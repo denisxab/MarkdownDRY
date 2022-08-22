@@ -28,7 +28,7 @@ class Test_Pars:
     ])
     def test_ParsingToHtml(self, T_in_data, T_check_data):
         res = ParsingToHtml(T_in_data.text).goPars(self.path)
-        T_check_data.write(res)
+        # T_check_data.write(res)
         print(res)
         # assert res == T_check_data.text
 

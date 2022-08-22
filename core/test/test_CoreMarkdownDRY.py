@@ -1,12 +1,13 @@
 from json import dumps, loads
 from pathlib import Path
+from typing import Literal
 
 from pytest import mark
 from testfull_pack.file import ReadTextFile
 
 from core.core_html import html_head, HTML_JS
 from core.core_markdown_dry import CoreMarkdownDRY, StoreDoc
-from core.core_parsing import ParsingToMarkdown,ParsingToHtml,ParsingBase
+from core.core_parsing import ParsingBase
 
 
 def _next_test():
@@ -119,6 +120,115 @@ class Test_Dev:
         assert res == T_check_data.text
 
 
+class Test_Pub_To_HTML:
+    """
+    Публичные тесты для конвертации в HTML
+    """
+
+    def setup(self):
+        self.type_out: Literal['html', 'md'] = 'html'
+        _next_test()
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/MathSpan_Simpl.md',
+                         'ec42c80aa7a3437cab8ab289b9f9c498046117b8f10cc38910fcadd520e3bf97'),
+            ReadTextFile('./dataset/pub/out/MathSpan_Simpl.html',
+                         None),
+
+        ]
+    ])
+    def test_MathSpan_Simpl(self, T_in_data, T_check_data):
+        """Быстрая проверка"""
+        res = f"{html_head}{CoreMarkdownDRY.MathSpan(T_in_data.text, self.type_out)}"
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/MathSpan.md',
+                         'c52f435a90dea50ca3c50e95ea996d5ca53e55ee9ac1f3903894aeef01dbea42'),
+            ReadTextFile('./dataset/pub/out/MathSpan.html',
+                         None),
+
+        ]
+    ])
+    def test_MathSpan(self, T_in_data, T_check_data):
+        res = f"{html_head}{CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text, self.type_out), self.type_out)}{''.join(StoreDoc.LastInsert)}{HTML_JS.Hotkey.result}"
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/MathSpan_Upgrade.md',
+                         '006319752222cdef78feaf0c968d317a6fd4c7e63f8d80f2721b5ea670fb7091'),
+            ReadTextFile('./dataset/pub/out/MathSpan_Upgrade.html',
+                         None),
+
+        ]
+    ])
+    def test_MathSpan_Upgrade(self, T_in_data, T_check_data):
+        """
+        Математическое выражение переменными и подсказками
+        """
+        res = f"{html_head}{CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text, self.type_out), self.type_out)}{''.join(StoreDoc.LastInsert)}{HTML_JS.Hotkey.result}{HTML_JS.MathSpan}"
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+
+class Test_Pub_To_MD:
+    """
+    Публичные тесты для конвертации в Markdown
+    """
+
+    def setup(self):
+        self.type_out: Literal['html', 'md'] = 'md'
+        _next_test()
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/MathSpan_Simpl.md',
+                         'ec42c80aa7a3437cab8ab289b9f9c498046117b8f10cc38910fcadd520e3bf97'),
+            ReadTextFile('./dataset/pub/out/MathSpan_Simpl.md',
+                         None),
+        ]
+    ])
+    def test_MathSpan_Simpl(self, T_in_data, T_check_data):
+        """Быстрая проверка"""
+        res = CoreMarkdownDRY.MathSpan(T_in_data.text, self.type_out)
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/MathSpan.md',
+                         'c52f435a90dea50ca3c50e95ea996d5ca53e55ee9ac1f3903894aeef01dbea42'),
+            ReadTextFile('./dataset/pub/out/MathSpan.md',
+                         None),
+        ]
+    ])
+    def test_MathSpan(self, T_in_data, T_check_data):
+        res = CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text, self.type_out), self.type_out)
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/MathSpan_Upgrade.md',
+                         '006319752222cdef78feaf0c968d317a6fd4c7e63f8d80f2721b5ea670fb7091'),
+            ReadTextFile('./dataset/pub/out/MathSpan_Upgrade.md',
+                         None),
+        ]
+    ])
+    def test_MathSpan_Upgrade(self, T_in_data, T_check_data):
+        """
+        Математическое выражение переменными и подсказками
+        """
+        res = CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text, self.type_out), self.type_out)
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+
 class Test_Pub:
     """
     Тесты публичных примеров
@@ -162,7 +272,6 @@ class Test_Pub:
                          'de14fc7157327ace051259ff96c7f34648daab78c2bad6fc2e8d1991475abace'),
             ReadTextFile('./dataset/pub/out/LinkCode.html',
                          '9da98369d24ab384b957eb679e6947d6edc7c3098600c39da7038ca4e446e9e2'),
-
         ]
     ])
     def test_LinkCode(self, T_in_data, T_check_data: ReadTextFile):
@@ -179,7 +288,6 @@ class Test_Pub:
                          None),
             ReadTextFile('./dataset/pub/out/store/HeaderMain.json',
                          '868ad22fa9545e1dfce87c6be30bddc55f05422438f6164657b883534ff6e2a1')
-
         ]
     ])
     def test_HeaderMain(self, T_in_data, T_check_data: ReadTextFile, T_check_store):
@@ -187,50 +295,6 @@ class Test_Pub:
         # T_check_data.write(res)
         assert dumps(StoreDoc.HeaderMain.date, ensure_ascii=False) == T_check_store.text
         assert res == T_check_data.text
-
-    @mark.parametrize(['T_in_data', 'T_check_data'], [
-        [
-            ReadTextFile('./dataset/pub/in/MathSpan_Simpl.md',
-                         'ec42c80aa7a3437cab8ab289b9f9c498046117b8f10cc38910fcadd520e3bf97'),
-            ReadTextFile('./dataset/pub/out/MathSpan_Simpl.html',
-                         None),
-
-        ]
-    ])
-    def test_MathSpan_Simpl(self, T_in_data, T_check_data):
-        """Быстрая проверка"""
-        res = f"{html_head}{CoreMarkdownDRY.MathSpan(T_in_data.text)}"
-        # T_check_data.write(res)
-        assert res == T_check_data.text
-
-    @mark.parametrize(['T_in_data', 'T_check_data'], [
-        [
-            ReadTextFile('./dataset/pub/in/MathSpan.md',
-                         'c52f435a90dea50ca3c50e95ea996d5ca53e55ee9ac1f3903894aeef01dbea42'),
-            ReadTextFile('./dataset/pub/out/MathSpan.html',
-                         None),
-
-        ]
-    ])
-    def test_MathSpan(self, T_in_data, T_check_data):
-        res = f"{html_head}{CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text))}{HTML_JS.Hotkey.result}"
-        # T_check_data.write(res)
-        assert res == T_check_data.text
-
-    @mark.parametrize(['T_in_data', 'T_check_data'], [
-        [
-            ReadTextFile('./dataset/pub/in/MathSpan_Upgrade.md',
-                         None),
-            ReadTextFile('./dataset/pub/out/MathSpan_Upgrade.html',
-                         None),
-
-        ]
-    ])
-    def test_MathSpan_Upgrade(self, T_in_data, T_check_data):
-        # TODO: Сделать апгрейд MathSpan.
-        res = f"{html_head}{CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text, 'html'), 'html')}"
-        # T_check_data.write(res)
-        # assert res == T_check_data.text
 
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [

@@ -243,7 +243,7 @@ class REGEX:
     # - Математически блок - #
     # Для поиска математических блоков
     MathSpan: re.Pattern = re.compile(
-        '`(?P<preliminary_response>\d*)=(?P<body>[^\n`]+)`:?(?P<type>[^ \n.,]+)?'
+        '`(?P<preliminary_response>\d*[,.]?\d*)=(?P<body>[^\n`]+)`:?(?P<type>[^ \n.,]+)?'
         # '`(?P<preliminary_response>\d*)=(?P<body>[^\n`]+)`'
     )
     # ------------------------
@@ -359,6 +359,7 @@ class StoreDoc:
         cls.DropdownBlock.clear()
         cls.HeaderMain.clear()
         cls.LinkCode.clear()
+        cls.LastInsert.clear()
 
     class LinkCode:
         """
@@ -574,11 +575,10 @@ class CoreMarkdownDRY:
         """
         Математический размах
         """
-        # TODO: Реализовать type_out: Literal['html', 'md']
         if type_out == 'html':
             return REGEX.MathSpan.sub(MDDRY_TO_HTML.MathSpan, source_text)
         else:
-            return source_text
+            return REGEX.MathSpan.sub(lambda m: '='.join(MDDRY_TO_MD.MathSpan(m)), source_text)
 
     @classmethod
     def InsertCodeFromFile(cls, source_text: str, self_path: str, type_out: Literal['html', 'md']) -> Optional[str]:
@@ -646,7 +646,7 @@ class CoreMarkdownDRY:
         """
         # TODO: реализовать type_out: Literal['html', 'md']
         if type_out == 'html':
-            res = REGEX.HeaderMain.sub(MDDRY_TO_HTML.HeaderMain, source_text)
+            res = REGEX.HeaderMain.sub(lambda m: MDDRY_TO_HTML.HeaderMain(m, type_out=type_out), source_text)
 
             def create_table_contents_from_HTML(
                     hed: StoreDoc.HeaderMain.data_type,
@@ -750,7 +750,7 @@ class CoreMarkdownDRY:
             </div>
             """[1:], res=res)
         else:
-            return source_text
+            return REGEX.HeaderMain.sub(lambda m: MDDRY_TO_HTML.HeaderMain(m, type_out=type_out), source_text)
 
     @classmethod
     def MultiLineTables(cls, source_text: str, type_out: Literal['html', 'md']) -> Optional[str]:
@@ -1016,13 +1016,22 @@ class MDDRY_TO_HTML:
 """[1:]
 
     @classmethod
-    def MathSpan(cls, m: re.Match) -> str:
+    def MathSpan(cls, m: re.Match, body: str = None, info: str = '') -> str:
         """
         Высчитываем математическое выражение с помощью SymPy, и возвращаем результат выражения в виде `HTML`
+
+        :param m:
+        :param body: Тело математического выражения, это нужно, для того чтобы передавать значения из переменных, а не сами переменные
+        :param info: Информацией о математическом выражение, например из каких переменных состоит математическое выражение
         """
-        # TODO: Поддержка типов для результата математического выражения, это должно распространятся также на переменные
-        text: str = m['body']
-        return f"""<span class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.MathSpan.value}"><span class="math_result">{MDDRY_TO_MD.MathSpan(m)}</span>={text}</span>"""
+        text: str = body if body else m['body']
+        # Ответ, Выражение
+        res: tuple[str, str] = MDDRY_TO_MD.MathSpan(m, body)
+        return f"""
+<div class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.MathSpanBody.value}">
+    {f'<div class="{HTML_CLASS.MathSpanInfo.value}">{info}</div>' if info else ''}
+    <span class="{HTML_CLASS.MathSpan.value}"><span class="{HTML_CLASS.MathResult.value}">{res[0]}</span>={res[1]}</span>
+</div>"""[1:]
 
     @classmethod
     def InsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
@@ -1051,7 +1060,7 @@ class MDDRY_TO_HTML:
 """[1:]
 
     @classmethod
-    def HeaderMain(cls, m: re.Match) -> str:
+    def HeaderMain(cls, m: re.Match, type_out: Literal['html', 'md']) -> str:
         """
         Ищем все заголовки. Нам нужно получить имя заголовка, его уровень, и его тело. После этого проверяем тип заголовка, он
         может быть обычным, а может быть скрытым. Потом находим инициализацию переменных. После этого заносим данные в кеш
@@ -1101,12 +1110,12 @@ class MDDRY_TO_HTML:
                                             _m['value']
                                             )
             # Переменная с результатом
-            res_var = _nested_var if _nested_var else _m['value']
+            res_var: str = _nested_var if _nested_var else _m['value']
             # Проврем на возможность наличия в значение математического выражения `MathSpan`
-            is_math_span = REGEX.MathSpan.match(res_var)
+            is_math_span: re.Match = REGEX.MathSpan.match(res_var)
             if is_math_span:
                 # Если есть `MathSpan`, то высчитываем выражение.
-                res_var = MDDRY_TO_MD.MathSpan(is_math_span)
+                res_var = MDDRY_TO_MD.MathSpan(is_math_span)[0]
             # Записываем переменные в кеш заголовка
             StoreDoc.HeaderMain.addVar(name_head, _m['name'], res_var, _m['type'])
             # Скрываем из выходного текста инициализацию переменных,
@@ -1118,32 +1127,28 @@ class MDDRY_TO_HTML:
             Вставка значений в места, где идет обращение к переменным,
             область вставки внутри математического выражению `MathSpan`.
             """
-            res = []
+            # Если в математическом выражение нет обращения к переменным, то пропускам такое выражение,
+            # его должны обработать отдельно на этапе `MathSpan`
+            is_math_span = False
 
-            def __self(_m2: re.Match) -> str:
-                _res = StoreDoc.HeaderMain.getVar(name_head, _m2['name'], default=_m2.group(0))
-                res.append((_m2['name'], *_res))
-                return _res[0]
+            def _self(_m2: re.Match) -> str:
+                nonlocal is_math_span
+                is_math_span = True
+                return StoreDoc.HeaderMain.getVar(name_head, _m2['name'], default=_m2.group(0))[0]
 
-            REGEX.VarsGet.sub(__self, _m['body'])
-            return StoreDoc.HeaderMain.getVar(name_head, _m['name'], default=_m.group(0))[0]
+            res = REGEX.VarsGet.sub(_self, _m['body'])
+            if is_math_span:
+                if type_out == 'html':
+                    return MDDRY_TO_HTML.MathSpan(_m, body=res, info=_m.group(0).replace('[=', '[').replace('`', ''))
+                else:
+                    return '='.join(MDDRY_TO_MD.MathSpan(_m, body=res))
+            else:
+                return _m.group(0)
 
         def _vars_get(_m: re.Match) -> str:
             """
             Вставка значений и тип(переменной) в места, где идет обращение к переменным.
             Область вставки во всем тексе.
-            """
-
-            # TODO: придумать как можно в MathSpan запихнуть имя перееденной и её тип, чтобы можно было в HTML посмотреть из
-            #  каких переменных и типов был получен результат.
-            """
-            Предполагаю это можно сделать если 
-            1. Сначала скрыть MathSpan перед вставками переменных
-            2. Вставить значения переменных во всем тексте(кроме MathSpan). Там по сути будет только одна переменна,
-                и там можно просто вставить текст и  через точку - тип переменной 
-            3. Вернуть `MathSpan`
-            3. Начать парсить `MathSpan` и искать в них переменные, делать расчеты и вставки переменных, сохранить куда
-                нибудь имена переменных и их типы, чтобы потом в HTML можно было посмотреть из чего состоит математическое выражение
             """
             return '.'.join(StoreDoc.HeaderMain.getVar(name_head, _m['name'], default=_m.group(0)))
 
@@ -1152,7 +1157,10 @@ class MDDRY_TO_HTML:
         body_header = REGEX.MathSpan.sub(_vars_get_from_math_span, body_header)
         # Обрабатываем обращения во всем тексе.
         body_header = REGEX.VarsGet.sub(_vars_get, body_header)
-        return f"""<h{level} id="{name_from_id}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}"><div class="{HTML_CLASS.mddry_name.value}">{name_head}</div><span class="{HTML_CLASS.paragraph.value}">¶</span><div class="{HTML_CLASS.mddry_level.value}">{level}</div></h{level}>\n{body_header}\n"""
+        if type_out == 'html':
+            return f"""<h{level} id="{name_from_id}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}"><div class="{HTML_CLASS.mddry_name.value}">{name_head}</div><span class="{HTML_CLASS.paragraph.value}">¶</span><div class="{HTML_CLASS.mddry_level.value}">{level}</div></h{level}>\n{body_header}\n"""
+        else:
+            return f"""{m['lvl']} {m['hidden']}{name_head}\n{body_header}"""
 
     @classmethod
     def MultiLineTables(cls, m: re.Match) -> str:
@@ -1222,9 +1230,12 @@ class MDDRY_TO_MD:
         return Path(self_path, m['path']).resolve().read_text()
 
     @classmethod
-    def MathSpan(cls, m: re.Match) -> str:
+    def MathSpan(cls, m: re.Match, body: str = None) -> tuple[str, str]:
         """
         Высчитываем математическое выражение с помощью SymPy, и возвращаем результат выражения
+
+        :param m:
+        :param body: Тело математического выражения, это нужно, для того чтобы передавать значения из переменных, а не сами переменные
         """
         """
        Доработать математический размах, сделать подсказку переменной, и её типа,
@@ -1233,9 +1244,8 @@ class MDDRY_TO_MD:
        выдавать ошибку сборки!
        """
 
-        text: str = m['body']
+        text: str = body if body else m['body']
         preliminary_response: Optional[str] = m['preliminary_response']
-
         try:
             res = sympify(text).__str__()
             # Если есть предварительный ответ, и он не равен ответу от `SymPy`
@@ -1243,12 +1253,12 @@ class MDDRY_TO_MD:
                 # То записываем в лог ошибку и возвращаем выражение без изменений
                 logger.error(f"В уравнение {m.group(0)} ожидался ответ={preliminary_response}, но получен={res}",
                              "Не равные ответы в `MathSpan`")
-                return m.group(0)
+                return f'!ERROR!', text
             else:
-                return res
+                return res, text
         except SympifyError:
             logger.error(f"{text}", "MathSpan")
-            return m.group(0)
+            return '!ERROR!', text
 
     @classmethod
     def InsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
