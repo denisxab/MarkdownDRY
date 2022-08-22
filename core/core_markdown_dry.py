@@ -644,7 +644,6 @@ class CoreMarkdownDRY:
         """
         Поиск заголовка и его тела
         """
-        # TODO: реализовать type_out: Literal['html', 'md']
         if type_out == 'html':
             res = REGEX.HeaderMain.sub(lambda m: MDDRY_TO_HTML.HeaderMain(m, type_out=type_out), source_text)
 

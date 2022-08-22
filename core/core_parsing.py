@@ -1,5 +1,3 @@
-# TODO: Реализовать конвертацию файла на ``MarkdownDRY` в `HTML`
-
 from abc import abstractmethod
 from hashlib import md5
 from typing import Literal
@@ -29,7 +27,6 @@ class ParsingBase:
         """
         res = CoreMarkdownDRY.IndisputableInsertCodeFromFile(text, path)
         res = self.ExcludeComment(res, type_out)
-        # TODO: Типы переменных, и два варианта парсинга в MD и в HTML
         res = CoreMarkdownDRY.HeaderMain(res, type_out)
         res = CoreMarkdownDRY.ReferenceBlock(res, type_out)
         # TODO: Проверить как работает UseReferenceBlock, нет примеров использования в документации
@@ -38,6 +35,8 @@ class ParsingBase:
         res = CoreMarkdownDRY.DropdownBlock(res, type_out)
         res = CoreMarkdownDRY.HighlightBlock(res, type_out)
         res = CoreMarkdownDRY.PhotoGallery(res, type_out)
+        # TODO: Сделать два этапа сборки. MDDRY в MD, и MDDRY в HTML. Например, для того чтобы можно было использовать только
+        #  переменные и бесспорные вставки и Математический размах и агрегатные функции в таблицах в MD файлах.
         res = CoreMarkdownDRY.InsertCodeFromFile(res, path, type_out)
         res = CoreMarkdownDRY.LinkCode(res, path, type_out)
         res = CoreMarkdownDRY.MultiPageCode(res, type_out)
@@ -180,8 +179,7 @@ class ParsingToHtml(ParsingBase):
 
         :return: Собранный HTML
         """
-        # TODO: Сделать два этапа сборки. MDDRY в MD, и MDDRY в HTML. Например, для того чтобы можно было использовать только
-        #  переменные и бесспорные вставки и Математический размах и агрегатные функции в таблицах в MD файлах.
+
         return self.goEndBuild(self.goMDPars(self.goMDDRYPars(self.text_mddry, path, 'html')))
 
     def goEndBuild(self, text: str) -> str:
