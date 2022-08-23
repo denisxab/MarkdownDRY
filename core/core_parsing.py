@@ -56,8 +56,6 @@ class ParsingBase:
         # TODO: Добавить тесты для ImageMd
         res = CoreMarkdown.ImgMd(res)
         # TODO: Реализовать вспомогательный текст (символ `> ` в начале строки)
-
-        # TODO: Вставить тег <br> если есть два переноса
         res = CoreMarkdown.Br(res)
         return res
 
