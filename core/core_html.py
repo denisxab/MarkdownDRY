@@ -5,7 +5,7 @@ from enum import Enum
 from hashlib import md5
 from typing import Optional
 
-from core.helpful import StrFormat
+from .helpful import StrFormat
 
 html_head: str = """
 <head>

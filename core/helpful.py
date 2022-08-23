@@ -1,7 +1,11 @@
 import os.path
 import re
+from decimal import Decimal
+from typing import Optional
 
 from logsmal import logger
+from sympy import sympify, SympifyError
+
 
 
 class File:
@@ -35,3 +39,5 @@ def StrFormat(text: str):
     # 1. Убрать перенос строк в начале и в конце текста
     # 2. Убрать табуляции в начале сроки
     return re.sub('\n([\t ]+)', '\n', text.strip())
+
+

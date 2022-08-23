@@ -5,7 +5,7 @@ from typing import Optional
 
 from logsmal import logger
 
-from core import core_markdown_dry
+from core.RegexStorage import REGEX
 
 
 class Lange:
@@ -59,7 +59,7 @@ class Lange:
         :return: (НайденныйТекст, началоТекста, КонецТекста)
         """
         res = None
-        for _m2 in re.finditer(core_markdown_dry.REGEX.AnchorFromCode.format(name=name), text):
+        for _m2 in re.finditer(REGEX.AnchorFromCode.format(name=name), text):
             # Находим лишние переносы строк в конце текст
             _text = _m2.group(0)
             _index_end = 0

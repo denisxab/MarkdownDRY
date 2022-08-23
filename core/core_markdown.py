@@ -87,6 +87,10 @@ class MD_TO_HTML:
             return m.group(0)
         return f'<div class="{HTML_CLASS.ImgMd.value}"><img src="{path_re.__str__()}" alt="{HTML_CLASS.ScreeningId(name)}"><div class="{HTML_CLASS.ImgMdName.value}">{name}</div></div>'
 
+    @staticmethod
+    def Br(m: re.Match) -> str:
+        return '\n<br>' * len(m.group(0))
+
 
 class CoreMarkdown:
     """
@@ -145,3 +149,11 @@ class CoreMarkdown:
         """
         logger.debug('ImgMd')
         return REGEX.ImgMd.sub(MD_TO_HTML.ImgMd, source_text)
+
+    @classmethod
+    def Br(cls, source_text: str) -> Optional[str]:
+        """
+        Вставить тег <br> если есть два переноса
+        """
+        logger.debug('Br')
+        return REGEX.Br.sub(MD_TO_HTML.Br, source_text)
