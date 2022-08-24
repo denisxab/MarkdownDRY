@@ -6,6 +6,7 @@ from pytest import mark
 from testfull_pack.file import ReadTextFile
 
 from core.core_html import html_head, HTML_JS
+from core.core_markdown import CoreMarkdown
 from core.core_markdown_dry import CoreMarkdownDRY, StoreDoc
 from core.core_parsing import ParsingBase
 
@@ -171,8 +172,8 @@ class Test_Pub_To_HTML:
         """
         Математическое выражение переменными и подсказками
         """
-        res = f"{html_head}{CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text, self.type_out), self.type_out)}{''.join(StoreDoc.LastInsert)}{HTML_JS.Hotkey.result}{HTML_JS.MathSpan}"
-        # T_check_data.write(res)
+        res = f"{html_head}{CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(CoreMarkdown.Br(T_in_data.text), self.type_out), self.type_out)}{''.join(StoreDoc.LastInsert)}{HTML_JS.Hotkey.result}{HTML_JS.MathSpan}"
+        T_check_data.write(res)
         assert res == T_check_data.text
 
 

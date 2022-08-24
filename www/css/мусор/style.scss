@@ -1,0 +1,196 @@
+// --------------
+// https://www.nordtheme.com/docs/colors-and-palettes
+
+$ЦветФона: #2e3440;
+
+$БазовыйЦветТекста: #eceff4;
+$ПриглушенныйЦветТекста: #d8dee9;
+$ЦветВыделениеТекста: #5e81ac;
+
+$БазовыйЦветСсылки: #5e81ac;
+$БазовыйЦветПосещеннойСсылки: #81a1c1;
+
+$ЦветФонаВсплывающегоОкна: #3b4252; //#acb7c7;
+$ЦветФонаПодсказки: #434c5e;
+
+$ЯркоеВыделение: #ebcb8b;
+$ЯркоеВыделение2: #88c0d0;
+
+$Хорошо: #a3be8c;
+$Среднее: #ebcb8b;
+$Плохо: #d08770;
+// Заголовки
+$h6_color: #22252a;
+$h5_color: #2e3238;
+$h4_color: #2f333a;
+$h3_color: #393e46;
+$h2_color: #454a54;
+$h1_color: #505762;
+$h_color: #abb0ba;
+
+// Глобальные настройки
+body {
+	background: $ЦветФона;
+	color: $БазовыйЦветТекста;
+	width: 100vw;
+	margin: 0px;
+	min-height: 1000px;
+	// Блок с подсказкой
+	#mddry_hint {
+		text-align: left;
+		padding: 5px 0px 5px 15px;
+		color: $ПриглушенныйЦветТекста;
+		background: $ЦветФонаПодсказки;
+		visibility: hidden;
+		display: block;
+		min-height: 12px;
+		max-height: 20vh;
+		overflow: scroll;
+		width: 100%;
+		overflow-wrap: break-word;
+		// --- Закрепить вверху
+		position: fixed;
+		top: 0;
+		left: 0;
+		// Кнопка скрытия подсказки
+		#mddry_hint_hiden {
+			position: relative;
+			top: 5px;
+			margin-left: auto;
+			margin-right: 16px;
+			background: $ПриглушенныйЦветТекста;
+			border: $ПриглушенныйЦветТекста solid 1px;
+			border-radius: 10px 0px 0px 0px;
+			width: 80px;
+			display: block;
+		}
+	}
+	// Всплывающие окно
+	#mddry_emerge_windows {
+		visibility: hidden;
+		border-radius: 10px;
+		position: fixed;
+		background: $ЦветФонаВсплывающегоОкна;
+		top: 10px;
+		right: 30px;
+		bottom: 50px;
+		left: 30px;
+		// Кнопка для скрытия окна
+		#mddry_emerge_windows_hidden {
+			position: relative;
+			margin-left: auto;
+			display: block;
+			margin-top: 10px;
+			margin-right: 15px;
+		}
+		// Основной текст
+		#mddry_emerge_windows_body {
+			padding: 10px 15px 10px 15px;
+			margin: 10px 15px 10px 15px;
+			overflow: scroll;
+			height: 90%;
+			border: 1px solid $БазовыйЦветТекста;
+			border-radius: 10px;
+		}
+		// Доп информация в всплывающем окне
+		#mddry_emerge_windows_info {
+			color: $ПриглушенныйЦветТекста;
+			background: $ЦветФонаПодсказки;
+			padding: 10px 15px 5px 15px;
+			border-radius: 0px 0px 10px 10px;
+			max-width: 100%;
+			max-height: 100%;
+			white-space: nowrap;
+			overflow: scroll;
+		}
+	}
+	// Оглавление
+	#mddry_menu {
+		position: fixed;
+		background: $ЦветФонаВсплывающегоОкна;
+		right: 0px;
+		bottom: 0px;
+		padding: 0px;
+		border-radius: 10px 0px 0px 0px;
+		height: 50%;
+		// Список заголовков
+		#detail_menu {
+			padding-left: 5px;
+			height: 100%;
+			overflow: scroll;
+			ol {
+				// Убрать тире у элементов ненумерованного списка
+				list-style-type: none;
+				color: $h_color;
+				padding-left: 0px;
+				// 1 заголовок
+				ol {
+					padding: 0px 0px 0px 5px;
+					border-radius: 5px 0px 0px 5px;
+					background: $h1_color;
+					// 2 заголовок
+					ol {
+						background: $h2_color;
+						// 3 заголовок
+						ol {
+							background: $h3_color;
+							// 4 заголовок
+							ol {
+								background: $h4_color;
+								// 5 заголовок
+								ol {
+									background: $h5_color;
+									// 6 заголовок
+									ol {
+										background: $h6_color;
+									}
+								}
+							}
+						}
+					}
+				}
+				// Ссылки
+				a {
+					text-decoration: none;
+					&:link {
+						color: $h_color;
+					}
+					&:hover {
+						text-decoration: underline;
+					}
+					&:visited {
+						color: $h_color;
+					}
+				}
+			}
+		}
+		#bt_show_menu,
+		#bt_hidden_menu {
+			border: none;
+			text-decoration: none;
+			width: 100%;
+			padding: 0;
+			background: transparent;
+			color: $БазовыйЦветТекста;
+		}
+		#bt_show_menu {
+			height: 100%;
+			padding: 5px;
+			display: none;
+		}
+	}
+	// Блок с основным текстом
+	#mddry_body {
+		padding: 10px 15px 15px 15px;
+	}
+	// Блок для отладки
+	#debug {
+		// background: $ЦветФона;
+		position: -webkit-sticky;
+		position: sticky;
+		bottom: 0;
+		#debug_body {
+			display: none;
+		}
+	}
+}

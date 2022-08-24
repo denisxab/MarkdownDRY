@@ -1,0 +1,145 @@
+body {
+  background: #2e3440;
+  color: #eceff4;
+  width: 100vw;
+  margin: 0px;
+  min-height: 1000px;
+}
+body #mddry_hint {
+  text-align: left;
+  padding: 5px 0px 5px 15px;
+  color: #d8dee9;
+  background: #434c5e;
+  visibility: hidden;
+  display: block;
+  min-height: 12px;
+  max-height: 20vh;
+  overflow: scroll;
+  width: 100%;
+  overflow-wrap: break-word;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+body #mddry_hint #mddry_hint_hiden {
+  position: relative;
+  top: 5px;
+  margin-left: auto;
+  margin-right: 16px;
+  background: #d8dee9;
+  border: #d8dee9 solid 1px;
+  border-radius: 10px 0px 0px 0px;
+  width: 80px;
+  display: block;
+}
+body #mddry_emerge_windows {
+  visibility: hidden;
+  border-radius: 10px;
+  position: fixed;
+  background: #3b4252;
+  top: 10px;
+  right: 30px;
+  bottom: 50px;
+  left: 30px;
+}
+body #mddry_emerge_windows #mddry_emerge_windows_hidden {
+  position: relative;
+  margin-left: auto;
+  display: block;
+  margin-top: 10px;
+  margin-right: 15px;
+}
+body #mddry_emerge_windows #mddry_emerge_windows_body {
+  padding: 10px 15px 10px 15px;
+  margin: 10px 15px 10px 15px;
+  overflow: scroll;
+  height: 90%;
+  border: 1px solid #eceff4;
+  border-radius: 10px;
+}
+body #mddry_emerge_windows #mddry_emerge_windows_info {
+  color: #d8dee9;
+  background: #434c5e;
+  padding: 10px 15px 5px 15px;
+  border-radius: 0px 0px 10px 10px;
+  max-width: 100%;
+  max-height: 100%;
+  white-space: nowrap;
+  overflow: scroll;
+}
+body #mddry_menu {
+  position: fixed;
+  background: #3b4252;
+  right: 0px;
+  bottom: 0px;
+  padding: 0px;
+  border-radius: 10px 0px 0px 0px;
+  height: 50%;
+}
+body #mddry_menu #detail_menu {
+  padding-left: 5px;
+  height: 100%;
+  overflow: scroll;
+}
+body #mddry_menu #detail_menu ol {
+  list-style-type: none;
+  color: #abb0ba;
+  padding-left: 0px;
+}
+body #mddry_menu #detail_menu ol ol {
+  padding: 0px 0px 0px 5px;
+  border-radius: 5px 0px 0px 5px;
+  background: #505762;
+}
+body #mddry_menu #detail_menu ol ol ol {
+  background: #454a54;
+}
+body #mddry_menu #detail_menu ol ol ol ol {
+  background: #393e46;
+}
+body #mddry_menu #detail_menu ol ol ol ol ol {
+  background: #2f333a;
+}
+body #mddry_menu #detail_menu ol ol ol ol ol ol {
+  background: #2e3238;
+}
+body #mddry_menu #detail_menu ol ol ol ol ol ol ol {
+  background: #22252a;
+}
+body #mddry_menu #detail_menu ol a {
+  text-decoration: none;
+}
+body #mddry_menu #detail_menu ol a:link {
+  color: #abb0ba;
+}
+body #mddry_menu #detail_menu ol a:hover {
+  text-decoration: underline;
+}
+body #mddry_menu #detail_menu ol a:visited {
+  color: #abb0ba;
+}
+body #mddry_menu #bt_show_menu,
+body #mddry_menu #bt_hidden_menu {
+  border: none;
+  text-decoration: none;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  color: #eceff4;
+}
+body #mddry_menu #bt_show_menu {
+  height: 100%;
+  padding: 5px;
+  display: none;
+}
+body #mddry_body {
+  padding: 10px 15px 15px 15px;
+}
+body #debug {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+}
+body #debug #debug_body {
+  display: none;
+}
