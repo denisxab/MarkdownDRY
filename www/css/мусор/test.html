@@ -9,7 +9,7 @@
     <!-- <link rel="stylesheet" href="../bootstrap-5.1.3-dist/main.js"> -->
     <!-- <link rel="stylesheet" href="../bootstrap-5.1.3-dist/main.css"> -->
     <link rel="stylesheet" href="../style.min.css">
-    <script src="./logic.js" defer> </script>
+    <script src="./logic.js" defer></script>
 
 </head>
 
@@ -35,13 +35,13 @@
             быть очень длинным екст с подсказкой, желательнекст с подсказкой, желательно он должен быть очень длинным
         </div>
         <!-- Скрыть подсказку -->
-        <input type="button" id="mddry_hint_hiden" value="Скрыть" onclick="CLS_mddry_hint.show_or_hide()">
+        <input type="button" id="mddry_hint_hiden" value="Скрыть" onclick="CLS_mddry_hint.show_or_hidden()">
     </div>
     <!-- Всплывающие окно -->
     <div id="mddry_emerge_windows">
         <!-- Скрыть Всплывающие окно -->
         <input type="button" id="mddry_emerge_windows_hidden" value="Скрыть"
-            onclick="CLS_mddry_emerge_windows.show_or_hide()">
+            onclick="CLS_mddry_emerge_windows.show_or_hidden()">
         <!-- Тело всплывающего окна -->
         <div id="mddry_emerge_windows_body">
             Текст с подсказкой, желательно
@@ -104,9 +104,9 @@
     <!-- Оглавление -->
     <div id="mddry_menu">
         <!-- Скрыть оглавление -->
-        <input type="button" id="bt_show_menu" value="<<" onclick="CLS_mddry_menu.show()">
+        <input type="button" id="bt_show_menu" value="<<" onclick="CLS_mddry_menu.show_or_hidden()">
         <!-- Развернуть оглавление -->
-        <input type="button" id="bt_hidden_menu" value=">>" onclick="CLS_mddry_menu.hidden()" />
+        <input type="button" id="bt_hidden_menu" value=">>" onclick="CLS_mddry_menu.show_or_hidden()" />
         <!-- Темы оглавления -->
         <div id="detail_menu">
             <ol>

@@ -1,39 +1,48 @@
+// ---------------------------------------- MAIN --------------------------------- //
+
+// Логика для `Подсказки`
 class CLS_mddry_emerge_windows {
-    // Логика для Всплывающей подсказки
-    static show_or_hide() {
-        if (mddry_emerge_windows.style.visibility == "hidden") {
+    static show_or_hidden() {
+        if (getComputedStyle(mddry_emerge_windows).visibility == "hidden") {
             // Показать
-            mddry_emerge_windows.style.visibility = "visible";
+            mddry_emerge_windows.style.setProperty("visibility", "visible");
         } else {
             // Скрыть
-            mddry_emerge_windows.style.visibility = "hidden";
+            mddry_emerge_windows.style.setProperty("visibility", "hidden");
         }
     }
-}
-class CLS_mddry_hint {
-    // Логика для Блок с подсказкой
-    static show_or_hide() {
-        if (mddry_hint.style.visibility == "hidden") {
-            // Показать
-            mddry_hint.style.visibility = "visible";
-        } else {
-            // Скрыть
-            mddry_hint.style.visibility = "hidden";
+    static hot_key(e) {
+        // Скрыть всплывающие окно ALT+R
+        if (e.altKey && e.which == 82) {
+            this.show_or_hidden();
+            return false;
         }
     }
 }
 
+// Логика для `Всплывающие окно`
+class CLS_mddry_hint {
+    static show_or_hidden() {
+        if (getComputedStyle(mddry_hint).visibility == "hidden") {
+            // Показать
+            mddry_hint.style.setProperty("visibility", "visible");
+        } else {
+            // Скрыть
+            mddry_hint.style.setProperty("visibility", "hidden");
+        }
+    }
+
+    static hot_key(e) {
+        // Скрыть всплывающие подсказки ALT+E
+        if (e.altKey && e.which == 69) {
+            this.show_or_hidden();
+            return false;
+        }
+    }
+}
+
+// Логика для  `Оглавление`
 class CLS_mddry_menu {
-    // Скрыть оглавление
-    static hidden() {
-        detail_menu.style.display = "none";
-        bt_show_menu.style.display = "block";
-    }
-    // Показать оглавление
-    static show() {
-        detail_menu.style.display = "block";
-        bt_show_menu.style.display = "none";
-    }
     // Добавить обработчик для  перехода к заголовку по нажатию элемент оглавления.
     static add_handler_on_click_from_header() {
         document.querySelectorAll("#detail_menu li").forEach((e) => {
@@ -43,21 +52,23 @@ class CLS_mddry_menu {
         });
     }
     // Узнать скрыто ли оглавление
-    static is_hidden() {
-        if (detail_menu.style.display == "none") {
-            return false;
+    static show_or_hidden() {
+        if (getComputedStyle(detail_menu).display == "none") {
+            // Показать оглавление
+            detail_menu.style.setProperty("display", "block");
+            bt_show_menu.style.setProperty("display", "none");
+            mddry_menu.style.setProperty("height", "50%");
         } else {
-            return true;
+            // Скрыть оглавление
+            detail_menu.style.setProperty("display", "none");
+            bt_show_menu.style.setProperty("display", "block");
+            mddry_menu.style.setProperty("height", "30px");
         }
     }
     // Горячая клавиша для Скрытия/Показа заголовка ALT+T
     static hot_key(e) {
         if (e.altKey && e.which == 84) {
-            if (CLS_mddry_menu.is_hidden() === false) {
-                CLS_mddry_menu.show();
-            } else {
-                CLS_mddry_menu.hidden();
-            }
+            this.show_or_hidden();
             return false;
         }
     }
@@ -65,7 +76,8 @@ class CLS_mddry_menu {
         this.add_handler_on_click_from_header();
     }
 }
-
+// ---------------------------------------- END_MAIN --------------------------------- //
+// ---------------------------------------- DEV -------------------------------------- //
 class DevLogic {
     // Логика для отладки программы
     static show_or_hide_dev() {
@@ -77,29 +89,34 @@ class DevLogic {
         }
     }
     static mddry_hint_show_or_hide() {
-        CLS_mddry_hint.show_or_hide();
+        CLS_mddry_hint.show_or_hidden();
     }
     static mddry_emerge_windows_show_or_hide() {
-        CLS_mddry_emerge_windows.show_or_hide();
+        CLS_mddry_emerge_windows.show_or_hidden();
     }
     static mddry_hint_inset_text() {
         // Вставить подсказку введенный текст
         mddry_hint_body.innerText = dev_text_hide_mddry_hint.value;
     }
 }
-class InitAppp {
+// ---------------------------------------- END_DEV ---------------------------------- //
+// -------------------------- Инициализация проекта ---------------------------------- //
+class InitApp {
     // Обработка горячих клавиш
     static hot_key() {
         // https://snipp.ru/handbk/js-kbd-codes
         document.onkeyup = function () {
             var e = e || window.event;
             CLS_mddry_menu.hot_key(e);
+            CLS_mddry_emerge_windows.hot_key(e);
+            CLS_mddry_hint.hot_key(e);
         };
     }
-    // Инициализация программы
+    // Инициализация логики компонентов программы
     static init() {
         this.hot_key();
         CLS_mddry_menu.init();
     }
 }
-InitAppp.init();
+InitApp.init();
+// ------------------------------------000---------------------------------------------- //

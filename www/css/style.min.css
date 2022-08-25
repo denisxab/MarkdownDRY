@@ -74,17 +74,21 @@ body #mddry_menu {
   bottom: 0px;
   padding: 0px;
   border-radius: 10px 0px 0px 0px;
-  height: 50%;
+  height: 30px;
 }
 body #mddry_menu #detail_menu {
   padding-left: 5px;
   height: 100%;
   overflow: scroll;
+  display: none;
 }
 body #mddry_menu #detail_menu ol {
   list-style-type: none;
   color: #abb0ba;
   padding-left: 0px;
+}
+body #mddry_menu #detail_menu ol li {
+  padding-right: 5px;
 }
 body #mddry_menu #detail_menu ol ol {
   padding: 0px 0px 0px 5px;
@@ -129,8 +133,8 @@ body #mddry_menu #bt_hidden_menu {
 }
 body #mddry_menu #bt_show_menu {
   height: 100%;
-  padding: 5px;
-  display: none;
+  display: block;
+  width: 120px;
 }
 body #mddry_body {
   padding: 10px 15px 15px 15px;
@@ -139,6 +143,7 @@ body #debug {
   position: -webkit-sticky;
   position: sticky;
   bottom: 0;
+  width: 70%;
 }
 body #debug #debug_body {
   display: none;

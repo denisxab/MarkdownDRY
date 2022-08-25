@@ -112,17 +112,22 @@ body {
 		bottom: 0px;
 		padding: 0px;
 		border-radius: 10px 0px 0px 0px;
-		height: 50%;
+		// По умолчанию меню скрыто, когда меню открыто высота будет 50%
+		height: 30px;
 		// Список заголовков
 		#detail_menu {
 			padding-left: 5px;
 			height: 100%;
 			overflow: scroll;
+			display: none;
 			ol {
 				// Убрать тире у элементов ненумерованного списка
 				list-style-type: none;
 				color: $h_color;
 				padding-left: 0px;
+				li {
+					padding-right: 5px;
+				}
 				// 1 заголовок
 				ol {
 					padding: 0px 0px 0px 5px;
@@ -175,8 +180,8 @@ body {
 		}
 		#bt_show_menu {
 			height: 100%;
-			padding: 5px;
-			display: none;
+			display: block;
+			width: 120px;
 		}
 	}
 	// Блок с основным текстом
@@ -186,9 +191,10 @@ body {
 	// Блок для отладки
 	#debug {
 		// background: $ЦветФона;
-		position: -webkit-sticky;
 		position: sticky;
 		bottom: 0;
+		// background: #000;
+		width: 70%;
 		#debug_body {
 			display: none;
 		}
