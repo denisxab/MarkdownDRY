@@ -144,5 +144,9 @@ class НезависимыйHTMLФайл:
 if __name__ == '__main__':
     НезависимыйHTMLФайл.Собрать(
         "/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/pub/ParsingToHtml.html",
-        "./test_3.html"
+        "./ParsingToHtml_res.html"
+    )
+    НезависимыйHTMLФайл.Собрать(
+        "/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/www/css/мусор/test.html",
+        "./test_res.html"
     )
