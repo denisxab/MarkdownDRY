@@ -35,10 +35,12 @@ body {
 	width: 100vw;
 	margin: 0px;
 	min-height: 1000px;
+	font-family: sans-serif;
+	font-size: 1em;
+
 	// Блок с подсказкой
 	#mddry_hint {
 		text-align: left;
-		padding: 5px 0px 5px 15px;
 		color: $ПриглушенныйЦветТекста;
 		background: $ЦветФонаПодсказки;
 		visibility: hidden;
@@ -48,10 +50,21 @@ body {
 		overflow: scroll;
 		width: 100%;
 		overflow-wrap: break-word;
+		z-index: 1;
+
+		// --------------------------------------
+		transition: height 0.3s, visibility 0.3s;
+		transition-timing-function: ease-in-out;
+		height: 0%;
+		// --------------------------------------
 		// --- Закрепить вверху
 		position: fixed;
 		top: 0;
 		left: 0;
+		#mddry_hint_body {
+			padding: 5px 15px 5px 15px;
+			text-align: justify;
+		}
 		// Кнопка скрытия подсказки
 		#mddry_hint_hiden {
 			position: relative;
@@ -75,7 +88,7 @@ body {
 		right: 0px;
 		bottom: 0px;
 		left: 0px;
-		z-index: 1;
+		z-index: 99;
 		// Кнопка для скрытия окна
 		#mddry_emerge_windows_hidden {
 			width: 89px;
@@ -112,10 +125,13 @@ body {
 		right: 0px;
 		bottom: 0px;
 		padding: 0px;
-		z-index: 0;
+		z-index: 1;
 		border-radius: 10px 0px 0px 0px;
-		// По умолчанию меню скрыто, когда меню открыто высота будет 50%
-		height: 30px;
+		// Анимация
+		transition: height 0.3s ease-in-out, width 0.3s ease-in-out;
+		// По умолчанию меню скрыто, когда меню открыто высота будет 35%
+		height: 20px;
+		width: 120px;
 		// Список заголовков
 		#detail_menu {
 			padding-left: 5px;
@@ -176,6 +192,7 @@ body {
 			border: none;
 			text-decoration: none;
 			width: 100%;
+			display: none;
 			padding: 0;
 			background: transparent;
 			color: $БазовыйЦветТекста;
@@ -189,7 +206,106 @@ body {
 	// Блок с основным текстом
 	#mddry_body {
 		padding: 10px 15px 15px 15px;
+		text-align: justify;
+
+		// Раскрываемые блок - `DropdownBlock`
+		.DropdownBlock {
+			/* Пример как использовать в HTML
+			<div class="DropdownBlock">
+				Текст Триггер
+				<div class="DropdownBlock-content">
+					Текст который всплывет
+				</div>
+			</div>
+			*/
+			position: relative;
+			display: inline-block;
+			border-bottom: 2px dotted $Среднее;
+			.DropdownBlock-content {
+				opacity: 0;
+				transition: opacity 0.3s ease-in-out;
+				position: absolute;
+				border-bottom: none;
+				background-color: $ЦветФонаВсплывающегоОкна;
+				min-width: 160px;
+				box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+				padding: 12px 16px;
+				z-index: 0;
+			}
+			&:hover .DropdownBlock-content {
+				opacity: 1;
+			}
+		}
 	}
+	//------------------------------------------------
+	//Текст при наведение на который всплывает подсказка
+
+	%HelpText {
+		position: relative;
+		.HelpText-content {
+			visibility: hidden;
+			width: 120px;
+			background-color: $ЦветФонаПодсказки;
+			text-align: center;
+			border-radius: 6px;
+			padding: 5px 0;
+			word-wrap: break-word;
+			position: absolute;
+			z-index: 1;
+			bottom: 100%;
+			left: 50%;
+			margin-left: -60px;
+			opacity: 0;
+			transition: opacity 0.3s;
+			&::after {
+				content: "";
+				position: absolute;
+				top: 100%;
+				left: 50%;
+				margin-left: -5px;
+				border-width: 5px;
+				border-style: solid;
+				border-color: $ЦветФонаПодсказки transparent transparent transparent;
+			}
+		}
+		&:hover .HelpText-content {
+			visibility: visible;
+			opacity: 1;
+		}
+
+		&:hover .HelpText-content {
+			visibility: visible;
+		}
+	}
+	.HelpText-span {
+		// Подсказка внутри текста, для тега `span`
+
+		/* Пример как использовать в HTML
+	
+		<div class="HelpText-span">
+			Основной текст
+			<span class="HelpText-content">Текст подсказки</span>
+		</div>
+		*/
+
+		display: inline-block;
+		border-bottom: 2px dotted $Хорошо;
+		@extend %HelpText;
+	}
+	.HelpText-div {
+		// Подсказка внутри блока, для тега `dev`
+		/* Пример как использовать в HTML
+
+		<div class="HelpText-div">
+			Основной текст
+			<span class="HelpText-content">Текст подсказки</span>
+		</div>
+		*/
+		display: block;
+		@extend %HelpText;
+	}
+
+	//------------------------------------------------
 	// Блок для отладки
 	#debug {
 		// background: $ЦветФона;
@@ -202,4 +318,5 @@ body {
 			display: none;
 		}
 	}
+	//------------------------------------------------
 }

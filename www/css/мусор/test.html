@@ -14,7 +14,7 @@
 <body>
 
     <!-- Блок с подсказкой -->
-    <div id="mddry_hint">
+    <div id="mddry_hint" show="0">
         <div id="mddry_hint_body">
             Текст с подсказкой, желательно
             он должен быть очень длинным
@@ -102,10 +102,17 @@
     </div>
     <!-- Оглавление -->
     <div id="mddry_menu">
-        <!-- Скрыть оглавление -->
-        <input type="button" id="bt_show_menu" value="<<" onclick="CLS_mddry_menu.show_or_hidden()">
+
         <!-- Развернуть оглавление -->
-        <input type="button" id="bt_hidden_menu" value=">>" onclick="CLS_mddry_menu.show_or_hidden()" />
+        <div class="HelpText-div">
+            <input type="button" id="bt_show_menu" value="<<" onclick="CLS_mddry_menu.show_or_hidden()">
+            <span class="HelpText-content">ALT+T</span>
+        </div>
+        <!-- Скрыть оглавление -->
+        <div class="HelpText-div">
+            <input type="button" id="bt_hidden_menu" value=">>" onclick="CLS_mddry_menu.show_or_hidden()" />
+            <span class="HelpText-content">ALT+T</span>
+        </div>
         <!-- Темы оглавления -->
         <div id="detail_menu">
             <ol>
@@ -151,9 +158,6 @@
         <img src="./MarkdownDRY.svg" alt="" srcset="">
         <img src="./MarkdownDRY.svg" alt="" srcset="">
         <img src="./MarkdownDRY.svg" alt="" srcset="">
-        <img src="./47678176.png" alt="" srcset="">
-        <img src="./47678176.png" alt="" srcset="">
-        <img src="./47678176.png" alt="" srcset="">
 
 
 
@@ -165,6 +169,12 @@
         <br>- [=летний-сезон](5):месяц
         <br>- [=Рабочих-Дней-В-Месяце](24):дня
         <br>
+        12313
+        <div class="HelpText-span">
+            Hover over me123123131231
+            <span class="HelpText-content">Tooltip text123131232312312312312312312323123132123</span>
+        </div> 113123
+
         <br>%%Маршрут:%%
         <br>
         <br>- [=в-одну-сторону](10):км
@@ -174,6 +184,27 @@
         <br>
         <br>%%ЭлектроСамокат:%%
         <br>
+        312312
+
+        <div class="DropdownBlock">
+
+            подсказкой, желательно32323
+            <div class="DropdownBlock-content">
+                подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен быть очень
+                длинным екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он
+                должен
+                быть очень длинным екст с подсказкой, желательнекст с подсказкой, желательно он должен быть очень
+                длинным
+                екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен быть
+                очень длинным екст с подсказкой, желательно он должен быть очень длинным о он должен быть очень длинным
+                екст
+                с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен быть очень
+                длинным екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он
+                должен
+                бы11111111111111111111111111111111111111111111111111111111111111333
+            </div>
+        </div>
+1231231
         <br>- [=количество-циклов-заряда-до-потери-емкости](800)
         <br>- [=Цена-за-новый-аккумулятор](20_000):руб
         <br>- [=Амер-в-батарее](18):Ампер

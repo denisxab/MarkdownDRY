@@ -23,12 +23,17 @@ class CLS_mddry_emerge_windows {
 // Логика для `Всплывающие окно`
 class CLS_mddry_hint {
     static show_or_hidden() {
-        if (getComputedStyle(mddry_hint).visibility == "hidden") {
+
+        if (mddry_hint.getAttribute('show') == '0') {
             // Показать
             mddry_hint.style.setProperty("visibility", "visible");
+            mddry_hint.style.setProperty("height", "100%");
+            mddry_hint.setAttribute('show', "1");
         } else {
             // Скрыть
             mddry_hint.style.setProperty("visibility", "hidden");
+            mddry_hint.style.setProperty("height", "0%");
+            mddry_hint.setAttribute('show', "0");
         }
     }
 
@@ -53,16 +58,23 @@ class CLS_mddry_menu {
     }
     // Узнать скрыто ли оглавление
     static show_or_hidden() {
-        if (getComputedStyle(detail_menu).display == "none") {
+        if (getComputedStyle(bt_hidden_menu).display == "none") {
             // Показать оглавление
             detail_menu.style.setProperty("display", "block");
             bt_show_menu.style.setProperty("display", "none");
-            mddry_menu.style.setProperty("height", "50%");
+            bt_hidden_menu.style.setProperty("display", "block");
+            mddry_menu.style.setProperty("height", "35%");
+            mddry_menu.style.setProperty("width", "100%");
         } else {
             // Скрыть оглавление
-            detail_menu.style.setProperty("display", "none");
             bt_show_menu.style.setProperty("display", "block");
-            mddry_menu.style.setProperty("height", "30px");
+            bt_hidden_menu.style.setProperty("display", "none");
+            mddry_menu.style.setProperty("height", "20px");
+            mddry_menu.style.setProperty("width", "120px");
+            // Скрыть отображение заголовков, после скрытия меню  
+            setTimeout(function () {
+                detail_menu.style.setProperty("display", "none");
+            }, 300);
         }
     }
     // Горячая клавиша для Скрытия/Показа заголовка ALT+T
