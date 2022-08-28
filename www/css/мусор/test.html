@@ -33,13 +33,20 @@
             быть очень длинным екст с подсказкой, желательнекст с подсказкой, желательно он должен быть очень длинным
         </div>
         <!-- Скрыть подсказку -->
-        <input type="button" id="mddry_hint_hiden" value="Скрыть" onclick="CLS_mddry_hint.show_or_hidden()">
+        <div style="width: 80vw; float:left;"><br></div>
+        <div class="HelpText-div" style="display: inline-block;width: 20vw">
+            <input type="button" id="mddry_hint_hiden" value="Скрыть" onclick="CLS_mddry_hint.show_or_hidden()">
+            <span class="HelpText-content">ALT+E</span>
+        </div>
     </div>
     <!-- Всплывающие окно -->
     <div id="mddry_emerge_windows">
         <!-- Скрыть Всплывающие окно -->
-        <input type="button" id="mddry_emerge_windows_hidden" value="Скрыть"
-            onclick="CLS_mddry_emerge_windows.show_or_hidden()">
+        <div class="HelpText-div-b" style="float: right;">
+            <input type="button" id="mddry_emerge_windows_hidden" value="Скрыть"
+                onclick="CLS_mddry_emerge_windows.show_or_hidden()">
+            <span class="HelpText-content">ALT+R</span>
+        </div>
         <!-- Информация Всплывающего окна -->
         <div id="mddry_emerge_windows_info">
             он должен быть очень длинным екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой,
@@ -204,7 +211,7 @@
                 бы11111111111111111111111111111111111111111111111111111111111111333
             </div>
         </div>
-1231231
+        1231231
         <br>- [=количество-циклов-заряда-до-потери-емкости](800)
         <br>- [=Цена-за-новый-аккумулятор](20_000):руб
         <br>- [=Амер-в-батарее](18):Ампер

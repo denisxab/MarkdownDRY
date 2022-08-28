@@ -6,9 +6,14 @@ class CLS_mddry_emerge_windows {
         if (getComputedStyle(mddry_emerge_windows).visibility == "hidden") {
             // Показать
             mddry_emerge_windows.style.setProperty("visibility", "visible");
+            mddry_emerge_windows.style.setProperty("opacity", "1");
         } else {
             // Скрыть
-            mddry_emerge_windows.style.setProperty("visibility", "hidden");
+            mddry_emerge_windows.style.setProperty("opacity", "0");
+            // Скрыть отображение заголовков, после скрытия меню  
+            setTimeout(function () {
+                mddry_emerge_windows.style.setProperty("visibility", "hidden");
+            }, 300);
         }
     }
     static hot_key(e) {
