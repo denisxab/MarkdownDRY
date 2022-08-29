@@ -32,11 +32,20 @@ $h_color: #abb0ba;
 body {
 	background: $ЦветФона;
 	color: $БазовыйЦветТекста;
-	width: 100vw;
 	margin: 0px;
 	min-height: 1000px;
 	font-family: sans-serif;
 	font-size: 1em;
+
+	// Общие вспомогательные стили
+	.oth {
+		// Выравнять блок по середине
+		&.center-div {
+			text-align: center;
+			position: relative;
+			top: 50%;
+		}
+	}
 
 	// Блок с подсказкой
 	#mddry_hint {
@@ -47,7 +56,7 @@ body {
 		display: block;
 		min-height: 12px;
 		max-height: 20vh;
-		overflow: scroll;
+		overflow: auto;
 		width: 100%;
 		overflow-wrap: break-word;
 		z-index: 1;
@@ -67,10 +76,7 @@ body {
 		}
 		// Кнопка скрытия подсказки
 		#mddry_hint_hiden {
-			position: relative;
-			top: 5px;
-			margin-left: auto;
-			// margin-right: 16px;
+			text-align: center;
 			background: $ЦветФона;
 			color: $ПриглушенныйЦветТекста;
 			border: $ЦветФона solid 1px;
@@ -107,13 +113,13 @@ body {
 			padding: 10px 15px 5px 30px;
 			margin-right: 90px;
 			white-space: nowrap;
-			overflow: scroll;
+			overflow: auto;
 		}
 		// Основной текст
 		#mddry_emerge_windows_body {
 			padding: 10px 15px 10px 15px;
 			margin: 10px 15px 10px 15px;
-			overflow: scroll;
+			overflow: auto;
 			max-width: 100%;
 			max-height: 90%;
 			border: 1px solid $БазовыйЦветТекста;
@@ -138,7 +144,7 @@ body {
 		#detail_menu {
 			padding-left: 5px;
 			height: 100%;
-			overflow: scroll;
+			overflow: auto;
 			display: none;
 			ol {
 				// Убрать тире у элементов ненумерованного списка
@@ -209,6 +215,96 @@ body {
 	#mddry_body {
 		padding: 10px 15px 15px 15px;
 		text-align: justify;
+
+		// ------------------- Изображения --------------------------------------- //
+		// Обычные одиночные изображения
+		.MdImg {
+			// Настройки для изображения
+			img {
+				object-fit: contain;
+				max-width: 90vw;
+				border-radius: 10px;
+				display: block;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			// Настройки для описания изображения
+			.img_info {
+				margin-top: 10px;
+				text-align: center;
+				font-style: italic;
+			}
+			padding-top: 10px;
+			padding-bottom: 10px;
+			margin-top: 10px;
+			margin-bottom: 10px;
+			border-radius: 10px;
+			background: $ЦветФонаВсплывающегоОкна;
+			border: 2px solid $ЦветФонаВсплывающегоОкна;
+			// Галерея с несколькими фото
+			& .Gallery {
+				/*
+				:Шаблон:
+				
+				<div class="MdImg">
+					<div class="Gallery">
+						<div class="navigation left" onclick="Gallery.last_page(this)">
+							<div class="oth center-div">
+								&lt
+							</div>
+						</div>
+						-----------------------------
+						<img src="ФОТО_1" select="0">
+						<img src="ФОТО_1" select="1">
+						<img src="ФОТО_1" select="0">
+						<img src="ФОТО_1" select="0">
+						-----------------------------
+						<div class="navigation right" onclick="Gallery.next_page(this)">
+							<div class="oth center-div">
+								&gt
+							</div>
+						</div>
+					</div>
+					<div class="name_img">Описание фото</div>
+				</div>
+				*/
+				display: flex;
+				flex-direction: row;
+				// Скрыть не активные фото
+				& img[select="0"] {
+					display: none;
+					visibility: hidden;
+				}
+				// Показать активное фото
+				& img[select="1"] {
+					display: block;
+					visibility: visible;
+				}
+				// Перемещение по фото
+				& .navigation {
+					// position: absolute;
+					background: #000;
+					opacity: 0.1;
+					// height: 36vw;
+					// Делаем эффект наведения на переключатель фото
+					&:hover {
+						opacity: 0.2;
+					}
+					&.left {
+						width: 30vw;
+					}
+					&.right {
+						width: 30vw;
+						right: 0;
+					}
+				}
+			}
+			& .name_img {
+				text-align: center;
+			}
+		}
+
+		// ------------------- Изображения --------------------------------------- //
 
 		// Раскрываемые блок - `DropdownBlock`
 		.DropdownBlock {
@@ -293,7 +389,7 @@ body {
 		*/
 
 		display: inline-block;
-		border-bottom: 2px dotted $Хорошо;
+		border-bottom: 3px dotted $Среднее;
 		@extend %HelpText;
 	}
 
@@ -313,7 +409,20 @@ body {
 		position: relative;
 		display: inline-block;
 		.HelpText-content {
-			@extend %HelpText.HelpText-content;
+			visibility: hidden;
+			width: 120px;
+			background-color: $Хорошо;
+			color: $ЦветФона;
+			text-align: center;
+			border-radius: 6px;
+			padding: 5px 0;
+
+			/* Position the tooltip */
+			position: absolute;
+			z-index: 1;
+			top: 100%;
+			left: 50%;
+			margin-left: -60px;
 		}
 		&:hover .HelpText-content {
 			visibility: visible;

@@ -10,7 +10,7 @@ class CLS_mddry_emerge_windows {
         } else {
             // Скрыть
             mddry_emerge_windows.style.setProperty("opacity", "0");
-            // Скрыть отображение заголовков, после скрытия меню  
+            // Скрыть отображение заголовков, после скрытия меню
             setTimeout(function () {
                 mddry_emerge_windows.style.setProperty("visibility", "hidden");
             }, 300);
@@ -28,17 +28,16 @@ class CLS_mddry_emerge_windows {
 // Логика для `Всплывающие окно`
 class CLS_mddry_hint {
     static show_or_hidden() {
-
-        if (mddry_hint.getAttribute('show') == '0') {
+        if (mddry_hint.getAttribute("show") == "0") {
             // Показать
             mddry_hint.style.setProperty("visibility", "visible");
             mddry_hint.style.setProperty("height", "100%");
-            mddry_hint.setAttribute('show', "1");
+            mddry_hint.setAttribute("show", "1");
         } else {
             // Скрыть
             mddry_hint.style.setProperty("visibility", "hidden");
             mddry_hint.style.setProperty("height", "0%");
-            mddry_hint.setAttribute('show', "0");
+            mddry_hint.setAttribute("show", "0");
         }
     }
 
@@ -76,7 +75,7 @@ class CLS_mddry_menu {
             bt_hidden_menu.style.setProperty("display", "none");
             mddry_menu.style.setProperty("height", "20px");
             mddry_menu.style.setProperty("width", "120px");
-            // Скрыть отображение заголовков, после скрытия меню  
+            // Скрыть отображение заголовков, после скрытия меню
             setTimeout(function () {
                 detail_menu.style.setProperty("display", "none");
             }, 300);
@@ -91,6 +90,55 @@ class CLS_mddry_menu {
     }
     static init() {
         this.add_handler_on_click_from_header();
+    }
+}
+
+// Логика для работы галериеи
+
+class Gallery {
+    // Получить текущий элемент, и скрыть его
+    static _select_items(elm) {
+        // Получем галерею со всеми элементами
+        let e_parent = elm.parentNode;
+        // Сколько всего элюентов в галерией
+        let max_len = e_parent.querySelectorAll("img").length - 1;
+        // Находим индекс выбранного элемента
+        let select_index = 0;
+        for (let e0 of e_parent.querySelectorAll("img")) {
+            if (e0.getAttribute("select") === "1") {
+                // Скрываем текущий элемент
+                e0.setAttribute("select", "0");
+                break;
+            }
+            select_index += 1;
+        }
+        return [select_index, max_len, e_parent]
+    }
+    // Переключить на предыдущий элемент
+    static last_page(elm) {
+        let [select_index, max_len, e_parent] = this._select_items(elm);
+        // Высчитываем предыдущий элемент
+        let next_page = undefined;
+        if (select_index === 0) {
+            next_page = max_len;
+        } else {
+            next_page = select_index - 1;
+        }
+        // Показываем предыдущий элемент
+        e_parent.querySelectorAll("img")[next_page].setAttribute("select", "1");
+    }
+    // Переключить на следующий элемент
+    static next_page(elm) {
+        let [select_index, max_len, e_parent] = this._select_items(elm);
+        // Высчитываем следующий элемент
+        let next_page = undefined;
+        if (select_index === max_len) {
+            next_page = 0;
+        } else {
+            next_page = select_index + 1;
+        }
+        // Показываем следующий элемент
+        e_parent.querySelectorAll("img")[next_page].setAttribute("select", "1");
     }
 }
 // ---------------------------------------- END_MAIN --------------------------------- //

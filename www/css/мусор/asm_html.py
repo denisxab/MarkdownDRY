@@ -40,12 +40,19 @@ class НезависимыйHTMLФайл:
                 m_path: Path = (path / Path(m['path_css'])).resolve()
                 suffix: str = m_path.suffix
                 if suffix == '.css':
-                    return f"""<style>\n{m_path.read_text().replace(NL, '')}\n</style>"""
+                    css_text = m_path.read_text()
+                    # Удаляем комментарии
+                    css_text = re.sub("(/\*\n*(?:.\s*(?!\*/))+.\*/)|(//.+)", '', css_text)
+                    return f"""<style>\n{css_text.replace(NL, '')}\n</style>"""
             elif m['path_js']:
                 m_path: Path = (path / Path(m['path_js'])).resolve()
                 suffix: str = m_path.suffix
                 if suffix == '.js':
-                    return f"""<script>\n{re.sub(f"//.+", "", m_path.read_text())}\n</script>"""
+                    js_text = m_path.read_text()
+                    # Удаляем комментарии
+                    js_text = re.sub("(/\*(?:.\s*(?!\*/))+.\*/)|(//.*)", '', js_text)
+                    js_text = re.sub('( {2,})|(\n)', '', js_text)
+                    return f"""<script>\n{js_text}\n</script>"""
 
             raise ValueError(f"Ни чего не найдено:{m.group(0)}")
 
@@ -92,13 +99,28 @@ class НезависимыйHTMLФайл:
                         # Сохраняем результат в кеш, который потом вставиться в JS переменную, из которой в потом заполниться тег <img>
                         if not cachy_img.get(m['path_img'], None):
                             cachy_img[(m['path_img'])] = f"data:image/{m_type_img};base64,{m_base64}"
-                        return f'''<img class="{CACHY_IMG_JS}" path="{m['path_img']}" src="">'''
+                        res_text = m.group(0)
+                        res_text = re.sub('src=\"[^\"]+\"', 'src=""', res_text)
+                        if re.search('class=\"', res_text):
+                            # Если уже есть классы до добавляем текст в конец
+                            res_text = re.sub(
+                                'class=\"(?P<class_name>[^\"]+)\"',
+                                lambda _m: f''' class="{_m['class_name']} {CACHY_IMG_JS}"''',
+                                res_text
+                            )
+                        # Если классов нет, то создаем класс
+                        else:
+                            res_text = re.sub(">$", f''' class="{CACHY_IMG_JS}" >''', res_text)
+                        # Вставляем ключ, по которому будет искаться изображение в кеше
+                        res_text = re.sub(">$", f''' path="{m['path_img']}" >''', res_text)
+
+                        return res_text  # f'''<img class="{CACHY_IMG_JS}" path="{m['path_img']}" src="">'''
                     else:
                         raise KeyError("Не допустимый формат изображения")
                 raise FileNotFoundError(f"Файл не найден: {m_path}")
             raise ValueError(f"Ни чего не найдено:{m.group(0)}")
 
-        СсылкаНаФото: re.Pattern = re.compile("<img +src=\"(?P<path_img>[^\"]+)\"[^>]+>")
+        СсылкаНаФото: re.Pattern = re.compile("<img.+src=\"(?P<path_img>[^\"]+)\"[^>]+>")
         _res = (
             f"""
         {СсылкаНаФото.sub(_self, source_text)}
@@ -130,6 +152,7 @@ class НезависимыйHTMLФайл:
             # TODO: Это не реализовано
             _res = requests.get(in_path)
             p_text = _res.text
+            raise ValueError("Не реализовано скачивание из интернета")
         else:
             # Взять локально
             p_in_path = Path(in_path).resolve()
@@ -142,10 +165,10 @@ class НезависимыйHTMLФайл:
 
 
 if __name__ == '__main__':
-    НезависимыйHTMLФайл.Собрать(
-        "/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/pub/ParsingToHtml.html",
-        "./ParsingToHtml_res.html"
-    )
+    # НезависимыйHTMLФайл.Собрать(
+    #     "/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/pub/ParsingToHtml.html",
+    #     "./ParsingToHtml_res.html"
+    # )
     НезависимыйHTMLФайл.Собрать(
         "/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/www/css/мусор/test.html",
         "./test_res.html"

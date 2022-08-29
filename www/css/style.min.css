@@ -2,11 +2,15 @@
 body {
   background: #2e3440;
   color: #eceff4;
-  width: 100vw;
   margin: 0px;
   min-height: 1000px;
   font-family: sans-serif;
   font-size: 1em;
+}
+body .oth.center-div {
+  text-align: center;
+  position: relative;
+  top: 50%;
 }
 body #mddry_hint {
   text-align: left;
@@ -16,7 +20,7 @@ body #mddry_hint {
   display: block;
   min-height: 12px;
   max-height: 20vh;
-  overflow: scroll;
+  overflow: auto;
   width: 100%;
   overflow-wrap: break-word;
   z-index: 1;
@@ -32,10 +36,7 @@ body #mddry_hint #mddry_hint_body {
   text-align: justify;
 }
 body #mddry_hint #mddry_hint_hiden {
-  position: relative;
-  top: 5px;
-  margin-left: auto;
-  margin-right: 16px;
+  text-align: center;
   background: #2e3440;
   color: #d8dee9;
   border: #2e3440 solid 1px;
@@ -69,12 +70,12 @@ body #mddry_emerge_windows #mddry_emerge_windows_info {
   padding: 10px 15px 5px 30px;
   margin-right: 90px;
   white-space: nowrap;
-  overflow: scroll;
+  overflow: auto;
 }
 body #mddry_emerge_windows #mddry_emerge_windows_body {
   padding: 10px 15px 10px 15px;
   margin: 10px 15px 10px 15px;
-  overflow: scroll;
+  overflow: auto;
   max-width: 100%;
   max-height: 90%;
   border: 1px solid #eceff4;
@@ -95,7 +96,7 @@ body #mddry_menu {
 body #mddry_menu #detail_menu {
   padding-left: 5px;
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
   display: none;
 }
 body #mddry_menu #detail_menu ol {
@@ -156,6 +157,83 @@ body #mddry_menu #bt_show_menu {
 body #mddry_body {
   padding: 10px 15px 15px 15px;
   text-align: justify;
+}
+body #mddry_body .MdImg {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: #3b4252;
+  border: 2px solid #3b4252;
+}
+body #mddry_body .MdImg img {
+  -o-object-fit: contain;
+     object-fit: contain;
+  max-width: 90vw;
+  border-radius: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+body #mddry_body .MdImg .img_info {
+  margin-top: 10px;
+  text-align: center;
+  font-style: italic;
+}
+body #mddry_body .MdImg .Gallery {
+  /*
+  :Шаблон:
+
+  <div class="MdImg">
+  	<div class="Gallery">
+  		<div class="navigation left" onclick="Gallery.last_page(this)">
+  			<div class="oth center-div">
+  				&lt
+  			</div>
+  		</div>
+  		-----------------------------
+  		<img src="ФОТО_1" select="0">
+  		<img src="ФОТО_1" select="1">
+  		<img src="ФОТО_1" select="0">
+  		<img src="ФОТО_1" select="0">
+  		-----------------------------
+  		<div class="navigation right" onclick="Gallery.next_page(this)">
+  			<div class="oth center-div">
+  				&gt
+  			</div>
+  		</div>
+  	</div>
+  	<div class="name_img">Описание фото</div>
+  </div>
+  */
+  display: flex;
+  flex-direction: row;
+}
+body #mddry_body .MdImg .Gallery img[select="0"] {
+  display: none;
+  visibility: hidden;
+}
+body #mddry_body .MdImg .Gallery img[select="1"] {
+  display: block;
+  visibility: visible;
+}
+body #mddry_body .MdImg .Gallery .navigation {
+  background: #000;
+  opacity: 0.1;
+}
+body #mddry_body .MdImg .Gallery .navigation:hover {
+  opacity: 0.2;
+}
+body #mddry_body .MdImg .Gallery .navigation.left {
+  width: 30vw;
+}
+body #mddry_body .MdImg .Gallery .navigation.right {
+  width: 30vw;
+  right: 0;
+}
+body #mddry_body .MdImg .name_img {
+  text-align: center;
 }
 body #mddry_body .DropdownBlock {
   /* Пример как использовать в HTML
@@ -230,7 +308,7 @@ body .HelpText-span {
   </div>
   */
   display: inline-block;
-  border-bottom: 2px dotted #a3be8c;
+  border-bottom: 3px dotted #ebcb8b;
 }
 body .HelpText-div {
   /* Пример как использовать в HTML
