@@ -10,7 +10,7 @@
     
     
     <style>
-@charset "UTF-8";body {  background: #2e3440;  color: #eceff4;  margin: 0px;  min-height: 1000px;  font-family: sans-serif;  font-size: 1em;}body .oth.center-div {  text-align: center;  position: relative;  top: 50%;}body #mddry_hint {  text-align: left;  color: #d8dee9;  background: #434c5e;  visibility: hidden;  display: block;  min-height: 12px;  max-height: 20vh;  overflow: auto;  width: 100%;  overflow-wrap: break-word;  z-index: 1;  transition: height 0.3s, visibility 0.3s;  transition-timing-function: ease-in-out;  height: 0%;  position: fixed;  top: 0;  left: 0;}body #mddry_hint #mddry_hint_body {  padding: 5px 15px 5px 15px;  text-align: justify;}body #mddry_hint #mddry_hint_hiden {  text-align: center;  background: #2e3440;  color: #d8dee9;  border: #2e3440 solid 1px;  border-radius: 10px 0px 0px 0px;  width: 80px;  display: block;}body #mddry_emerge_windows {  visibility: hidden;  position: fixed;  background: #3b4252;  top: 0px;  right: 0px;  bottom: 0px;  left: 0px;  opacity: 0;  transition: opacity 0.3s ease-in-out;  z-index: 99;}body #mddry_emerge_windows #mddry_emerge_windows_hidden {  width: 89px;  height: 39px;  float: right;  background: #3b4252;  border: #3b4252;  color: #d8dee9;}body #mddry_emerge_windows #mddry_emerge_windows_info {  color: #d8dee9;  background: #434c5e;  padding: 10px 15px 5px 30px;  margin-right: 90px;  white-space: nowrap;  overflow: auto;}body #mddry_emerge_windows #mddry_emerge_windows_body {  padding: 10px 15px 10px 15px;  margin: 10px 15px 10px 15px;  overflow: auto;  max-width: 100%;  max-height: 90%;  border: 1px solid #eceff4;  border-radius: 10px;}body #mddry_menu {  position: fixed;  background: #3b4252;  right: 0px;  bottom: 0px;  padding: 0px;  z-index: 1;  border-radius: 10px 0px 0px 0px;  transition: height 0.3s ease-in-out, width 0.3s ease-in-out;  height: 20px;  width: 120px;}body #mddry_menu #detail_menu {  padding-left: 5px;  height: 100%;  overflow: auto;  display: none;}body #mddry_menu #detail_menu ol {  list-style-type: none;  color: #abb0ba;  padding-left: 0px;}body #mddry_menu #detail_menu ol li {  padding-right: 5px;}body #mddry_menu #detail_menu ol ol {  padding: 0px 0px 0px 5px;  border-radius: 5px 0px 0px 5px;  background: #505762;}body #mddry_menu #detail_menu ol ol ol {  background: #454a54;}body #mddry_menu #detail_menu ol ol ol ol {  background: #393e46;}body #mddry_menu #detail_menu ol ol ol ol ol {  background: #2f333a;}body #mddry_menu #detail_menu ol ol ol ol ol ol {  background: #2e3238;}body #mddry_menu #detail_menu ol ol ol ol ol ol ol {  background: #22252a;}body #mddry_menu #detail_menu ol a {  text-decoration: none;}body #mddry_menu #detail_menu ol a:link {  color: #abb0ba;}body #mddry_menu #detail_menu ol a:hover {  text-decoration: underline;}body #mddry_menu #detail_menu ol a:visited {  color: #abb0ba;}body #mddry_menu #bt_show_menu,body #mddry_menu #bt_hidden_menu {  border: none;  text-decoration: none;  width: 100%;  display: none;  padding: 0;  background: transparent;  color: #eceff4;}body #mddry_menu #bt_show_menu {  height: 100%;  display: block;  width: 120px;}body #mddry_body {  padding: 10px 15px 15px 15px;  text-align: justify;}body #mddry_body .MdImg {  padding-top: 10px;  padding-bottom: 10px;  margin-top: 10px;  margin-bottom: 10px;  border-radius: 10px;  background: #3b4252;  border: 2px solid #3b4252;}body #mddry_body .MdImg img {  -o-object-fit: contain;     object-fit: contain;  max-width: 90vw;  border-radius: 10px;  display: block;  margin-left: auto;  margin-right: auto;}body #mddry_body .MdImg .img_info {  margin-top: 10px;  text-align: center;  font-style: italic;}body #mddry_body .MdImg .Gallery {    display: flex;  flex-direction: row;}body #mddry_body .MdImg .Gallery img[select="0"] {  display: none;  visibility: hidden;}body #mddry_body .MdImg .Gallery img[select="1"] {  display: block;  visibility: visible;}body #mddry_body .MdImg .Gallery .navigation {  background: #000;  opacity: 0.1;}body #mddry_body .MdImg .Gallery .navigation:hover {  opacity: 0.2;}body #mddry_body .MdImg .Gallery .navigation.left {  width: 30vw;}body #mddry_body .MdImg .Gallery .navigation.right {  width: 30vw;  right: 0;}body #mddry_body .MdImg .name_img {  text-align: center;}body #mddry_body .DropdownBlock {    position: relative;  border: 2px solid #ebcb8b;  border-radius: 5px;  padding: 5px;}body #mddry_body .DropdownBlock .DropdownBlock-content {  opacity: 0;  transition: opacity 0.3s ease-in-out;  position: absolute;  border-bottom: none;  background-color: #3b4252;  min-width: 160px;  padding: 12px 16px;  z-index: 0;}body #mddry_body .DropdownBlock:hover .DropdownBlock-content {  opacity: 1;}body .HelpText-div, body .HelpText-span {  position: relative;}body .HelpText-div .HelpText-content, body .HelpText-span .HelpText-content {  visibility: hidden;  width: 120px;  background-color: #a3be8c;  color: #2e3440;  text-align: center;  border-radius: 6px;  padding: 5px;  word-wrap: break-word;  position: absolute;  z-index: 1;  bottom: 100%;  left: 50%;  margin-left: -60px;  opacity: 0;  transition: opacity 0.3s;}body .HelpText-div .HelpText-content::after, body .HelpText-span .HelpText-content::after {  content: "";  position: absolute;  top: 100%;  left: 50%;  margin-left: -5px;  border-width: 5px;  border-style: solid;  border-color: #434c5e transparent transparent transparent;}body .HelpText-div:hover .HelpText-content, body .HelpText-span:hover .HelpText-content {  visibility: visible;  opacity: 1;}body .HelpText-div:hover .HelpText-content, body .HelpText-span:hover .HelpText-content {  visibility: visible;}body .HelpText-span {    display: inline-block;  border-bottom: 3px dotted #ebcb8b;}body .HelpText-div {    display: block;}body .HelpText-div-b {  position: relative;  display: inline-block;}body .HelpText-div-b .HelpText-content {  visibility: hidden;  width: 120px;  background-color: #a3be8c;  color: #2e3440;  text-align: center;  border-radius: 6px;  padding: 5px 0;    position: absolute;  z-index: 1;  top: 100%;  left: 50%;  margin-left: -60px;}body .HelpText-div-b:hover .HelpText-content {  visibility: visible;}body #debug {  position: -webkit-sticky;  position: sticky;  bottom: 0;  z-index: 2;  width: 70%;}body #debug #debug_body {  display: none;}
+@charset "UTF-8";body {  background: #2e3440;  color: #eceff4;  margin: 0px;  width: 100%;  min-height: 1000px;  font-family: sans-serif;  font-size: 1em;}body .oth.center-div {  text-align: center;  position: relative;  top: 50%;}body #mddry_hint {  text-align: left;  color: #d8dee9;  background: #434c5e;  visibility: hidden;  display: block;  min-height: 12px;  max-height: 20vh;  overflow: auto;  width: 100%;  overflow-wrap: break-word;  z-index: 1;  transition: height 0.3s, visibility 0.3s;  transition-timing-function: ease-in-out;  height: 0%;  position: fixed;  top: 0;  left: 0;}body #mddry_hint #mddry_hint_body {  padding: 5px 15px 5px 15px;  text-align: justify;}body #mddry_hint #mddry_hint_hiden {  text-align: center;  background: #2e3440;  color: #d8dee9;  border: #2e3440 solid 1px;  border-radius: 10px 0px 0px 0px;  width: 80px;  display: block;}body #mddry_emerge_windows {  visibility: hidden;  position: fixed;  background: #3b4252;  top: 0px;  right: 0px;  bottom: 0px;  left: 0px;  opacity: 0;  transition: opacity 0.3s ease-in-out;  z-index: 99;}body #mddry_emerge_windows #mddry_emerge_windows_hidden {  width: 89px;  height: 39px;  float: right;  background: #3b4252;  border: #3b4252;  color: #d8dee9;}body #mddry_emerge_windows #mddry_emerge_windows_info {  color: #d8dee9;  background: #434c5e;  padding: 10px 15px 5px 30px;  margin-right: 90px;  white-space: nowrap;  overflow: auto;}body #mddry_emerge_windows #mddry_emerge_windows_body {  padding: 10px 15px 10px 15px;  margin: 10px 15px 10px 15px;  overflow: auto;  max-width: 100%;  max-height: 90%;  border: 1px solid #eceff4;  border-radius: 10px;}body #mddry_menu {  position: fixed;  background: #3b4252;  right: 0px;  bottom: 0px;  padding: 0px;  z-index: 1;  border-radius: 10px 0px 0px 0px;  transition: height 0.3s ease-in-out, width 0.3s ease-in-out;  height: 20px;  width: 120px;}body #mddry_menu #detail_menu {  padding-left: 5px;  height: 100%;  overflow: auto;  display: none;}body #mddry_menu #detail_menu ol {  list-style-type: none;  color: #abb0ba;  padding-left: 0px;}body #mddry_menu #detail_menu ol li {  padding-right: 5px;}body #mddry_menu #detail_menu ol ol {  padding: 0px 0px 0px 5px;  border-radius: 5px 0px 0px 5px;  background: #505762;}body #mddry_menu #detail_menu ol ol ol {  background: #454a54;}body #mddry_menu #detail_menu ol ol ol ol {  background: #393e46;}body #mddry_menu #detail_menu ol ol ol ol ol {  background: #2f333a;}body #mddry_menu #detail_menu ol ol ol ol ol ol {  background: #2e3238;}body #mddry_menu #detail_menu ol ol ol ol ol ol ol {  background: #22252a;}body #mddry_menu #detail_menu ol a {  text-decoration: none;}body #mddry_menu #detail_menu ol a:link {  color: #abb0ba;}body #mddry_menu #detail_menu ol a:hover {  text-decoration: underline;}body #mddry_menu #detail_menu ol a:visited {  color: #abb0ba;}body #mddry_menu #bt_show_menu,body #mddry_menu #bt_hidden_menu {  border: none;  text-decoration: none;  width: 100%;  display: none;  padding: 0;  background: transparent;  color: #eceff4;}body #mddry_menu #bt_show_menu {  height: 100%;  display: block;  width: 120px;}body #mddry_body {  padding: 10px 15px 15px 15px;  text-align: justify;}body #mddry_body .MdImg {  padding-top: 10px;  padding-bottom: 10px;  margin-top: 10px;  margin-bottom: 10px;  border-radius: 10px;  background: #3b4252;  border: 2px solid #3b4252;}body #mddry_body .MdImg img {  -o-object-fit: contain;     object-fit: contain;  max-width: 90vw;  border-radius: 10px;  display: block;  margin-left: auto;  margin-right: auto;}body #mddry_body .MdImg .img_info {  margin-top: 10px;  text-align: center;  font-style: italic;}body #mddry_body .MdImg .Gallery {    display: flex;  flex-direction: row;}body #mddry_body .MdImg .Gallery img[select="0"] {  display: none;  visibility: hidden;}body #mddry_body .MdImg .Gallery img[select="1"] {  display: block;  visibility: visible;}body #mddry_body .MdImg .Gallery .navigation {  background: #000;  opacity: 0.1;}body #mddry_body .MdImg .Gallery .navigation:hover {  opacity: 0.2;}body #mddry_body .MdImg .Gallery .navigation.left {  width: 30vw;}body #mddry_body .MdImg .Gallery .navigation.right {  width: 30vw;  right: 0;}body #mddry_body .MdImg .name_img {  text-align: center;}body #mddry_body .DropdownBlock {    position: relative;  border: 2px solid #ebcb8b;  border-radius: 5px;  padding: 5px;}body #mddry_body .DropdownBlock .DropdownBlock-content {  opacity: 0;  transition: opacity 0.3s ease-in-out;  position: absolute;  border-bottom: none;  background-color: #3b4252;  min-width: 160px;  padding: 12px 16px;  z-index: 0;}body #mddry_body .DropdownBlock:hover .DropdownBlock-content {  opacity: 1;}body .HelpText-div, body .HelpText-span {  position: relative;}body .HelpText-div .HelpText-content, body .HelpText-span .HelpText-content {  visibility: hidden;  width: 120px;  background-color: #a3be8c;  color: #2e3440;  text-align: center;  border-radius: 6px;  padding: 5px;  word-wrap: break-word;  position: absolute;  z-index: 1;  bottom: 100%;  left: 50%;  margin-left: -60px;  opacity: 0;  transition: opacity 0.3s;}body .HelpText-div .HelpText-content::after, body .HelpText-span .HelpText-content::after {  content: "";  position: absolute;  top: 100%;  left: 50%;  margin-left: -5px;  border-width: 5px;  border-style: solid;  border-color: #434c5e transparent transparent transparent;}body .HelpText-div:hover .HelpText-content, body .HelpText-span:hover .HelpText-content {  visibility: visible;  opacity: 1;}body .HelpText-div:hover .HelpText-content, body .HelpText-span:hover .HelpText-content {  visibility: visible;}body .HelpText-span {    display: inline-block;  border-bottom: 3px dotted #ebcb8b;}body .HelpText-div {    display: block;}body .HelpText-div-b {  position: relative;  display: inline-block;}body .HelpText-div-b .HelpText-content {  visibility: hidden;  width: 120px;  background-color: #a3be8c;  color: #2e3440;  text-align: center;  border-radius: 6px;  padding: 5px 0;    position: absolute;  z-index: 1;  top: 100%;  left: 50%;  margin-left: -60px;}body .HelpText-div-b:hover .HelpText-content {  visibility: visible;}body #debug {  position: -webkit-sticky;  position: sticky;  bottom: 0;  z-index: 2;  width: 70%;}body #debug #debug_body {  display: none;}
 </style>
 
 
@@ -152,7 +152,7 @@
     <div id="mddry_body">
         Текст с подсказкой, желательно
         он должен быть очень длинным
-        екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен быть
+        екст с подсказкой, желательно он долж/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/SYNC/Bison_sync/test_res.htmlен быть очень длинным екст с подсказкой, желательно он должен быть
         очень длинным екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он
         должен быть очень длинным екст с подсказкой, желательнекст с подсказкой, желательно он должен быть очень
         длинным екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен
@@ -166,203 +166,7 @@
         длинным екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен
         бы
         
-        <div class="MdImg">
-            <img src="" alt="" srcset="" class="CACHY_IMG_JS"  path="./MarkdownDRY.svg" >
-        </div>
-        
-        очень длинным екст с подсказкой, желательно он должен быть очень длинным о он должен быть очень длинным екст
-        с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен быть очень
-        длинным екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен
-        бы
-        !!!!!!!!!!!!!!!!!!!!!!!!
-        <div class="MdImg">
-            <div class="Gallery">
-                <div class="navigation left" onclick="Gallery.last_page(this)">
-                    <div class="oth center-div">
-                        &lt
-                    </div>
-                </div>
-                <img src="" select="0" class="CACHY_IMG_JS"  path="./47678176.png" >
-                <img src="" select="0" class="CACHY_IMG_JS"  path="./IndisputableInsertCodeFromFile3.png" >
-                <img src="" select="1" class="CACHY_IMG_JS"  path="./Технологии.png" >
-                <div class="navigation right" onclick="Gallery.next_page(this)">
-                    <div class="oth center-div">
-                        &gt
-                    </div>
-                </div>
-            </div>
-            <div class="name_img">Имя для</div>
-        </div>
-
-        !!!!!!!!!!!!!!!!!!!!!!!!!
-        очень длинным екст с подсказкой, желательно он должен быть очень длинным о он должен быть очень длинным екст
-        с подсказкой,
-        <div class="MdImg">
-            <img src="" alt="" srcset="" class="CACHY_IMG_JS"  path="./47678176.png" >
-            <div class="img_info"> очень 123длинным 132 с подсказкой, желательно </div>
-        </div>
-        желательно он должен быть очень длинным екст с подсказкой, желательно он должен быть очень
-        длинным екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен
-        бы
-        <div class="MdImg">
-            <img src="" alt="" srcset="" class="CACHY_IMG_JS"  path="./IndisputableInsertCodeFromFile3.png" >
-        </div>
-        очень длинным екст с подсказкой, желательно он должен быть очень длинным о он должен быть очень длинным екст
-        с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен быть очень
-        длинным екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен
-        бы
-        <div class="MdImg">
-            <img src="" alt="" srcset="" class="CACHY_IMG_JS"  path="./Технологии.png" >
-        </div>
-        очень длинным екст с подсказкой, желательно он должен быть очень длинным о он должен быть очень длинным екст
-        с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен быть очень
-        длинным екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен
-        бы
-
-
-
-        <br># Можно ли сэкономить если ездя на электросамокате ?
-        <br>
-        <br>%%Аксиомы:%%
-        <br>
-        <br>- [=минут-в-часу](60):мин
-        <br>- [=летний-сезон](5):месяц
-        <br>- [=Рабочих-Дней-В-Месяце](24):дня
-        <br>
-        12313
-        <div class="HelpText-span">
-            Hover over me123123131231
-            <span class="HelpText-content">Tooltip text123131232312312312312312312323123132123</span>
-        </div> 113123
-
-        <br>%%Маршрут:%%
-        <br>
-        <br>- [=в-одну-сторону](10):км
-        <br>- [=в-две-стороны](`=[=в-одну-сторону]*2`):км
-        <br>- [=время-в-пути-в-одну-сторону](30):мин
-        <br>- [=средняя-скорость](`20=([=в-одну-сторону]/[=время-в-пути-в-одну-сторону])*[=минут-в-часу]`):км-ч
-        <br>
-        <br>%%ЭлектроСамокат:%%
-        <br>
-        312312
-
-        <div class="DropdownBlock">
-
-            подсказкой, желательно32323
-            <div class="DropdownBlock-content">
-                подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен быть очень
-                длинным екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он
-                должен
-                быть очень длинным екст с подсказкой, желательнекст с подсказкой, желательно он должен быть очень
-                длинным
-                екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен быть
-                очень длинным екст с подсказкой, желательно он должен быть очень длинным о он должен быть очень длинным
-                екст
-                с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он должен быть очень
-                длинным екст с подсказкой, желательно он должен быть очень длинным екст с подсказкой, желательно он
-                должен
-                бы11111111111111111111111111111111111111111111111111111111111111333
-            </div>
-        </div>
-        1231231
-        <br>- [=количество-циклов-заряда-до-потери-емкости](800)
-        <br>- [=Цена-за-новый-аккумулятор](20_000):руб
-        <br>- [=Амер-в-батарее](18):Ампер
-        <br>- [=Цена-за-один-ампер](1000):руб
-        <br>- [=Сколько-км-я-проезжаю-за-лето](1000):км
-        <br>-
-        [=Сколько-теоретически-можно-проехать-на-одной-батарее](`=[=количество-циклов-заряда-до-потери-емкости]*[=в-две-стороны]`):км
-        <br>
-        <br>%%Общественный транспорт:%%
-        <br>
-        <br>- [=Билет-в-автобус](60):руб
-        <br>- [=Билет-в-автобус-скидка](31):руб
-        <br>- [=Билет-в-метро](65):руб
-        <br>- [=Билет-в-метро-скидка](41):руб
-        <br>
-        <br>- [=цена-в-одну-сторону-на-общественном-транспорте](`=[=Билет-в-автобус]+[=Билет-в-метро]`):руб
-        <br>-
-        [=цена-в-две-сторону-на-общественном-транспорте](`=[=цена-в-одну-сторону-на-общественном-транспорте]*2`):руб
-        <br>-
-        [=цена-в-одну-сторону-на-общественном-транспорте-скидка](`=[=Билет-в-автобус-скидка]+[=Билет-в-метро-скидка]`):руб
-        <br>-
-        [=цена-в-две-сторону-на-общественном-транспорте-скидка](`=[=цена-в-одну-сторону-на-общественном-транспорте-скидка]*2`):руб
-        <br>
-        <br>-=весь-летний-сезон-общественно-транспорте-скидка](`17280=([=цена-в-две-сторону-на-общественном-транспорте-скидка]*[=Рабочих-Дней-В-Месяце])*[=летний-сезон]`):руб
-        <br>-весь-летний-сезон-общественно-транспорте](`30000=([=цена-в-две-сторону-на-общественном-транспорте]*[=Рабочих-Дней-В-Месяце])*[=летний-сезон]`):руб
-        <br>
-        <br>%%Прокат электросамоката:%%
-        <br>
-        <br>- [=цена-за-старт](50):руб
-        <br>- [=цена-за-минуту](5):руб
-        <br>-
-        <br>[=цена-в-одну-сторону-на-прокатном](`=([=время-в-пути-в-одну-сторону]*[=цена-за-минуту])+[=цена-за-старт]`):руб
-        <br>- [=цена-в-две-сторону-на-прокатном](`=[=цена-в-одну-сторону-на-прокатном]*2`):руб
-        <br>
-        <br>---
-        <br>
-        <br>Давайте посчитаем
-        <br>
-        <br>Допустим наш маршрут на работу/учебу требует проезда на автобусе и метро.
-        <br>
-        <br>На момент 2022 в СПБ
-        <br>
-        <br>- цена на автобус(со скидками) = [=Билет-в-автобус]
-        <br>- цена на автобус(без скидки) = [=Билет-в-автобус-скидка]
-        <br>- цена на метро(со скидкой) = [=Билет-в-метро]
-        <br>- цена на метро(без скидки) = [=Билет-в-метро-скидка]
-        <br>
-        <br>Если весь летний сезон([=летний-сезон] месяца) ездить на общественном транспорте
-        <br>у нас получиться
-        <br>
-        <br>- Цена без скидки
-        <br>- [весь-летний-сезон-общественно-транспорте]
-        <br>- Цена со скидкой
-        <br>- [весь-летний-сезон-общественно-транспорте-скидка]
-        <br>`4=2+2`:руб
-        <br>Как заявлено у электросамоката `kugo m4` его бактерии хватит
-        <br>на [=количество-циклов-заряда-до-потери-емкости] зарядных циклов без потери
-        <br>емкости, давайте подсчитаем на сколько километров хватит до
-        <br>[=количество-циклов-заряда-до-потери-емкости] циклов зарядки
-        <br>
-        <br>`=[=Сколько-теоретически-можно-проехать-на-одной-батарее]+2+[=Билет-в-автобус]`:км
-        <br>
-        <br>
-        <br>
-        <br>Допустим мы проезжаем по [=в-две-стороны] км в день на электросамокате(это
-        <br>разряжает батарею до `15%` от `100%`) и каждый вечер ставите его на зарядку, то
-        <br>есть за один зарядный цикл мы можем проехать по 35 км. Это получается мы можем
-        <br>теоретически проехать
-        <br>`=[=Сколько-теоретически-можно-проехать-на-одной-батарее]`:км до полной
-        <br>замены батарею(притом [=количество-циклов-заряда-до-потери-емкости]
-        <br>циклов зарядов это смерть батареи, а потеря `20%`
-        <br>емкости батареи, притом если разряжать батарею до `50%` от `100%` количество
-        <br>циклов зарядов можно умножать на два). Цена на новую батарею можно прикинуть так
-        <br>`1A` = `[=Цена-за-один-ампер]`:руб, и для замены [=Амер-в-батарее]A батареи нам
-        <br>нужно `=[=Амер-в-батарее]*[=Цена-за-один-ампер]`.
-        <br>
-        <br>По опыту могу сказать что за все лето я проехал [=Сколько-км-я-проезжаю-за-лето]
-        <br>км, и теоретически(если бы лито-ионные аккумуляторы не теряли емкость сами по
-        <br>себе от времени) то я бы мог проездить на одной батареи
-        <br>еще
-        <br>`=([=Сколько-теоретически-можно-проехать-на-одной-батарее]-[=Сколько-км-я-проезжаю-за-лето])/[=Сколько-км-я-проезжаю-за-лето]`:лет,
-        <br>ну а в реальности батарея прослужит не более 5 лет, просто из-за
-        <br>деградации от времени.
-        <br>
-        <br>Очевидно что за 5 лет езды на общественном транспорте, как бы вы не экономили,
-        <br>выйдет дороже чем замена бактерии электросамоката.
-        <br>
-        <br>- Цена со скидкой на общественном транспорте за 5 лет если учитывать
-        <br>только [=летний-сезон]
-        <br>месяца
-        <br>лета `=[=весь-летний-сезон-общественно-транспорте-скидка]*[=летний-сезон]`:рублей
-        <br>
-        <br>
-        <br>- Итого: В выше указных условиях ездить на электросамокате в
-        <br>`2.84=([=весь-летний-сезон-общественно-транспорте-скидка]*[=летний-сезон])-([=Амер-в-батарее]*[=Цена-за-один-ампер])/([=Амер-в-батарее]*[=Цена-за-один-ампер])`
-        <br>дешевле чем на общественном транспорте.
-
-
+     
     </div>
     
     <div id="debug">
@@ -386,7 +190,7 @@
 
 <footer>
     <script>
-class CLS_mddry_emerge_windows {static show_or_hidden() {if (getComputedStyle(mddry_emerge_windows).visibility == "hidden") {mddry_emerge_windows.style.setProperty("visibility", "visible");mddry_emerge_windows.style.setProperty("opacity", "1");} else {mddry_emerge_windows.style.setProperty("opacity", "0");setTimeout(function () {mddry_emerge_windows.style.setProperty("visibility", "hidden");}, 300);}}static hot_key(e) {if (e.altKey && e.which == 82) {this.show_or_hidden();return false;}}}class CLS_mddry_hint {static show_or_hidden() {if (mddry_hint.getAttribute("show") == "0") {mddry_hint.style.setProperty("visibility", "visible");mddry_hint.style.setProperty("height", "100%");mddry_hint.setAttribute("show", "1");} else {mddry_hint.style.setProperty("visibility", "hidden");mddry_hint.style.setProperty("height", "0%");mddry_hint.setAttribute("show", "0");}}static hot_key(e) {if (e.altKey && e.which == 69) {this.show_or_hidden();return false;}}}class CLS_mddry_menu {static add_handler_on_click_from_header() {document.querySelectorAll("#detail_menu li").forEach((e) => {e.onclick = () => {window.location.href = e.children[0].href;};});}static show_or_hidden() {if (getComputedStyle(bt_hidden_menu).display == "none") {detail_menu.style.setProperty("display", "block");bt_show_menu.style.setProperty("display", "none");bt_hidden_menu.style.setProperty("display", "block");mddry_menu.style.setProperty("height", "35%");mddry_menu.style.setProperty("width", "100%");} else {bt_show_menu.style.setProperty("display", "block");bt_hidden_menu.style.setProperty("display", "none");mddry_menu.style.setProperty("height", "20px");mddry_menu.style.setProperty("width", "120px");setTimeout(function () {detail_menu.style.setProperty("display", "none");}, 300);}}static hot_key(e) {if (e.altKey && e.which == 84) {this.show_or_hidden();return false;}}static init() {this.add_handler_on_click_from_header();}}class Gallery {static _select_items(elm) {let e_parent = elm.parentNode;let max_len = e_parent.querySelectorAll("img").length - 1;let select_index = 0;for (let e0 of e_parent.querySelectorAll("img")) {if (e0.getAttribute("select") === "1") {e0.setAttribute("select", "0");break;}select_index += 1;}return [select_index, max_len, e_parent]}static last_page(elm) {let [select_index, max_len, e_parent] = this._select_items(elm);let next_page = undefined;if (select_index === 0) {next_page = max_len;} else {next_page = select_index - 1;}e_parent.querySelectorAll("img")[next_page].setAttribute("select", "1");}static next_page(elm) {let [select_index, max_len, e_parent] = this._select_items(elm);let next_page = undefined;if (select_index === max_len) {next_page = 0;} else {next_page = select_index + 1;}e_parent.querySelectorAll("img")[next_page].setAttribute("select", "1");}}class DevLogic {static show_or_hide_dev() {if (debug_body.style.display == "none") {debug_body.style.display = "block";} else {debug_body.style.display = "none";}}static mddry_hint_show_or_hide() {CLS_mddry_hint.show_or_hidden();}static mddry_emerge_windows_show_or_hide() {CLS_mddry_emerge_windows.show_or_hidden();}static mddry_hint_inset_text() {mddry_hint_body.innerText = dev_text_hide_mddry_hint.value;}}class InitApp {static hot_key() {document.onkeyup = function () {var e = e || window.event;CLS_mddry_menu.hot_key(e);CLS_mddry_emerge_windows.hot_key(e);CLS_mddry_hint.hot_key(e);};}static init() {this.hot_key();CLS_mddry_menu.init();}}InitApp.init();
+class CLS_mddry_emerge_windows {	static show_or_hidden() {		if (getComputedStyle(mddry_emerge_windows).visibility == "hidden") {						mddry_emerge_windows.style.setProperty("visibility", "visible");			mddry_emerge_windows.style.setProperty("opacity", "1");		} else {						mddry_emerge_windows.style.setProperty("opacity", "0");						setTimeout(function () {				mddry_emerge_windows.style.setProperty("visibility", "hidden");			}, 300);		}	}	static hot_key(e) {				if (e.altKey && e.which == 82) {			this.show_or_hidden();			return false;		}	}}class CLS_mddry_hint {	static show_or_hidden() {		if (mddry_hint.getAttribute("show") == "0") {						mddry_hint.style.setProperty("visibility", "visible");			mddry_hint.style.setProperty("height", "100%");			mddry_hint.setAttribute("show", "1");		} else {						mddry_hint.style.setProperty("visibility", "hidden");			mddry_hint.style.setProperty("height", "0%");			mddry_hint.setAttribute("show", "0");		}	}	static hot_key(e) {				if (e.altKey && e.which == 69) {			this.show_or_hidden();			return false;		}	}}class CLS_mddry_menu {		static add_handler_on_click_from_header() {		document.querySelectorAll("#detail_menu li").forEach((e) => {			e.onclick = () => {				window.location.href = e.children[0].href;			};		});	}		static show_or_hidden() {		if (getComputedStyle(bt_hidden_menu).display == "none") {						detail_menu.style.setProperty("display", "block");			bt_show_menu.style.setProperty("display", "none");			bt_hidden_menu.style.setProperty("display", "block");			mddry_menu.style.setProperty("height", "35%");			mddry_menu.style.setProperty("width", "100%");		} else {						bt_show_menu.style.setProperty("display", "block");			bt_hidden_menu.style.setProperty("display", "none");			mddry_menu.style.setProperty("height", "20px");			mddry_menu.style.setProperty("width", "120px");						setTimeout(function () {				detail_menu.style.setProperty("display", "none");			}, 300);		}	}		static hot_key(e) {		if (e.altKey && e.which == 84) {			this.show_or_hidden();			return false;		}	}	static init() {		this.add_handler_on_click_from_header();	}}class Gallery {		static _select_items(elm) {				let e_parent = elm.parentNode;				let max_len = e_parent.querySelectorAll("img").length - 1;				let select_index = 0;		for (let e0 of e_parent.querySelectorAll("img")) {			if (e0.getAttribute("select") === "1") {								e0.setAttribute("select", "0");				break;			}			select_index += 1;		}		return [select_index, max_len, e_parent];	}		static last_page(elm) {		let [select_index, max_len, e_parent] = this._select_items(elm);				let next_page = undefined;		if (select_index === 0) {			next_page = max_len;		} else {			next_page = select_index - 1;		}				e_parent.querySelectorAll("img")[next_page].setAttribute("select", "1");	}		static next_page(elm) {		let [select_index, max_len, e_parent] = this._select_items(elm);				let next_page = undefined;		if (select_index === max_len) {			next_page = 0;		} else {			next_page = select_index + 1;		}				e_parent.querySelectorAll("img")[next_page].setAttribute("select", "1");	}		static touch_move() {				let q = document.querySelector(".Gallery");				let elm = q.querySelector('img[select="1"]');				let doorstep = elm.width / 3;		console.log(doorstep);				let pos_start = 0;				let dif = 0;		let is_start = false;				q.addEventListener("touchstart", (e) => {			pos_start = e.targetTouches[0].clientX;			is_start = true;		});				q.addEventListener("touchmove", (e) => {			dif = e.targetTouches[0].clientX - pos_start;						if (dif < -1) {				dif *= -1;				console.log(`${dif} - ${doorstep}`);								if (dif > doorstep) {					if (is_start === true) {						is_start = false;						console.log("last_img");						Gallery.last_page(elm);					}				}			}						else {				console.log(`${dif} - ${doorstep}`);								if (dif > doorstep) {					if (is_start === true) {						is_start = false;						console.log("next_img");						Gallery.next_page(elm);					}				}			}		});	}	static init() {		this.touch_move();	}}class DevLogic {		static show_or_hide_dev() {				if (debug_body.style.display == "none") {			debug_body.style.display = "block";		} else {			debug_body.style.display = "none";		}	}	static mddry_hint_show_or_hide() {		CLS_mddry_hint.show_or_hidden();	}	static mddry_emerge_windows_show_or_hide() {		CLS_mddry_emerge_windows.show_or_hidden();	}	static mddry_hint_inset_text() {				mddry_hint_body.innerText = dev_text_hide_mddry_hint.value;	}}class InitApp {		static hot_key() {				document.onkeyup = function () {			var e = e || window.event;			CLS_mddry_menu.hot_key(e);			CLS_mddry_emerge_windows.hot_key(e);			CLS_mddry_hint.hot_key(e);		};	}		static init() {		this.hot_key();		CLS_mddry_menu.init();		Gallery.init();	}}window.onload = function () {	InitApp.init();};
 </script>
 </footer>
 

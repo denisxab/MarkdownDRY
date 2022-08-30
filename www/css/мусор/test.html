@@ -36,7 +36,7 @@
         <div style="width: 80vw;"><br></div>
         <div class="HelpText-div" style="display: inline-block;">
             <input type="button" id="mddry_hint_hiden" value="Скрыть" onclick="CLS_mddry_hint.show_or_hidden()">
-            <span class="HelpText-content">ALT+E</span>
+            <span class="HelpText-content hot_key_info">ALT+E</span>
         </div>
     </div>
     <!-- Всплывающие окно -->
@@ -45,7 +45,7 @@
         <div class="HelpText-div-b" style="float: right;">
             <input type="button" id="mddry_emerge_windows_hidden" value="Скрыть"
                 onclick="CLS_mddry_emerge_windows.show_or_hidden()">
-            <span class="HelpText-content">ALT+R</span>
+            <span class="HelpText-content hot_key_info">ALT+R</span>
         </div>
         <!-- Информация Всплывающего окна -->
         <div id="mddry_emerge_windows_info">
@@ -113,12 +113,12 @@
         <!-- Развернуть оглавление -->
         <div class="HelpText-div">
             <input type="button" id="bt_show_menu" value="<<" onclick="CLS_mddry_menu.show_or_hidden()">
-            <span class="HelpText-content">ALT+T</span>
+            <span class="HelpText-content hot_key_info">ALT+T</span>
         </div>
         <!-- Скрыть оглавление -->
         <div class="HelpText-div">
             <input type="button" id="bt_hidden_menu" value=">>" onclick="CLS_mddry_menu.show_or_hidden()" />
-            <span class="HelpText-content">ALT+T</span>
+            <span class="HelpText-content hot_key_info">ALT+T</span>
         </div>
         <!-- Темы оглавления -->
         <div id="detail_menu">
@@ -368,13 +368,13 @@
             <div>
                 <!-- Блок с подсказкой  -->
                 <input type="button" value="Скрыть/Показать подсказку" onclick="DevLogic.mddry_hint_show_or_hide()">
-                <input type="text" size="50" placeholder="Ввод в подсказку" id="dev_text_hide_mddry_hint"
+                <input type="text" size="20" placeholder="Ввод в подсказку" id="dev_text_hide_mddry_hint"
                     onchange="DevLogic.mddry_hint_inset_text()">
             </div>
             <div>
                 <input type="button" value="Скрыть/Показать всплывающие окно"
                     onclick="DevLogic.mddry_emerge_windows_show_or_hide()">
-                <input type="text" size="50" placeholder="Ввод в всплывающие окно" id="dev_text_hide_mddry_hint"
+                <input type="text" size="20" placeholder="Ввод в всплывающие окно" id="dev_text_hide_mddry_hint"
                     onchange="">
             </div>
         </div>

@@ -171,5 +171,5 @@ if __name__ == '__main__':
     # )
     НезависимыйHTMLФайл.Собрать(
         "/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/www/css/мусор/test.html",
-        "./test_res.html"
+        "/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/SYNC/Bison_sync/test_res.html"
     )
