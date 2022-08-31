@@ -225,7 +225,8 @@ class Test_Pub_To_MD:
         """
         Математическое выражение переменными и подсказками
         """
-        res = CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text, self.type_out), self.type_out)
+        res1 = CoreMarkdownDRY.HeaderMain(T_in_data.text, self.type_out)
+        res = CoreMarkdownDRY.MathSpan(res1, self.type_out)
         # T_check_data.write(res)
         assert res == T_check_data.text
 

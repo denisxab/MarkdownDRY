@@ -1,6 +1,5 @@
 import re
 from base64 import b64encode
-from enum import Enum
 from hashlib import md5
 from pathlib import Path
 from typing import Optional, Literal
@@ -12,19 +11,7 @@ from sympy import sympify, SympifyError
 from core.RegexStorage import REGEX, Tables
 from core.core_html import HTML_CLASS, HTML_JS
 from core.core_lang import Lange, ConvertSuffixToLange, AvailableLanguages
-from core.types import BaseCodeRefReturn
-
-
-class HeaderType(Enum):
-    """
-    Доступные типы заголовков
-    """
-    # Стандартный заголовок
-    Standard = 0
-    # Не отображать заголовок в оглавление
-    Hide = 1
-    # Сколько максимально возможно заголовков
-    MaxLvlHeader = 6
+from core.types import BaseCodeRefReturn, HeaderMain_data_body, HeaderType
 
 
 class StoreDoc:
@@ -65,8 +52,9 @@ class StoreDoc:
         """
         Структура для заголовков
         """
-        data_body = tuple[int, HeaderType, dict[str, tuple[str, str]], str]
-        data_type = dict[str, data_body]
+
+        # data_body = tuple[int, HeaderType, dict[str, tuple[str, str]], str]
+        data_type = dict[str, HeaderMain_data_body]
         # Заголовки - ИмяЗаголовка:(УровеньЗаголовка,ТипЗаголовка,{ИмяПеременной:(Значение,IdЗаголовка)},IdЗаголовка)
         date: data_type = dict()
 
@@ -106,9 +94,10 @@ class StoreDoc:
                     _last = _next
                 return ''.join(tmp)
 
-            id_header: str = f"{HTML_CLASS.ScreeningId(name)}_{md5(generate_id_header(cls.date).encode()).hexdigest()}"
-            cls.date[name] = (level, type_header.value, dict(), id_header)
-            return id_header
+            uuid_header: str = f"{HTML_CLASS.ScreeningId(name)}_{md5(generate_id_header(cls.date).encode()).hexdigest()}"
+            cls.date[name] = HeaderMain_data_body(level=level, type_header=type_header.value, vars=dict(),
+                                                  uuid_header=uuid_header)
+            return uuid_header
 
         @classmethod
         def addVar(cls, header: str, name: str, value: str, type_value: Optional[str]):
@@ -135,8 +124,8 @@ class StoreDoc:
             """
 
             # Ищем переменные в текущем заголовке
-            _res = cls.date[header][2].get(name, ('', ''))
-            if not _res:
+            _res = cls.date[header].vars.get(name, ('', ''))
+            if _res == ('', ''):
                 # Если не найдено в текущем заголовке, то ищем в вышестоящих заголовках
 
                 # Получаем заголовки в которых объявлена такая переменная
@@ -261,7 +250,7 @@ class CoreMarkdownDRY:
         if type_out == 'html':
             return REGEX.MathSpan.sub(MDDRY_TO_HTML.MathSpan, source_text)
         else:
-            return REGEX.MathSpan.sub(lambda m: '='.join(MDDRY_TO_MD.MathSpan(m)), source_text)
+            return REGEX.MathSpan.sub(lambda m: f"""`{'='.join(MDDRY_TO_MD.MathSpan(m))}`""", source_text)
 
     @classmethod
     def InsertCodeFromFile(cls, source_text: str, self_path: str, type_out: Literal['html', 'md']) -> Optional[str]:
@@ -827,7 +816,7 @@ class MDDRY_TO_HTML:
                                                   info=re.sub(':[^ \n.,]+', '', _m.group(0)).replace('[=', '[').replace('`', '')
                                                   )
                 else:
-                    return '='.join(MDDRY_TO_MD.MathSpan(_m, body=res))
+                    return f"""`{'='.join(MDDRY_TO_MD.MathSpan(_m, body=res))}`"""
             else:
                 return _m.group(0)
 
@@ -838,6 +827,7 @@ class MDDRY_TO_HTML:
             """
             return '.'.join(StoreDoc.HeaderMain.getVar(name_head, _m['name'], default=_m.group(0)))
 
+        # Поиск инициализации переменных
         body_header = REGEX.VarsInit.sub(_vars_init, body_header)
         # Обрабатываем обращения к переменным которые находятся внутри математического выражения `MathSpan`.
         body_header = REGEX.MathSpan.sub(_vars_get_from_math_span, body_header)
@@ -937,7 +927,7 @@ class MDDRY_TO_MD:
             # Если есть предварительный ответ, и он не равен ответу от `SymPy`
             if preliminary_response and preliminary_response != res:
                 # То записываем в лог ошибку и возвращаем выражение без изменений
-                logger.error(f"В уравнение {m.group(0)} ожидался ответ={preliminary_response}, но получен={res}",
+                logger.error(f"Ожидался ответ={preliminary_response}, но получен={res}.\nВ уравнение: {m.group(0)}.\nВ готовом варианте:{m['preliminary_response']}={body}",
                              "Не равные ответы в `MathSpan`")
                 return f'!ERROR!', text
             else:
