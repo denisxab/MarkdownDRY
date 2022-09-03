@@ -273,21 +273,31 @@ class Test_Pub_To_MD:
     @mark.parametrize(['T_in_data', 'T_check_store', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/ReferenceBlock.md',
-                         '6c454cd3f9956bb26bf15432703329a1e49c50af4cda08795e9880e1e69d78b3'),
+                         'aaa5301d9acd36250de35cf9768d33352a5a7907253e65ee834884ef8418272a'),
             ReadTextFile('./dataset/pub/out/store/ReferenceBlock.json',
-                         '1a95b66a729a8db3a7d0cc341662bfe84eefffb57a854b2e846d1cdeb5f6f6b7')
+                         '1a95b66a729a8db3a7d0cc341662bfe84eefffb57a854b2e846d1cdeb5f6f6b7'),
+            ReadTextFile('./dataset/pub/out/ReferenceBlock.md',
+                         'b75a9dc2a92a192ecccd1810600b2bf87d569f0b8f450cca00e480284cdcd79d')
         ]
     ])
     def test_ReferenceBlock(self, T_in_data, T_check_store, T_check_data):
-        # TODO:!!!!
-        """"""
-        res = CoreMarkdownDRY.ReferenceBlock(T_in_data.text, self.type_out)
+        CoreMarkdownDRY.ReferenceBlock(T_in_data.text, self.type_out)
+        assert dumps(StoreDoc.ReferenceBlock, ensure_ascii=False) == T_check_store.text
+        res = CoreMarkdownDRY.UseReferenceBlock(T_in_data.text, StoreDoc.ReferenceBlock)
+        # T_check_data.write(res)
         assert res == T_check_data.text
 
-        #
-        # assert dumps(StoreDoc.ReferenceBlock, ensure_ascii=False) == T_check_store.text
-
-    def test_ProceduralTemplates(self, T_in_data, T_check_store):
+    @mark.parametrize(['T_in_data', 'T_check_store', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/ProceduralTemplates.md',
+                         None),
+            ReadTextFile('./dataset/pub/out/store/ProceduralTemplates.json',
+                         None),
+            ReadTextFile('./dataset/pub/out/ProceduralTemplates.md',
+                         None)
+        ]
+    ])
+    def test_ProceduralTemplates(self, T_in_data, T_check_store, T_check_data):
         # TODO:!!!!
         ...
 
@@ -425,7 +435,7 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_store'], [
         [
             ReadTextFile('./dataset/pub/in/ReferenceBlock.md',
-                         '6c454cd3f9956bb26bf15432703329a1e49c50af4cda08795e9880e1e69d78b3'),
+                         'aaa5301d9acd36250de35cf9768d33352a5a7907253e65ee834884ef8418272a'),
             ReadTextFile('./dataset/pub/out/store/ReferenceBlock.json',
                          '1a95b66a729a8db3a7d0cc341662bfe84eefffb57a854b2e846d1cdeb5f6f6b7')
         ]
@@ -437,9 +447,9 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data', 'T_store'], [
         [
             ReadTextFile('./dataset/pub/in/ReferenceBlock.md',
-                         '6c454cd3f9956bb26bf15432703329a1e49c50af4cda08795e9880e1e69d78b3'),
+                         'aaa5301d9acd36250de35cf9768d33352a5a7907253e65ee834884ef8418272a'),
             ReadTextFile('./dataset/pub/out/ReferenceBlock.md',
-                         '210824208db94fb5d9f4277cc09e4643f894a11685a975a8fe5b8d3fdb95b23c'),
+                         'b75a9dc2a92a192ecccd1810600b2bf87d569f0b8f450cca00e480284cdcd79d'),
             ReadTextFile('./dataset/pub/out/store/ReferenceBlock.json',
                          '1a95b66a729a8db3a7d0cc341662bfe84eefffb57a854b2e846d1cdeb5f6f6b7')
         ]

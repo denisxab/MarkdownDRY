@@ -186,9 +186,9 @@ class CoreMarkdownDRY:
         Ссылочный блок объявление
         """
         if type_out == 'html':
-            return REGEX.ReferenceBlock.sub(MDDRY_TO_HTML.ReferenceBlock, source_text)
+            return REGEX.ReferenceBlock.sub(lambda m: GenericMDDRY.ReferenceBlock(m, MDDRY_TO_HTML.ReferenceBlock), source_text)
         else:
-            return REGEX.ReferenceBlock.sub(MDDRY_TO_MD.ReferenceBlock, source_text)
+            return REGEX.ReferenceBlock.sub(lambda m: GenericMDDRY.ReferenceBlock(m, MDDRY_TO_MD.ReferenceBlock), source_text)
 
     @staticmethod
     def UseReferenceBlock(source_text: str,
@@ -201,7 +201,7 @@ class CoreMarkdownDRY:
         """
         if not StoreDocs_ReferenceBlock:
             StoreDocs_ReferenceBlock = StoreDoc.ReferenceBlock
-        return REGEX.UseReferenceBlock.sub(lambda m: MDDRY_TO_MD.UseReferenceBlock(m, StoreDocs_ReferenceBlock),
+        return REGEX.UseReferenceBlock.sub(lambda m: GenericMDDRY.UseReferenceBlock(m, StoreDocs_ReferenceBlock),
                                            source_text)
 
     @classmethod
@@ -556,6 +556,26 @@ class GenericMDDRY:
             logger.error(f"{text}", "MathSpan")
             return '!ERROR!', text
 
+    @staticmethod
+    def ReferenceBlock(m: re.Match, call_res: typing.Callable[[re.Match], str]) -> str:
+        """Ссылочные блоки"""
+        # Заносим найденные ссылочные блоки в общий кеш документа
+        StoreDoc.ReferenceBlock[m['ref_block_name']] = m['ref_block_text']
+        return call_res(m)
+
+    @staticmethod
+    def UseReferenceBlock(m: re.Match, StoreDocs_ReferenceBlock: StoreDoc.ReferenceBlock) -> str:
+        """
+        Использование ссылочного блока
+        """
+        # Берем тест блока из хранилища
+        res = StoreDocs_ReferenceBlock.get(m['use_ref_block'])
+        if res:
+            return f"{res}{m['sm']}"
+        else:
+            # Если такого блока нет в хранилище, то возвращаем тот же текст
+            return m.group(0)
+
     @classmethod
     def InsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
         """
@@ -565,6 +585,7 @@ class GenericMDDRY:
         if not res:
             # Если нет ответа то вернем тот же текст
             return m.group(0)
+        # TODO: Проработать экранирование спец символов
         return f"{res.name_re}\n```{res.lange_file.name_lange} [{res.name_re}]{{{res.line_start}-{res.line_end}}}\n{res.text_in_file_cup}\n```"
 
     @classmethod
@@ -718,8 +739,6 @@ class MDDRY_TO_HTML:
     @staticmethod
     def ReferenceBlock(m: re.Match) -> str:
         """Ссылочные блоки"""
-        # Заносим найденные ссылочные блоки в общий кеш документа
-        StoreDoc.ReferenceBlock[m['ref_block_name']] = m['ref_block_text']
         # Формируем html
         return f"""
 <div class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.InReferenceBlock.value}">
@@ -974,23 +993,8 @@ class MDDRY_TO_MD:
     @staticmethod
     def ReferenceBlock(m: re.Match) -> str:
         """Ссылочные блоки"""
-        # Заносим найденные ссылочные блоки в общий кеш документа
-        StoreDoc.ReferenceBlock[m['ref_block_name']] = m['ref_block_text']
-        # Формируем html
-        return m.group(0)
-
-    @staticmethod
-    def UseReferenceBlock(m: re.Match, StoreDocs_ReferenceBlock: StoreDoc.ReferenceBlock) -> str:
-        """
-        Использование ссылочного блока
-        """
-        # Берем тест блока из хранилища
-        res = StoreDocs_ReferenceBlock.get(m['use_ref_block'])
-        if res:
-            return f"{res}{m['sm']}"
-        else:
-            # Если такого блока нет в хранилище, то возвращаем тот же текст
-            return m.group(0)
+        # TODO: Убрать следы ссылочного блока из обычного `Markdown`
+        return m['ref_block_text']
 
     @classmethod
     def IndisputableInsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
