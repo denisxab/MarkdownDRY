@@ -1,9 +1,11 @@
 import re
+import typing
 from decimal import Decimal
 from typing import Optional
 
-from logsmal import logger
 from sympy import SympifyError, sympify
+
+from core.types import ErrorBuildMDDRY
 
 
 class AggregateFunc:
@@ -29,7 +31,7 @@ class AggregateFunc:
         c_e: int = int(_m['c_e'])
         r_s: int = int(_m['r_s'])
         r_e: int = int(_m['r_e'])
-        date: Optional[list[str]] = None
+        date: Optional[list[str]]
         # Если нужно считать столбцы
         if c_s == c_e:
             date = [x[c_s - 1].strip() for x in table_body[r_s - 1:r_e]]
@@ -37,14 +39,17 @@ class AggregateFunc:
         elif r_s == r_e:
             date = [x.strip() for x in table_body[r_s - 1]][c_s - 1:c_e]
         else:
-            logger.warning(f'Строки или столбцы не равны: ({c_s},{c_e},{r_s},{r_e})', 'AggregateFunc.f_avg')
-            return _m.group(0)
+            raise ErrorBuildMDDRY(
+                f'В агрегатной функции:{_m["func"]} указаны не прямой(а по диагонали) '
+                f'диапазоны ячеек: {_m["func"]}({c_s},{c_e},{r_s},{r_e})',
+                ('Возможно вы указали ячейки по диагонали, но так нельзя делать',),
+                ('Укажите диапазон ячеек где строки или столбцы одинаковые, тогда это будет прямой диапазон',))
         if date:
             # После получения списка значений, вызываем указанную агрегатную функцию
             return str(AggregateFunc.__dict__[f"f_{_m['func']}"](cls, date))
         else:
-            logger.warning(f'Диапазон ячеек пуст: ({c_s},{c_e},{r_s},{r_e})', 'AggregateFunc.f_avg')
-            return _m.group(0)
+            raise ErrorBuildMDDRY(f'Диапазон ячеек пуст: {_m["func"]}({c_s},{c_e},{r_s},{r_e})', ('Диапазон ячеек пуст',),
+                                  ('Заполните диапазон ячеек',))
 
     @staticmethod
     def _toDecimal(date: list[str]) -> list[Decimal]:
@@ -71,13 +76,18 @@ class Tables:
     # Доступные агрегатные функции в таблице
     allowed_func = frozenset(x[2:] for x in AggregateFunc.__dict__.keys() if x.startswith('f_'))
 
-    def __init__(self, max_column: int):
+    title: list[str] = typing.NewType
+    body: list[list[str]] = typing.NewType
+
+    def __init__(self, text: str):
+        # Текст исходной таблицы
+        self.text = text
         # Заголовок
-        self.title: list[str] = []
+        self.title: Tables.title = []
         # Тело таблицы
-        self.body: list[list[str]] = [[]]
-        # Сколько максимум колонок в таблице
-        self.max_column = max_column
+        self.body: Tables.body = [[]]
+        # Узнаем сколько столбцов в таблице
+        self.max_column = REGEX.MultiLineTablesRow.match(self.text).group(0).count('|') - 1
         # Внутренний счетчик текущей строки
         self._next_row = 0
         # Внутренний счетчик текущего столбца
@@ -87,16 +97,22 @@ class Tables:
         """
         Преобразования в таблицы после добавления всех строк и столбцов.
         """
-        # Переносим заголовки из тела таблицы, в переменную непосредственно для заголовков
+        # Переносим заголовки из тела таблицы, в переменную непосредственно для заголовков, после этого удаляем заголовки из тела таблицы
         self.title = self.body.pop(0)
         # Удаляем строку с тире, которое должно быть под заголовок.
         self.body.pop(0)
         # Убираем возможность вызвать эту функцию более одного раза у экземпляра класса
-        self.EndBuild = lambda *args, **kwargs: None
+        self.EndBuild = None
+        self.addColumn_IfEndThenNewRow = None
+        # Убираем пустую строку с конца, так как уже в эту таблицу нельзя будут добавить новые данные
+        self.body.pop()
+        # Если это многостраничная таблица, то проводим дополнительные преобразования
+        if len(REGEX.MultiLineTablesIsMultyOrStandard.findall(self.text)) > self.max_column:
+            self._EndMultiLaneBuild()
 
-    def EndMultiLaneBuild(self):
+    def _EndMultiLaneBuild(self):
         """
-        Преобразования в таблицы для многострочных строк.
+        Преобразования многострочного тела таблицы, в объеденные строки
         """
         # Массив для результата.
         res: list[list[str]] = [[]]
@@ -108,19 +124,20 @@ class Tables:
         for _i, _x in enumerate(self.body[:-1]):
             # Если в строке у которой первый столбце НЕ начинается на три тире и более, то тогда считаем эту строку с полезными данными
             if not re.match('\s*-{3,}\s*', self.body[_i][0]):
-                # Перебираем столбцы в исходной таблице, так как это строка многострочная то столбцы будут объединиться
+                # Перебираем столбцы в исходной таблице, так как это строка многострочная, то столбцы будут объединиться
                 # в единую строчку, до того момента пока не встретиться три тире и более
                 for _in, _item in enumerate(self.body[_i]):
                     res[_num_col_res][_in] += f"{_item}\n"
             else:
                 # Если в строке первый столбец начинателя на три тире и более, то значит что многострочная строка закончена
                 # и должна быть сформироваться новая строка
+
+                # Обрезаем в конце лишний перенос строки
+                for _i2, _ in enumerate(res[_num_col_res]): res[_num_col_res][_i2] = res[_num_col_res][_i2][:-1]
+                # Формируем новую строку
                 res.append([])
                 _num_col_res += 1
-                for _ in self.body[_i]:
-                    res[_num_col_res].append('')
-        # Убираем лишний хвост
-        res.pop()
+                for _ in self.body[_i]: res[_num_col_res].append('')
         # Делаем подмену исходной таблицы на многострочную
         self.body = res
 
@@ -128,53 +145,66 @@ class Tables:
         """
         Реализуем логику агрегатных функций и простого обращения к ячейкам. Вызываем у таблицы после `EndBuild` и/или `EndMultiLaneBuild`
         """
-
+        if self.EndBuild is not None:
+            raise ErrorBuildMDDRY("Функция DepLogic вызвана до функции EndBuild",
+                                  reasons=('Вы вызвали функцию DepLogic до вызова EndBuild',),
+                                  solutions=('Вам нужно сначала вызвать функцию EndBuild, а потом уже DepLogic',),
+                                  )
         # Временное хранение найденного, или не найденного результата
-        tmp_re: Optional[re.Match] = None
+        tmp_re: Optional[re.Match]
         # Временное хранение арифметического выражения
-        tmp_equations: str = ''
+        tmp_equations: str
         for _i_r, _row in enumerate(self.body):
             for _i_c, _col in enumerate(_row):
-                # Ищем, где есть обращение к агрегатным функциям или ячейкам
+                # Ищем, где есть обращение к ячейкам или агрегатным функциям
                 tmp_re = REGEX.MultiLineTablesDepLogic.search(_col)
                 if tmp_re:
-                    # Получаем результат для агрегатных функций
+                    # Получаем результат от агрегатных функций
                     tmp_equations = REGEX.MultiLineTablesDepLogicAggregateFunc.sub(
                         lambda m: AggregateFunc.main(m, self.body) if m['func'] else m.group(0),
                         tmp_re['body']
                     )
                     try:
-                        # Получаем арифметическое выражение
+                        # Получаем значение из указанных строк и столбцов
                         tmp_equations = REGEX.MultiLineTablesDepLogicSlot.sub(
                             lambda m:
                             self.body[int(m['row']) - 1][int(m['col']) - 1].strip(),
                             tmp_equations
                         )
                     except IndexError:
-                        logger.error(
-                            f'Недосягаемый столбец или строка {tmp_re["body"]}',
-                            'Tables.DepLogic')
+                        raise ErrorBuildMDDRY(f'Недосягаемый столбец или строка {tmp_re["body"]}',
+                                              ('Вы обращаетесь в уравнение к несуществующим ячейкам таблицы',),
+                                              (f"В этом уравнение {tmp_re['body']} вы указали не достигаемый адрес, "
+                                               f"исправите его на достигаемый, напомню что таблицы имеет размер "
+                                               f"- Столбцы={self.max_column} - Строки={len(self.body)}",))
                     except ValueError:
-                        logger.error(
+                        raise ErrorBuildMDDRY(
                             f'Синтаксическая ошибка в ячейке, невозможно конвертировать в число {tmp_re["body"]}',
-                            'Tables.DepLogic')
+                            ('Вы написали вместо числа строку',), ('Напишите в адресе число',)
+                        )
                     try:
-                        # Считаем
+                        # Считаем записываем ответ в тело таблицы
                         self.body[_i_r][_i_c] = sympify(tmp_equations).__str__()
                     except SympifyError:
-                        logger.error(
+                        raise ErrorBuildMDDRY(
                             f'Синтаксическая ошибка в ячейке, не возможно произвести вычисления ячейки: {tmp_equations}',
-                            'Tables.DepLogic')
+                            (f"В уравнение {tmp_re['body']}|{tmp_equations} есть лишний текст который Sympy не может посчитать",),
+                            (f"Проверти что у вас в уравнение {tmp_re['body']}|{tmp_equations}  там должны быть числа, "
+                             f"или ключевые слова который поддерживает Sympy",)
+                        )
 
     def addColumn_IfEndThenNewRow(self, column: str):
         """
+        Добавить новый столбец в таблицу, если новый столбец превышает максимальное количество,
+        то он переходит на новую строку в начальный столбец
+
         :param column: Новый столбец в таблицу
         """
         # Добавляем новый столбец в строку,
         self.body[self._next_row].append(column)
         self._next_column += 1
         # Если он будет превышать максимально разрешенное количество столбцов в таблице,
-        # то добавляем этот столбце на новую строку
+        # то добавляем этот столбце на новую строку в начальный столбец
         if self._next_column == self.max_column:
             self._next_column = 0
             self.body.append([])
@@ -281,7 +311,10 @@ class REGEX:
     # Поиск многострочного столбца
     MultiLineTablesMultiLineColumn: re.Pattern = re.compile("(?:- +\|\n)(?P<row>\|(?:.\s*(?!\| -))+)")
     # Регулярное выражения для проверки таблица многострочная или обычная
-    MultiLineTablesIsMultyOrStandard: re.Pattern = re.compile("(?<=\|)\s+-+\s+(?=\|)")
+    MultiLineTablesIsMultyOrStandard: re.Pattern = re.compile(
+        "(?<=\|)\s*-+\s*(?=\|)"
+        # "(?<=\|)\s+-+\s+(?=\|)"
+    )
     # Регулярное выражение для поиска агрегатных функций или обращение к ячейкам
     MultiLineTablesDepLogic: re.Pattern = re.compile("`~(?P<body>[^`]+)`")
     # Поиск обращения ячейкам таблицы, и замена их на значение этой ячейки

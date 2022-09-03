@@ -2,6 +2,25 @@ import os.path
 import re
 
 from logsmal import logger
+from prettytable import PrettyTable, ALL
+
+
+def ptabel(data: tuple[tuple[str, ...], ...], align="l", junction_char='+', hrules=ALL) -> str:
+    """
+    :param data: [ [Столбец_1_Строка_1,Столбец_1_Строка_N], [Столбец_2_Строка_1,[Столбец_2_Строка_N]] ]
+    :param align: Выравнивание
+    :param junction_char: Строка из одного символа, используемая для рисования соединений линий. По умолчанию +.
+    :param hrules:  Управляет печатью горизонтальных линеек после строк. Допустимые значения: FRAME, HEADER, ALL, NONE- обратите
+    внимание, что это переменные, определенные внутри prettytable модуль, поэтому убедитесь, что вы импортируете их или используете
+     prettytable.FRAME
+    :return:
+    """
+    x = PrettyTable(data[0])
+    x.add_rows(data[1:])
+    x.align = align
+    x.junction_char = junction_char
+    x.hrules = hrules
+    return x.__str__()
 
 
 class File:

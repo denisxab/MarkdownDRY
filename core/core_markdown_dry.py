@@ -8,12 +8,14 @@ from typing import Optional, Literal
 
 import requests
 from logsmal import logger
+from prettytable import HEADER
 from sympy import sympify, SympifyError
 
 from core.RegexStorage import REGEX, Tables
 from core.core_html import HTML_CLASS, HTML_JS
-from core.core_lang import Lange, ConvertSuffixToLange, AvailableLanguages
-from core.types import BaseCodeRefReturn, HeaderMain_data_body, HeaderType, HeaderMain_ValueVar, \
+from core.core_lang import Lange, ConvertSuffixToLange, AvailableLanguages, BaseCodeRefReturn
+from core.helpful import ptabel
+from core.types import HeaderMain_data_body, HeaderType, HeaderMain_ValueVar, \
     HeaderMain_Headers_With_Found_Variables, HeaderMain
 
 
@@ -435,9 +437,11 @@ class CoreMarkdownDRY:
         """
         # TODO: реализовать type_out: Literal['html', 'md']
         if type_out == 'html':
-            return REGEX.MultiLineTables.sub(MDDRY_TO_HTML.MultiLineTables, source_text)
+            return REGEX.MultiLineTables.sub(lambda m: GenericMDDRY.MultiLineTables(m, MDDRY_TO_HTML.MultiLineTables),
+                                             source_text)
         else:
-            return source_text
+            return REGEX.MultiLineTables.sub(lambda m: GenericMDDRY.MultiLineTables(m, MDDRY_TO_MD.MultiLineTables),
+                                             source_text)
 
 
 class GenericMDDRY:
@@ -562,6 +566,26 @@ class GenericMDDRY:
             # Если нет ответа то вернем тот же текст
             return m.group(0)
         return f"{res.name_re}\n```{res.lange_file.name_lange} [{res.name_re}]{{{res.line_start}-{res.line_end}}}\n{res.text_in_file_cup}\n```"
+
+    @classmethod
+    def MultiLineTables(cls, m: re.Match, call_res: typing.Callable[[Tables.title, Tables.body], str]) -> str:
+        """
+        Многостраничная таблица
+
+        :param m:
+        :param call_res: Функция форматирования результата таблицы
+        """
+        text = m.group(0)
+        # Формируем таблицу
+        tb = Tables(text)
+        for _index, _head_table in enumerate(REGEX.MultiLineTablesColumn.finditer(text)):
+            tb.addColumn_IfEndThenNewRow(_head_table['column'].rstrip())
+        # После вставки всех строк и столбцов, производим конечное преобразование таблицы
+        tb.EndBuild()
+        # Реализуем логику агрегатных функций и простого обращения к ячейкам. Вызываем у таблицы после `EndBuild` и/или `EndMultiLaneBuild`
+        tb.DepLogic()
+        # Формируем таблицу через переданную функцию форматирования
+        return call_res(tb.title, tb.body)
 
     class HeaderMain:
         """
@@ -919,35 +943,18 @@ class MDDRY_TO_HTML:
         </div>"""
 
     @classmethod
-    def MultiLineTables(cls, m: re.Match) -> str:
+    def MultiLineTables(cls, title: Tables.title, body: Tables.body) -> str:
         """Многостраничная таблица"""
-        text = m.group(0)
-        # Узнаем сколько столбцов в таблице
-        count_column = REGEX.MultiLineTablesRow.match(text).group(0).count('|') - 1
-        # Формируем таблицу
-        tb = Tables(max_column=count_column)
-        for _index, _head_table in enumerate(REGEX.MultiLineTablesColumn.finditer(text)):
-            tb.addColumn_IfEndThenNewRow(_head_table['column'].rstrip())
-        # После вставки всех строк и столбцов, производим конечное преобразование таблицы
-        tb.EndBuild()
-        # Если это многостраничная таблица, то проводим дополнительные преобразования
-        if len(REGEX.MultiLineTablesIsMultyOrStandard.findall(text)) > count_column:
-            tb.EndMultiLaneBuild()
-        logger.debug(tb.title, flag='MultiLineTables Title')
-        logger.debug(tb.body, flag='MultiLineTables Body')
-        # Реализуем логику агрегатных функций и простого обращения к ячейкам. Вызываем у таблицы после `EndBuild` и/или `EndMultiLaneBuild`
-        tb.DepLogic()
-        # Формируем таблицу на языке html
         return f"""
 <div class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.MultiLineTables.value}">
 <table>
 <thead>
 <tr>
-{''.join(f'<th>{x}</th>' for x in tb.title)}
+{''.join(f'<th>{x}</th>' for x in title)}
 </tr>
 </thead>
 <tbody>
-{''.join(f'<tr>{"".join(f"<td>{y}</td>" for y in x)}</tr>' for x in tb.body).replace(f'{REGEX.NL}', "<br>")}
+{''.join(f'<tr>{"".join(f"<td>{y}</td>" for y in x)}</tr>' for x in body).replace(f'{REGEX.NL}', "<br>")}
 </tbody>
 </table>        
 </div>
@@ -996,14 +1003,14 @@ class MDDRY_TO_MD:
         Форматирование математического выражения
         """
         # Удаляем скобки если они уже были поставлены ранее
-        type_res = '(' + re.sub("\(|\)", '', m['type']) + ')' if m['type'] else ''
+        type_res = '(' + re.sub("[()]", '', m['type']) + ')' if m['type'] else ''
         return f"""`{'='.join(GenericMDDRY.MathSpan(m, body=body))}`{type_res}"""
 
-    # @classmethod
-    # def InsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
-    #     """Вставка кода"""
-    #     res: BaseCodeRefReturn = CoreMarkdownDRY.DeepLogic.BaseCodeRef(m, self_path)
-    #     if not res:
-    #         # Если нет ответа то вернем тот же текст
-    #         return m.group(0)
-    #     return f"{res.name_re}\n\n{res.text_in_file_cup}"
+    @classmethod
+    def MultiLineTables(cls, title: Tables.title, body: Tables.body) -> str:
+        """Многостраничная таблица"""
+        return '\n{0}\n'.format(
+            ptabel(
+                (title, *([y.replace('\n', '<br>').strip() for y in x] for x in body)), junction_char='|', hrules=HEADER
+            )
+        )

@@ -1,9 +1,9 @@
-import typing
 from enum import Enum
-from pathlib import Path
 from typing import NamedTuple
 
-from core.core_lang import Lange
+from logsmal import logger
+
+from core.helpful import ptabel
 
 
 class HeaderType(Enum):
@@ -18,27 +18,33 @@ class HeaderType(Enum):
     MaxLvlHeader = 6
 
 
-class BaseCodeRefReturn(NamedTuple):
-    """Структура данных для хранения ответа функции"""
-    # Описание ссылки
-    name_re: str
-    # Текст целиком из файла
-    text_in_file: str
-    # Обрезанный текст, на который указывает ссылка
-    text_in_file_cup: str
-    # Начальный индекс найденного элемента
-    line_start: int
-    # Конечный индекс найденного элемента
-    line_end: int
-    # На какой элемент ссылка
-    ref: str
-    # Имя языка программирования или разметки
-    lange_file: Lange
-    # Путь к файлу или ссылка
-    file: Path
+class ErrorBuildMDDRY(Exception):
+    """
+    Ошибка сборки MarkdownDRY
+    """
+
+    def __init__(self, text, reasons: tuple[str, ...], solutions: tuple[str, ...], ):
+        """
+
+        :param text: Текст ошибки
+        :param reasons: Список возможных причин возникновения исключения
+        :param solutions: Список возможных решения для исправления исключения
+        """
+        self.text = text
+        self.solutions = solutions
+        self.reasons = reasons
+
+    def __str__(self):
+        res = "ErrorBuildMDDRY: {text}\n{reasons}\n{solutions}".format(
+            text=self.text,
+            reasons=ptabel((('№', 'Возможные причины',), *[(i, x) for i, x in enumerate(self.reasons)],)),
+            solutions=ptabel((('№', 'Возможные решения',), *[(i, x) for i, x in enumerate(self.solutions)],)),
+        )
+        logger.error(res)
+        return res
 
 
-class HeaderMain_ValueVar(typing.NamedTuple):
+class HeaderMain_ValueVar(NamedTuple):
     """
     Хранение значения переменной
     """
@@ -48,7 +54,7 @@ class HeaderMain_ValueVar(typing.NamedTuple):
     type: str
 
 
-class HeaderMain_data_body(typing.NamedTuple):
+class HeaderMain_data_body(NamedTuple):
     """
     Что храниться в заголовке
     """
@@ -63,7 +69,7 @@ class HeaderMain_data_body(typing.NamedTuple):
     uuid_header: str
 
 
-class HeaderMain_Headers_With_Found_Variables(typing.NamedTuple):
+class HeaderMain_Headers_With_Found_Variables(NamedTuple):
     """
     Заголовки с найденными переменными
     """

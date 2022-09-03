@@ -1,7 +1,8 @@
 import re
 from abc import abstractstaticmethod, ABCMeta, abstractproperty
 from enum import Enum
-from typing import Optional
+from pathlib import Path
+from typing import Optional, NamedTuple
 
 from logsmal import logger
 
@@ -82,6 +83,26 @@ class Lange:
             res = _m2.group(), _m2.start(), end
             logger.debug(res, 'Якорь')
         return res
+
+
+class BaseCodeRefReturn(NamedTuple):
+    """Структура данных для хранения ответа функции"""
+    # Описание ссылки
+    name_re: str
+    # Текст целиком из файла
+    text_in_file: str
+    # Обрезанный текст, на который указывает ссылка
+    text_in_file_cup: str
+    # Начальный индекс найденного элемента
+    line_start: int
+    # Конечный индекс найденного элемента
+    line_end: int
+    # На какой элемент ссылка
+    ref: str
+    # Имя языка программирования или разметки
+    lange_file: Lange
+    # Путь к файлу или ссылка
+    file: Path
 
 
 class Python(Lange):

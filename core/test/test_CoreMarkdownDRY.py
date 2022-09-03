@@ -189,6 +189,23 @@ class Test_Pub_To_MD:
 
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
+            ReadTextFile('./dataset/pub/in/Header_Vars_MathSpan.md',
+                         '9f76b82334c75f08e6f3f862e4db6df142b81b420ef51d8a9649b40fef502aff'),
+            ReadTextFile('./dataset/pub/out/Header_Vars_MathSpan.md',
+                         'be2f4b5eafb298509054c61e6a754b838e44800b6d89b72579416176d94120a7'),
+        ]
+    ])
+    def test_Header_Vars_MathSpan(self, T_in_data, T_check_data):
+        """
+        Математическое выражение переменными и подсказками
+        """
+        res1 = CoreMarkdownDRY.HeaderMain(T_in_data.text, self.type_out)
+        res = CoreMarkdownDRY.MathSpan(res1, self.type_out)
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
             ReadTextFile('./dataset/pub/in/MathSpan_Simpl.md',
                          '013b0718ccde1ab8f6082f5dff24e26a34d5b17e811f1e3d8926c53ba7546b43'),
             ReadTextFile('./dataset/pub/out/MathSpan_Simpl.md',
@@ -211,36 +228,6 @@ class Test_Pub_To_MD:
     ])
     def test_MathSpan(self, T_in_data, T_check_data):
         res = CoreMarkdownDRY.MathSpan(CoreMarkdownDRY.HeaderMain(T_in_data.text, self.type_out), self.type_out)
-        # T_check_data.write(res)
-        assert res == T_check_data.text
-
-    @mark.parametrize(['T_in_data', 'T_check_data'], [
-        [
-            ReadTextFile('./dataset/pub/in/MathSpan_Upgrade.md',
-                         '9f76b82334c75f08e6f3f862e4db6df142b81b420ef51d8a9649b40fef502aff'),
-            ReadTextFile('./dataset/pub/out/MathSpan_Upgrade.md',
-                         'be2f4b5eafb298509054c61e6a754b838e44800b6d89b72579416176d94120a7'),
-        ]
-    ])
-    def test_MathSpan_Upgrade(self, T_in_data, T_check_data):
-        """
-        Математическое выражение переменными и подсказками
-        """
-        res1 = CoreMarkdownDRY.HeaderMain(T_in_data.text, self.type_out)
-        res = CoreMarkdownDRY.MathSpan(res1, self.type_out)
-        # T_check_data.write(res)
-        assert res == T_check_data.text
-
-    @mark.parametrize(['T_in_data', 'T_check_data'], [
-        [
-            ReadTextFile('./dataset/pub/in/MultiLineTables.md',
-                         None),
-            ReadTextFile('./dataset/pub/out/MultiLineTables.html',
-                         None)
-        ]
-    ])
-    def test_MultiLineTables(self, T_in_data, T_check_data):
-        res = CoreMarkdownDRY.MultiLineTables(T_in_data.text, self.type_out)
         # T_check_data.write(res)
         assert res == T_check_data.text
 
@@ -269,6 +256,40 @@ class Test_Pub_To_MD:
         res = CoreMarkdownDRY.IndisputableInsertCodeFromFile(T_in_data.text, self.path)
         # T_check_data.write(res)
         assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/MultiLineTables.md',
+                         '754e71650ce80e294b8dec8b618b417e8dedb1df345b629731b6def87703f366'),
+            ReadTextFile('./dataset/pub/out/MultiLineTables.md',
+                         'f31a28090d2ac20f71b40de78c67ac5cee48bb5c19d3714cf6fa1a65886e7b33')
+        ]
+    ])
+    def test_MultiLineTables(self, T_in_data, T_check_data):
+        res = CoreMarkdownDRY.MultiLineTables(T_in_data.text, self.type_out)
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_store', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/ReferenceBlock.md',
+                         '6c454cd3f9956bb26bf15432703329a1e49c50af4cda08795e9880e1e69d78b3'),
+            ReadTextFile('./dataset/pub/out/store/ReferenceBlock.json',
+                         '1a95b66a729a8db3a7d0cc341662bfe84eefffb57a854b2e846d1cdeb5f6f6b7')
+        ]
+    ])
+    def test_ReferenceBlock(self, T_in_data, T_check_store, T_check_data):
+        # TODO:!!!!
+        """"""
+        res = CoreMarkdownDRY.ReferenceBlock(T_in_data.text, self.type_out)
+        assert res == T_check_data.text
+
+        #
+        # assert dumps(StoreDoc.ReferenceBlock, ensure_ascii=False) == T_check_store.text
+
+    def test_ProceduralTemplates(self, T_in_data, T_check_store):
+        # TODO:!!!!
+        ...
 
 
 class Test_Pub:
@@ -476,7 +497,7 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/MultiLineTables.md',
-                         '88ac5f6f043375250bc6191c37d867138c698796c89b4f4eaab56336af568923'),
+                         '754e71650ce80e294b8dec8b618b417e8dedb1df345b629731b6def87703f366'),
             ReadTextFile('./dataset/pub/out/MultiLineTables.html',
                          None)
         ]
