@@ -13,23 +13,30 @@ class Lange:
     Шаблонная структура класса для языка программирования или языка разметки
     """
 
+    @abstractproperty
+    def name_lange(self):
+        """Имя языка для код блока в Markdown"""
+        ...
+
     class REGEX(metaclass=ABCMeta):
         """
-        Регулярные выражения
+        Регулярные выражения, для поиска элемента в конкретном языке программирования или разметки
         """
 
         @abstractproperty
         def class_func_var_re(self):
+            """Регулярное выражение для поиска класс/функции/переменной в коде"""
             ...
 
         @abstractproperty
         def class_meth_attr_re(self):
+            """Регулярное выражение для поиска метода/атрибута в коде"""
             ...
 
         @abstractstaticmethod
         def class_meth_attr(name: str, text: str) -> tuple[str, int, int]:
             """
-            Поиск метода/атрибута в коде
+            Логика поиск метода/атрибута в коде
 
             :param name:
             :param text:
@@ -81,6 +88,8 @@ class Python(Lange):
     """
     Python
     """
+
+    name_lange = 'py'
 
     class REGEX(Lange.REGEX):
         class_func_var_re = "(?P<class>(class[\t ]+{name}[\t ]*)(?:\((.+)\))?:\n(?:\t+| {{1,4}}.*\n+)+)|" \
@@ -180,7 +189,7 @@ class ConvertSuffixToLange:
     Класс для перевода расширения файла в стандартное имя языка программирования или языка разметки
     """
 
-    __store = {
+    _store = {
         '.py': AvailableLanguages.Python
     }
 
@@ -190,5 +199,8 @@ class ConvertSuffixToLange:
         Получить объект на основе расширения файла, если расширение файла не поддерживается или оно не указано то тогда
         будет поддержка только `УникальногоЯкоря`
         """
-        res = cls.__store.get(suffix, AvailableLanguages.NoneType)
-        return res.value
+        res = cls._store.get(suffix, AvailableLanguages.NoneType.value)
+        if res == AvailableLanguages.NoneType.value:
+            # Если это не поддерживаемый тип, то указываем имя языка таким же как и расширение файла, только без символов точки
+            res.name_lange = suffix.replace('.', '')
+        return res

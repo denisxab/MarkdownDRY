@@ -133,7 +133,7 @@ class Test_Pub_To_HTML:
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/MathSpan_Simpl.md',
-                         'ec42c80aa7a3437cab8ab289b9f9c498046117b8f10cc38910fcadd520e3bf97'),
+                         '013b0718ccde1ab8f6082f5dff24e26a34d5b17e811f1e3d8926c53ba7546b43'),
             ReadTextFile('./dataset/pub/out/MathSpan_Simpl.html',
                          None),
 
@@ -148,7 +148,7 @@ class Test_Pub_To_HTML:
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/MathSpan.md',
-                         'c52f435a90dea50ca3c50e95ea996d5ca53e55ee9ac1f3903894aeef01dbea42'),
+                         None),
             ReadTextFile('./dataset/pub/out/MathSpan.html',
                          None),
 
@@ -184,14 +184,15 @@ class Test_Pub_To_MD:
 
     def setup(self):
         self.type_out: Literal['html', 'md'] = 'md'
+        self.path = (Path(__file__).parent / 'dataset/pub/in').__str__()
         _next_test()
 
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/MathSpan_Simpl.md',
-                         'ec42c80aa7a3437cab8ab289b9f9c498046117b8f10cc38910fcadd520e3bf97'),
+                         '013b0718ccde1ab8f6082f5dff24e26a34d5b17e811f1e3d8926c53ba7546b43'),
             ReadTextFile('./dataset/pub/out/MathSpan_Simpl.md',
-                         None),
+                         '4ff6899ed4d0a8198ec10eaa31b233068be52af03541d65e4b9e9ffa2770d38f'),
         ]
     ])
     def test_MathSpan_Simpl(self, T_in_data, T_check_data):
@@ -203,9 +204,9 @@ class Test_Pub_To_MD:
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/MathSpan.md',
-                         'c52f435a90dea50ca3c50e95ea996d5ca53e55ee9ac1f3903894aeef01dbea42'),
+                         '0022143b197b892e6326267dae62a3632c17321f0d7152ca5bad4421fe1ead15'),
             ReadTextFile('./dataset/pub/out/MathSpan.md',
-                         None),
+                         'fd5b5ddfc754c2b938b0e82016e99026cc76e60fb01671322c3ac7fcf7a0318f'),
         ]
     ])
     def test_MathSpan(self, T_in_data, T_check_data):
@@ -216,9 +217,9 @@ class Test_Pub_To_MD:
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/MathSpan_Upgrade.md',
-                         None),
+                         '9f76b82334c75f08e6f3f862e4db6df142b81b420ef51d8a9649b40fef502aff'),
             ReadTextFile('./dataset/pub/out/MathSpan_Upgrade.md',
-                         None),
+                         'be2f4b5eafb298509054c61e6a754b838e44800b6d89b72579416176d94120a7'),
         ]
     ])
     def test_MathSpan_Upgrade(self, T_in_data, T_check_data):
@@ -227,6 +228,45 @@ class Test_Pub_To_MD:
         """
         res1 = CoreMarkdownDRY.HeaderMain(T_in_data.text, self.type_out)
         res = CoreMarkdownDRY.MathSpan(res1, self.type_out)
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/MultiLineTables.md',
+                         None),
+            ReadTextFile('./dataset/pub/out/MultiLineTables.html',
+                         None)
+        ]
+    ])
+    def test_MultiLineTables(self, T_in_data, T_check_data):
+        res = CoreMarkdownDRY.MultiLineTables(T_in_data.text, self.type_out)
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/InsertCodeFromFile.md',
+                         'a91e346234985ed1f3fc447c460c0c03189c46bf2e871ab00b7cea7f63213dff'),
+            ReadTextFile('./dataset/pub/out/InsertCodeFromFile.md',
+                         'f870d42aeedc168591f1f30249d16acd0abda14d1be495a9c9e9c57efecb8a7f')
+        ]
+    ])
+    def test_InsertCodeFromFile(self, T_in_data, T_check_data):
+        res = CoreMarkdownDRY.InsertCodeFromFile(T_in_data.text, self.path, self.type_out)
+        # T_check_data.write(res)
+        assert res == T_check_data.text
+
+    @mark.parametrize(['T_in_data', 'T_check_data'], [
+        [
+            ReadTextFile('./dataset/pub/in/IndisputableInsertCodeFromFile.md',
+                         '4d464265bce2b39d1fbf091e58134ee67854025370ad6352b40dd8581c22e671'),
+            ReadTextFile('./dataset/pub/out/IndisputableInsertCodeFromFile.md',
+                         'e96d4ca044661b7dcc35da52164b1206b5e12fa5bd74bf2fa77f8b015510af27'),
+        ]
+    ])
+    def test_IndisputableInsertCodeFromFile(self, T_in_data, T_check_data):
+        res = CoreMarkdownDRY.IndisputableInsertCodeFromFile(T_in_data.text, self.path)
         # T_check_data.write(res)
         assert res == T_check_data.text
 
@@ -244,7 +284,7 @@ class Test_Pub:
     @mark.parametrize(['T_in_data', 'T_check_data'], [
         [
             ReadTextFile('./dataset/pub/in/InsertCodeFromFile.md',
-                         'db0cb3300b33614ef2072406de60534782913406417d79a181d0c515d457b371'),
+                         None),
             ReadTextFile('./dataset/pub/out/InsertCodeFromFile.html',
                          None)
         ]

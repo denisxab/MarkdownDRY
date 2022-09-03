@@ -1,4 +1,6 @@
 import re
+import re
+import typing
 from base64 import b64encode
 from hashlib import md5
 from pathlib import Path
@@ -11,7 +13,8 @@ from sympy import sympify, SympifyError
 from core.RegexStorage import REGEX, Tables
 from core.core_html import HTML_CLASS, HTML_JS
 from core.core_lang import Lange, ConvertSuffixToLange, AvailableLanguages
-from core.types import BaseCodeRefReturn, HeaderMain_data_body, HeaderType
+from core.types import BaseCodeRefReturn, HeaderMain_data_body, HeaderType, HeaderMain_ValueVar, \
+    HeaderMain_Headers_With_Found_Variables, HeaderMain
 
 
 class StoreDoc:
@@ -53,10 +56,8 @@ class StoreDoc:
         Структура для заголовков
         """
 
-        # data_body = tuple[int, HeaderType, dict[str, tuple[str, str]], str]
-        data_type = dict[str, HeaderMain_data_body]
         # Заголовки - ИмяЗаголовка:(УровеньЗаголовка,ТипЗаголовка,{ИмяПеременной:(Значение,IdЗаголовка)},IdЗаголовка)
-        date: data_type = dict()
+        date: HeaderMain.date = dict()
 
         @classmethod
         def clear(cls):
@@ -70,7 +71,7 @@ class StoreDoc:
                        type_header: HeaderType,
                        ) -> str:
             """
-            Добавить новый заголовок в кеш
+            Добавить новый заголовок в кеш.
 
             :param name: Имя заголовка
             :param level: Уровень заголовка
@@ -78,7 +79,7 @@ class StoreDoc:
             :return: Уникальный идентификатор заголовка
             """
 
-            def generate_id_header(date: cls.data_type) -> str:
+            def generate_id_header(date: cls.date) -> str:
                 """
                 Создаем уникальный идентификатор заголовка на основе вложенности выше стоящих заголовках
                 """
@@ -95,7 +96,9 @@ class StoreDoc:
                 return ''.join(tmp)
 
             uuid_header: str = f"{HTML_CLASS.ScreeningId(name)}_{md5(generate_id_header(cls.date).encode()).hexdigest()}"
-            cls.date[name] = HeaderMain_data_body(level=level, type_header=type_header.value, vars=dict(),
+            cls.date[name] = HeaderMain_data_body(level=level,
+                                                  type_header=type_header.value,
+                                                  vars=dict(),
                                                   uuid_header=uuid_header)
             return uuid_header
 
@@ -109,7 +112,7 @@ class StoreDoc:
             :param name: Имя племенной
             :param value: Значение
             """
-            cls.date[header][2][name] = (value, type_value if type_value else '')
+            cls.date[header].vars[name] = HeaderMain_ValueVar(value=value, type=type_value if type_value else '')
 
         @classmethod
         def getVar(cls, header: str, name: str, default: Optional[str] = None, context: str = None) -> tuple[str, str]:
@@ -119,7 +122,7 @@ class StoreDoc:
             :param header: Имя заголовка
             :param name: Имя переменной
             :param default: Значение если ключа нет
-            :param context: Для подробного вывода ошибок, передаем контекст в котором происходит поиск переменных
+            :param context: Для подробного вывода в лог с ошибками, передаем контекст в котором происходит поиск переменных
             :return: (ЗначениеПеременной, ТипПеременной)
             """
 
@@ -129,10 +132,10 @@ class StoreDoc:
                 # Если не найдено в текущем заголовке, то ищем в вышестоящих заголовках
 
                 # Получаем заголовки в которых объявлена такая переменная
-                _tmp: list[tuple[str, cls.data_body]] = [
-                    (k, v)
+                _tmp: list[HeaderMain_Headers_With_Found_Variables] = [
+                    HeaderMain_Headers_With_Found_Variables(name_head=k, value=v)
                     for k, v in cls.date.items()
-                    if v[2].get(name)
+                    if v.vars.get(name)
                 ]
                 if _tmp:
                     # Если есть заголовки с такими переменными, то тогда начинаем искать с конца,
@@ -141,14 +144,14 @@ class StoreDoc:
                     # из результата так как там объявлена самая новая переменная.
                     _last: int = HeaderType.MaxLvlHeader.value
                     _next: int = 0
-                    _tmp2 = []
+                    _tmp2: list[HeaderMain_Headers_With_Found_Variables] = []
                     for _index in range(len(_tmp) - 1, -1, -1):
-                        _next = _tmp[_index][1][0]
+                        _next = _tmp[_index].value.level  # _tmp[_index][1][0]
                         if _next >= _last:
                             break
                         _last = _next
                         _tmp2.append(_tmp[_index])
-                    _res = _tmp2[0][1][2][name]
+                    _res = _tmp2[0].value.vars[name]
                 else:
                     logger.error(f"{header=}->{name=}->{context=}", "Переменная не инициализирована")
                     return default, ''
@@ -250,17 +253,17 @@ class CoreMarkdownDRY:
         if type_out == 'html':
             return REGEX.MathSpan.sub(MDDRY_TO_HTML.MathSpan, source_text)
         else:
-            return REGEX.MathSpan.sub(lambda m: f"""`{'='.join(MDDRY_TO_MD.MathSpan(m))}`""", source_text)
+            return REGEX.MathSpan.sub(lambda m: MDDRY_TO_MD.MathSpan(m), source_text)
 
     @classmethod
     def InsertCodeFromFile(cls, source_text: str, self_path: str, type_out: Literal['html', 'md']) -> Optional[str]:
         """
-        Вставка кода, не трогает `md` файл, а создается в HTML
+        Экранированная вставка текста из файла, в код блок, далее он будет обработан стандартным `Markdown` этапом для код блоков
         """
         if type_out == 'html':
             return REGEX.InsertCodeFromFile.sub(lambda t: MDDRY_TO_HTML.InsertCodeFromFile(t, self_path), source_text)
         else:
-            return REGEX.InsertCodeFromFile.sub(lambda t: MDDRY_TO_MD.InsertCodeFromFile(t, self_path), source_text)
+            return REGEX.InsertCodeFromFile.sub(lambda t: GenericMDDRY.InsertCodeFromFile(t, self_path), source_text)
 
     @classmethod
     def IndisputableInsertCodeFromFile(cls, source_text: str, self_path: str) -> Optional[str]:
@@ -317,10 +320,11 @@ class CoreMarkdownDRY:
         Поиск заголовка и его тела
         """
         if type_out == 'html':
-            res = REGEX.HeaderMain.sub(lambda m: MDDRY_TO_HTML.HeaderMain(m, type_out=type_out), source_text)
+            res = REGEX.HeaderMain.sub(
+                lambda m: GenericMDDRY.HeaderMain.call(m, MDDRY_TO_HTML.HeaderMain, MDDRY_TO_HTML.MathSpan), source_text)
 
             def create_table_contents_from_HTML(
-                    hed: StoreDoc.HeaderMain.data_type,
+                    hed: StoreDoc.HeaderMain.date,
                     template_li: str = "<li>{header}</li>"
             ) -> str:
                 """
@@ -421,7 +425,8 @@ class CoreMarkdownDRY:
             </div>
             """[1:], res=res)
         else:
-            return REGEX.HeaderMain.sub(lambda m: MDDRY_TO_HTML.HeaderMain(m, type_out=type_out), source_text)
+            return REGEX.HeaderMain.sub(
+                lambda m: GenericMDDRY.HeaderMain.call(m, MDDRY_TO_MD.HeaderMain, MDDRY_TO_MD.MathSpan), source_text)
 
     @classmethod
     def MultiLineTables(cls, source_text: str, type_out: Literal['html', 'md']) -> Optional[str]:
@@ -434,76 +439,251 @@ class CoreMarkdownDRY:
         else:
             return source_text
 
-    class DeepLogic:
-        """Углубленная логика MarkdownDRY"""
+
+class GenericMDDRY:
+    """
+    Основной функционал MarkdownDRY, который будет использоваться для конвертации в другие форматы,
+    сейчас поддерживаются форматы: `html`, `md`
+    """
+
+    @staticmethod
+    def BaseCodeRef(m: re.Match, self_path: str) -> Optional[BaseCodeRefReturn]:
+        """
+        Основная логика ссылок на код
+        """
+        # Имя ссылки
+        name_re: str = m['name']
+        # Базовое имя в теле ссылки
+        main_re: str = m['main']
+        # Уточняющие имя у базового имени
+        child_re: str = m['child']
+        if not m['path']:
+            # Если не указан путь, то выходим
+            return None
+        # Путь к исходному файлу
+        path_re: Path = Path(m['path'])
+        # Проверим что это НЕ бинарный файл, путем просмотра расширения файла. Если это бинарный файл, то выходим из функции
+        if AvailableLanguages.Binary.value.search(path_re.suffix):
+            return None
+        # Язык программирования или разметки
+        lange_file: Lange = ConvertSuffixToLange.getlang(path_re.suffix)
+        # Исходный текст кода
+        text_in_file: str
+        # Проверяем куда указывает путь, локально или в интернет
+        path_or_url = re.match('(https|http|ftp|tcp|localhost):', m['path'])
+        if path_or_url:
+            """Это ссылку в интернет"""
+            logger.debug(m['path'], 'URL')
+            # Скачиваем исходный текст из интернета
+            text_in_file = requests.get(m['path']).text
+        else:
+            """Это локальный путь"""
+            logger.debug(path_re, 'LOCAL')  # Path(self_path, m['path']).resolve().__str__()
+            try:
+                # Читаем файл по абсолютному пути
+                text_in_file = Path(self_path, path_re).resolve().read_text()
+            except FileNotFoundError as e:
+                logger.error(f"{path_re}:\n{e}", "LOCAL_BaseCodeRef")
+                return None
+            except TypeError as e:
+                logger.error(f"{path_re}:\n{e}", "LOCAL_BaseCodeRef")
+                return None
+
+        # Формируем ссылку, например ей можно использовать для `HTML`
+        ref = f"{f'{main_re}' if main_re else ''}{f'.{child_re}' if child_re else ''}"
+        # Переменная для указания индекса начало найденного элемента
+        line_start = 0
+        # Переменная для указания индекса конца найденного элемента
+        line_end = -1
+        # Переменная для хранения обрезанного текста
+        text_in_file_cup: str = text_in_file
+        # Если указано, что вставлять, то вставляем этот участок код из файла
+        if main_re:
+            # Если указывает на класс/функцию/переменную/УникальныйЯкорь
+            text_in_file_cup, line_start, line_end = lange_file.REGEX.class_func_var_anchor(main_re, text_in_file)
+            if child_re:
+                # Если указывает на метод класса/атрибут класса
+                text_in_file_cup, tmp_line_start, tmp_line_end = lange_file.REGEX.class_meth_attr(child_re, text_in_file_cup)
+                # Конец найденного текста
+                line_end = line_start + tmp_line_end if tmp_line_end else 0
+                # Начало найденного текст
+                line_start = line_start + tmp_line_start if tmp_line_start else 0
+        return BaseCodeRefReturn(name_re=name_re,
+                                 text_in_file_cup=text_in_file_cup,
+                                 text_in_file=text_in_file,
+                                 line_start=line_start,
+                                 line_end=line_end,
+                                 ref=ref,
+                                 lange_file=lange_file,
+                                 file=path_re)
+
+    @classmethod
+    def MathSpan(cls, m: re.Match, body: str = None) -> tuple[str, str]:
+        """
+        Высчитываем математическое выражение с помощью SymPy, и возвращаем результат выражения
+
+        :param m:
+        :param body: Тело математического выражения, это нужно, для того чтобы передавать значения переменных, а не их имена
+        """
+
+        """
+        Доработать математический размах, сделать подсказку переменной, и её типа,
+        добавить возможность самому писать ответ к выражению, но все равно делать
+        расчеты для проверки правильности указного ответа, если ответы разные то
+        выдавать ошибку сборки!
+        """
+
+        text: str = body if body else m['body']
+        # Предварительный ответ, который заранее написан в выражение
+        preliminary_response: Optional[str] = m['preliminary_response']
+        try:
+            # Ответ посчитанный SymPy
+            res = sympify(text).__str__()
+            # Если есть предварительный ответ, и он не равен ответу от `SymPy`
+            if preliminary_response and preliminary_response != res:
+                # То записываем в лог ошибку и возвращаем выражение с ошибкой в ответе
+                logger.error(
+                    f"Ожидался ответ={preliminary_response}, но получен={res}.\nВ уравнение: {m.group(0)}.\nВ готовом варианте:{m['preliminary_response']}={body}",
+                    "Не равные ответы в `MathSpan`")
+                return f'!ERROR!', text
+            else:
+                return res, text
+        except SympifyError:
+            logger.error(f"{text}", "MathSpan")
+            return '!ERROR!', text
+
+    @classmethod
+    def InsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
+        """
+        Экранированная вставка текста из файла, в код блок, далее он будет обработан стандартным `Markdown` этапом для код блоков
+        """
+        res: BaseCodeRefReturn = cls.BaseCodeRef(m, self_path)
+        if not res:
+            # Если нет ответа то вернем тот же текст
+            return m.group(0)
+        return f"{res.name_re}\n```{res.lange_file.name_lange} [{res.name_re}]{{{res.line_start}-{res.line_end}}}\n{res.text_in_file_cup}\n```"
+
+    class HeaderMain:
+        """
+        Основная логика заголовков и переменных в MarkdownDRY
+        """
+
+        @classmethod
+        def call(cls, m: re.Match,
+                 call_return: typing.Callable[[int, str, str, str, str], str],
+                 call_format_math_span: typing.Callable[[re.Match, str], str]) -> str:
+            """
+            :param m:
+            :param call_return: Функция для формирования результата в нужный формат
+            :param call_format_math_span: Функция для формирования результат математического выражения в котором используются переменные
+
+
+            1. Ищем все заголовки. Нам нужно получить имя заголовка, его уровень, и его тело. После этого проверяем тип заголовка, он
+            может быть обычным, а может быть скрытым.
+
+            2. Начинаем поиск инициализируемых переменных, если это простое значение то записываем его в кеш, также возможны случае
+            когда в текуще инициализируемой переменной идет обращение к уже ранее созданным переменным, тогда нужно получить
+            значение этих переменных из кеша, и записать к текущую инициализируемую переменную, после этого возможно что в
+            инициализируемой переменной есть математическое выражение(MathSpan), тогда нам нужно его вычислить, после всех
+            проверок записываем имя и значение переменной в `StoreDoc.HeaderMain`
+
+            3. После этого проверяем во всем тексе заголовка обращения к переменным, если есть то тогда проверяем кеш на наличие переменных
+            к которым идет обращение. Логика поиска переменных похоже на область видимости в других языках - поиск начинается от текущего заголовка
+            и идет вверх по заголовкам, поиск остановиться в тот момент когда следующий заголовок будет не уменьшатся, а увеличиваться.
+
+            Например, если заголовки идут как - [3,2,1,2] то в результате будет [3,2,1]
+
+            После этого происходит замена обращение к переменной на значение переменной.
+            """
+            # Получаем имя заголовка
+            name_head = m['name']
+            # Получим тело заголовка
+            body_header: str = m['body']
+            # Получаем тип заголовка
+            res_HeadersType: Optional[HeaderType] = None
+            if m['hidden']:
+                res_HeadersType = HeaderType.Hide
+                res_HeadersTypeHtml = HTML_CLASS.HiddenHeaders.value
+            else:
+                res_HeadersType = HeaderType.Standard
+                res_HeadersTypeHtml = HTML_CLASS.StandardHeaders.value
+            # Получаем уровень заголовка
+            level: Literal[1, 2, 3, 4, 5, 6] = len(m['lvl'])
+            # Добавляем заголовок в кеш, получаем уникальный id для заголовка
+            name_from_id = StoreDoc.HeaderMain.addHeaders(name_head, level, res_HeadersType)
+            #######################################################################################################
+            # Поиск инициализации переменных
+            body_header = REGEX.VarsInit.sub(lambda _m: cls.vars_init(_m, name_head), body_header)
+            # Обрабатываем обращения к переменным которые находятся внутри математического выражения `MathSpan`.
+            body_header = REGEX.MathSpan.sub(lambda _m: cls.vars_get_from_math_span(_m, name_head, call_format_math_span),
+                                             body_header)
+            # Обрабатываем обращения во всем тексе.
+            body_header = REGEX.VarsGet.sub(lambda _m: cls.vars_get(_m, name_head), body_header)
+            #######################################################################################################
+
+            return call_return(level, name_from_id, res_HeadersTypeHtml, name_head, body_header)
 
         @staticmethod
-        def BaseCodeRef(m: re.Match, self_path: str) -> Optional[BaseCodeRefReturn]:
+        def vars_init(m: re.Match, name_head: str) -> str:
             """
-            Подготовить параметры для ссылки на код
-            """
-            name_re: str = m['name']
-            main_re: str = m['main']
-            child_re: str = m['child']
-            if not m['path']:
-                return None
-            # Путь к исходному файлу
-            path_re: Path = Path(m['path'])
-            # Проверим что это НЕ бинарный файл, путем просмотра расширения файла. Если это бинарный файл, то выходим из функции
-            if AvailableLanguages.Binary.value.search(path_re.suffix):
-                return None
-            # Язык программирования или разметки
-            lange_file: Lange
-            # Исходный текст кода
-            text_in_file: str
-            # Проверяем куда указывает путь, локально или в интернет
-            path_or_url = re.match('(https|http|ftp|tcp|localhost):', m['path'])
-            if path_or_url:
-                """Это ссылку в интернет"""
-                logger.debug(m['path'], 'URL')
-                lange_file = ConvertSuffixToLange.getlang(path_re.suffix)
-                # Скачиваем исходный текст из интернета
-                text_in_file = requests.get(m['path']).text
-            else:
-                """Это локальный путь"""
-                logger.debug(path_re, 'LOCAL')  # Path(self_path, m['path']).resolve().__str__()
-                lange_file = ConvertSuffixToLange.getlang(path_re.suffix)
-                # Читаем файл по абсолютному пути
-                try:
-                    text_in_file = Path(self_path, path_re).resolve().read_text()
-                except FileNotFoundError as e:
-                    logger.error(f"{path_re}:\n{e}", "LOCAL_BaseCodeRef")  # path_re
-                    return None
-                except TypeError as e:
-                    logger.error(f"{path_re}:\n{e}", "LOCAL_BaseCodeRef")  # path_re
-                    return None
+            Поиск инициализации переменных
 
-            # Формируем ссылку для `HTML`
-            ref = f"{f'{main_re}' if main_re else ''}{f'.{child_re}' if child_re else ''}"
-            # Переменная для указания начало найденного элемента
-            line_start = 0
-            # Переменная для указания конца найденного элемента
-            line_end = -1
-            # Обрезанный текст
-            text_in_file_cup: str = text_in_file
-            # Если указано, что вставлять, то вставляем этот участок код из файла
-            if main_re:
-                # Если указывает на класс/функцию/переменную
-                text_in_file_cup, line_start, line_end = lange_file.REGEX.class_func_var_anchor(main_re, text_in_file)
-                if child_re:
-                    # Если указывает на метод класса/атрибут класса
-                    text_in_file_cup, tmp_line_start, tmp_line_end = lange_file.REGEX.class_meth_attr(child_re, text_in_file_cup)
-                    # Конец текста
-                    line_end = line_start + tmp_line_end if tmp_line_end else 0
-                    # Начало текст
-                    line_start = line_start + tmp_line_start if tmp_line_start else 0
-            return BaseCodeRefReturn(name_re=name_re,
-                                     text_in_file_cup=text_in_file_cup,
-                                     text_in_file=text_in_file,
-                                     line_start=line_start,
-                                     line_end=line_end,
-                                     ref=ref,
-                                     file=path_re)
+
+            Наглядный пример:
+
+            - [=Имя](Иван)
+            - [=Фамилия]([=Имя] Иванов)
+            - [=Отчество]([=Имя] Иванов Иванович):ТипИмяОтчество
+
+            В итоге `[=Фамилия]` будет равен Иванов Иван
+            """
+            # Обрабатываем вариант когда при инициализации переменной есть обращение к уже ранее созданным переменным
+            _nested_var = REGEX.VarsGet.sub(lambda _n_v:
+                                            StoreDoc.HeaderMain.getVar(name_head, _n_v['name'], context=m.group(0))[0],
+                                            m['value']
+                                            )
+            # Переменная с результатом
+            res_var: str = _nested_var if _nested_var else m['value']
+            # Проврем на возможность наличия в значение математического выражения `MathSpan`
+            is_math_span: re.Match = REGEX.MathSpan.match(res_var)
+            if is_math_span:
+                # Если есть `MathSpan`, то высчитываем выражение.
+                res_var = GenericMDDRY.MathSpan(is_math_span)[0]
+            # Записываем переменные в кеш заголовка
+            StoreDoc.HeaderMain.addVar(name_head, m['name'], res_var, m['type'])
+            # Скрываем из выходного текста инициализацию переменных,
+            # все данные о переменных теперь хранятся в `StoreDoc.HeaderMain`
+            return f"%%{m['name']}={res_var}:{m['type']}%%"
+
+        @staticmethod
+        def vars_get_from_math_span(m: re.Match, name_head: str, call_format: typing.Callable[[re.Match, str], str]) -> str:
+            """
+            Вставка значений в места, где идет обращение к переменным,
+            область вставки внутри математического выражению `MathSpan`.
+            """
+
+            # Если в математическом выражение нет обращения к переменным, то пропускам такое выражение,
+            # его должны обработать отдельно, на этапе `MathSpan`
+            if REGEX.VarsGet.search(m['body']):
+                res = REGEX.VarsGet.sub(
+                    lambda _m: StoreDoc.HeaderMain.getVar(
+                        name_head,
+                        _m['name'],
+                        default=_m.group(0))[0],
+                    m['body']
+                )
+                return call_format(m, res)
+            else:
+                return m.group(0)
+
+        @staticmethod
+        def vars_get(m: re.Match, name_head: str) -> str:
+            """
+            Вставка значений и тип(переменной) в места, где идет обращение к переменным.
+            Область вставки во всем тексе.
+            """
+            res = StoreDoc.HeaderMain.getVar(name_head, m['name'], default=m.group(0))
+            return f"{res[0]}({res[1]})"
 
 
 class MDDRY_TO_HTML:
@@ -687,28 +867,9 @@ class MDDRY_TO_HTML:
 """[1:]
 
     @classmethod
-    def MathSpan(cls, m: re.Match, body: str = None, info: str = '') -> str:
-        """
-        Высчитываем математическое выражение с помощью SymPy, и возвращаем результат выражения в виде `HTML`
-
-        :param m:
-        :param body: Тело математического выражения, это нужно, для того чтобы передавать значения из переменных, а не сами переменные
-        :param info: Информацией о математическом выражение, например из каких переменных состоит математическое выражение
-        """
-        text: str = body if body else m['body']
-        type_math_span: str = m["type"] if m["type"] else ''
-        # Ответ, Выражение
-        res: tuple[str, str] = MDDRY_TO_MD.MathSpan(m, body)
-        return f"""
-<div class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.MathSpanBody.value}">
-    {f'<div class="{HTML_CLASS.MathSpanInfo.value}">{info if info else "_" * len(type_math_span)}<div class="{HTML_CLASS.MathSpanType.value}">{type_math_span}</div></div>'}
-    <span class="{HTML_CLASS.MathSpan.value}"><span class="{HTML_CLASS.MathResult.value}">{res[0]}</span>={res[1]}</span>
-</div>"""[1:]
-
-    @classmethod
     def InsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
         """Вставка кода"""
-        res: BaseCodeRefReturn = CoreMarkdownDRY.DeepLogic.BaseCodeRef(m, self_path)
+        res: BaseCodeRefReturn = GenericMDDRY.BaseCodeRef(m, self_path)
         if not res:
             # Если нет ответа то вернем тот же текст
             return m.group(0)
@@ -721,7 +882,7 @@ class MDDRY_TO_HTML:
     @classmethod
     def LinkCode(cls, m: re.Match, self_path: str) -> Optional[str]:
         """Ссылка на код"""
-        res: BaseCodeRefReturn = CoreMarkdownDRY.DeepLogic.BaseCodeRef(m, self_path)
+        res: BaseCodeRefReturn = GenericMDDRY.BaseCodeRef(m, self_path)
         if not res:
             # Если нет ответа то вернем тот же текст
             return m.group(0)
@@ -731,112 +892,31 @@ class MDDRY_TO_HTML:
 <a href="#" class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.LinkCode.value}" file="{res.file.__str__()}" ref="{res.ref}" char_start="{res.line_start}" char_end="{res.line_end}">{res.name_re}</a>
 """[1:]
 
-    @classmethod
-    def HeaderMain(cls, m: re.Match, type_out: Literal['html', 'md']) -> str:
+    @staticmethod
+    def HeaderMain(level: int, name_from_id: str, res_HeadersTypeHtml: str, name_head: str, body_header: str) -> str:
+        """Форматирование результата заголовка"""
+        return f"""<h{level} id="{name_from_id}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}"><div class="{HTML_CLASS.mddry_name.value}">{name_head}</div><span class="{HTML_CLASS.paragraph.value}">¶</span><div class="{HTML_CLASS.mddry_level.value}">{level}</div></h{level}>\n{body_header}\n"""
+
+    @staticmethod
+    def MathSpan(m: re.Match, body: str):
         """
-        Ищем все заголовки. Нам нужно получить имя заголовка, его уровень, и его тело. После этого проверяем тип заголовка, он
-        может быть обычным, а может быть скрытым. Потом находим инициализацию переменных. После этого заносим данные в кеш
-        `StoreDoc.HeaderMain`.
+        Форматирование математического выражения
 
-        После этого проверяем есть ли обращения к переменным в заголовке, если есть то тогда проверяем кеш на наличие переменных
-        к которым идет обращение. Логика поиска переменных похоже на область видимости в других языках - поиск начинается от текущего заголовка
-        и идет вверх по заголовкам, поиск остановиться в тот момент когда следующий заголовок будет не уменьшатся, а увеличиваться.
-
-        Например, если заголовки идут как - [3,2,1,2] то в результате будет [3,2,1]
-
-        После этого происходит замена обращение к переменной на значение переменной.
+        :param m:
+        :param body: Тело математического выражения, это нужно, для того чтобы передавать значения переменных, а не их имена
         """
 
-        # Получаем имя заголовка
-        name_head = m['name']
-        # Получим тело заголовка
-        body_header: str = m['body']
-        # Получаем тип заголовка
-        res_HeadersType: Optional[HeaderType] = None
-        if m['hidden']:
-            res_HeadersType = HeaderType.Hide
-            res_HeadersTypeHtml = HTML_CLASS.HiddenHeaders.value
-        else:
-            res_HeadersType = HeaderType.Standard
-            res_HeadersTypeHtml = HTML_CLASS.StandardHeaders.value
-        # Получаем уровень заголовка
-        level: Literal[1, 2, 3, 4, 5, 6] = len(m['lvl'])
-        # Добавляем заголовок в кеш, получаем id для заголовка
-        name_from_id = StoreDoc.HeaderMain.addHeaders(name_head, level, res_HeadersType)
-
-        #: Поиск инициализации переменных
-        def _vars_init(_m: re.Match) -> str:
-            """
-            Наглядный пример:
-
-            - [=Имя](Иван)
-            - [=Фамилия]([=Имя] Иванов)
-            - [=Отчество]([=Имя] Иванов Иванович):ТипИмяОтчество
-
-            В итоге `[=Фамилия]` будет равен Иванов Иван
-            """
-            # Обработать вложенных переменных, То есть когда мы обращаемся к другой переменной во время инициализации текущей,
-            # ищем вложенные переменной и подставляем их значение в текущую переменную.
-            _nested_var = REGEX.VarsGet.sub(lambda _n_v:
-                                            StoreDoc.HeaderMain.getVar(name_head, _n_v['name'], context=_m.group(0))[0],
-                                            _m['value']
-                                            )
-            # Переменная с результатом
-            res_var: str = _nested_var if _nested_var else _m['value']
-            # Проврем на возможность наличия в значение математического выражения `MathSpan`
-            is_math_span: re.Match = REGEX.MathSpan.match(res_var)
-            if is_math_span:
-                # Если есть `MathSpan`, то высчитываем выражение.
-                res_var = MDDRY_TO_MD.MathSpan(is_math_span)[0]
-            # Записываем переменные в кеш заголовка
-            StoreDoc.HeaderMain.addVar(name_head, _m['name'], res_var, _m['type'])
-            # Скрываем из выходного текста инициализацию переменных,
-            # все данные о переменных теперь хранятся в `StoreDoc.HeaderMain`
-            return f"%%{_m['name']}={res_var}:{_m['type']}%%"
-
-        def _vars_get_from_math_span(_m: re.Match) -> str:
-            """
-            Вставка значений в места, где идет обращение к переменным,
-            область вставки внутри математического выражению `MathSpan`.
-            """
-            # Если в математическом выражение нет обращения к переменным, то пропускам такое выражение,
-            # его должны обработать отдельно на этапе `MathSpan`
-            is_math_span = False
-
-            def _self(_m2: re.Match) -> str:
-                nonlocal is_math_span
-                is_math_span = True
-                return StoreDoc.HeaderMain.getVar(name_head, _m2['name'], default=_m2.group(0))[0]
-
-            res = REGEX.VarsGet.sub(_self, _m['body'])
-            if is_math_span:
-                if type_out == 'html':
-                    return MDDRY_TO_HTML.MathSpan(_m,
-                                                  body=res,
-                                                  info=re.sub(':[^ \n.,]+', '', _m.group(0)).replace('[=', '[').replace('`', '')
-                                                  )
-                else:
-                    return f"""`{'='.join(MDDRY_TO_MD.MathSpan(_m, body=res))}`"""
-            else:
-                return _m.group(0)
-
-        def _vars_get(_m: re.Match) -> str:
-            """
-            Вставка значений и тип(переменной) в места, где идет обращение к переменным.
-            Область вставки во всем тексе.
-            """
-            return '.'.join(StoreDoc.HeaderMain.getVar(name_head, _m['name'], default=_m.group(0)))
-
-        # Поиск инициализации переменных
-        body_header = REGEX.VarsInit.sub(_vars_init, body_header)
-        # Обрабатываем обращения к переменным которые находятся внутри математического выражения `MathSpan`.
-        body_header = REGEX.MathSpan.sub(_vars_get_from_math_span, body_header)
-        # Обрабатываем обращения во всем тексе.
-        body_header = REGEX.VarsGet.sub(_vars_get, body_header)
-        if type_out == 'html':
-            return f"""<h{level} id="{name_from_id}" class="{HTML_CLASS.MarkdownDRY.value} {res_HeadersTypeHtml}"><div class="{HTML_CLASS.mddry_name.value}">{name_head}</div><span class="{HTML_CLASS.paragraph.value}">¶</span><div class="{HTML_CLASS.mddry_level.value}">{level}</div></h{level}>\n{body_header}\n"""
-        else:
-            return f"""{m['lvl']} {m['hidden']}{name_head}\n{body_header}"""
+        text: str = body if body else m['body']
+        # Текстовый тип результат математического выражения
+        type_math_span: str = m["type"] if m["type"] else ''
+        # Информацией о математическом выражение, например из каких переменных состоит математическое выражение
+        info = re.sub(':[^ \n.,]+', '', m.group(0)).replace('[=', '[').replace('`', '')
+        # Ответ математического выражения выражение
+        res_math_span: tuple[str, str] = GenericMDDRY.MathSpan(m, text)
+        return f"""<div class="{HTML_CLASS.MarkdownDRY.value} {HTML_CLASS.MathSpanBody.value}">
+        {f'<div class="{HTML_CLASS.MathSpanInfo.value}">{info if info else "_" * len(type_math_span)}<div class="{HTML_CLASS.MathSpanType.value}">{type_math_span}</div></div>'}
+        <span class="{HTML_CLASS.MathSpan.value}"><span class="{HTML_CLASS.MathResult.value}">{res_math_span[0]}</span>={res_math_span[1]}</span>
+        </div>"""
 
     @classmethod
     def MultiLineTables(cls, m: re.Match) -> str:
@@ -880,6 +960,11 @@ class MDDRY_TO_MD:
     """
 
     @staticmethod
+    def HeaderMain(level: int, name_from_id: str, res_HeadersTypeHtml: str, name_head: str, body_header: str) -> str:
+        """Форматирование результата заголовка"""
+        return f"""{"#" * level} {'^' if res_HeadersTypeHtml == HeaderType.Hide.value else ''}{name_head}\n{body_header}"""
+
+    @staticmethod
     def ReferenceBlock(m: re.Match) -> str:
         """Ссылочные блоки"""
         # Заносим найденные ссылочные блоки в общий кеш документа
@@ -905,42 +990,20 @@ class MDDRY_TO_MD:
         """Бесспорная вставка кода"""
         return Path(self_path, m['path']).resolve().read_text()
 
-    @classmethod
-    def MathSpan(cls, m: re.Match, body: str = None) -> tuple[str, str]:
+    @staticmethod
+    def MathSpan(m: re.Match, body: str = None):
         """
-        Высчитываем математическое выражение с помощью SymPy, и возвращаем результат выражения
-
-        :param m:
-        :param body: Тело математического выражения, это нужно, для того чтобы передавать значения из переменных, а не сами переменные
+        Форматирование математического выражения
         """
-        """
-       Доработать математический размах, сделать подсказку переменной, и её типа,
-       добавить возможность самому писать ответ к выражению, но все равно делать
-       расчеты для проверки правильности указного ответа, если ответы разные то
-       выдавать ошибку сборки!
-       """
+        # Удаляем скобки если они уже были поставлены ранее
+        type_res = '(' + re.sub("\(|\)", '', m['type']) + ')' if m['type'] else ''
+        return f"""`{'='.join(GenericMDDRY.MathSpan(m, body=body))}`{type_res}"""
 
-        text: str = body if body else m['body']
-        preliminary_response: Optional[str] = m['preliminary_response']
-        try:
-            res = sympify(text).__str__()
-            # Если есть предварительный ответ, и он не равен ответу от `SymPy`
-            if preliminary_response and preliminary_response != res:
-                # То записываем в лог ошибку и возвращаем выражение без изменений
-                logger.error(f"Ожидался ответ={preliminary_response}, но получен={res}.\nВ уравнение: {m.group(0)}.\nВ готовом варианте:{m['preliminary_response']}={body}",
-                             "Не равные ответы в `MathSpan`")
-                return f'!ERROR!', text
-            else:
-                return res, text
-        except SympifyError:
-            logger.error(f"{text}", "MathSpan")
-            return '!ERROR!', text
-
-    @classmethod
-    def InsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
-        """Вставка кода"""
-        res: BaseCodeRefReturn = CoreMarkdownDRY.DeepLogic.BaseCodeRef(m, self_path)
-        if not res:
-            # Если нет ответа то вернем тот же текст
-            return m.group(0)
-        return f"{res.name_re}\n\n{res.text_in_file_cup}"
+    # @classmethod
+    # def InsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
+    #     """Вставка кода"""
+    #     res: BaseCodeRefReturn = CoreMarkdownDRY.DeepLogic.BaseCodeRef(m, self_path)
+    #     if not res:
+    #         # Если нет ответа то вернем тот же текст
+    #         return m.group(0)
+    #     return f"{res.name_re}\n\n{res.text_in_file_cup}"
