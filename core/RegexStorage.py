@@ -1,7 +1,6 @@
 import re
-import typing
 from decimal import Decimal
-from typing import Optional
+from typing import NewType, Optional
 
 from sympy import SympifyError, sympify
 
@@ -76,8 +75,8 @@ class Tables:
     # Доступные агрегатные функции в таблице
     allowed_func = frozenset(x[2:] for x in AggregateFunc.__dict__.keys() if x.startswith('f_'))
 
-    title: list[str] = typing.NewType
-    body: list[list[str]] = typing.NewType
+    title: list[str] = NewType
+    body: list[list[str]] = NewType
 
     def __init__(self, text: str):
         # Текст исходной таблицы
@@ -216,14 +215,24 @@ class REGEX:
     Класс для хранения регулярных выражений
     """
     # ---   MarkdownDRY   --- #
-    # Инициализация ссылочного блока
+    # Ссылочного блока, объявление
+
     ReferenceBlock: re.Pattern = re.compile(
-        '\[#(?P<ref_block_name>[\d\w_-]+)]\(\n{2}(?P<ref_block_text>[^\n][^)]+)\n{2}\)'
+        "\[#(?P<ref_block_name>[\d\w_-]+)]\(\n{2,}(?P<ref_block_text>(?:(?:.)|(?:\s(?!\n{1}\))))+)\n{2}\)"
+        # '\[#(?P<ref_block_name>[\d\w_-]+)]\(\n{2}(?P<ref_block_text>[^\n][^)]+)\n{2}\)'
     )
-    # Использование ссылочного блока
-    UseReferenceBlock: re.Pattern = re.compile(
-        '\[#(?P<use_ref_block>[^]]+)](?P<sm>[ \n]+)'
+    # Ссылочного блока, использование
+    UseReferenceBlock: re.Pattern = re.compile('\[#(?P<use_ref_block>[^]]+)](?P<sm>[ \n]+)')
+    # Процедурный шаблоны, объявление
+    ProceduralTemplates: re.Pattern = re.compile(ReferenceBlock)
+    # Процедурный шаблоны, объявление, поиск инициализации переменных
+    ProceduralTemplatesInitVar: re.Pattern = re.compile("\[!(?P<name>[^]]+)]")
+    # Процедурный шаблоны, использование
+    UseProceduralTemplates: re.Pattern = re.compile(
+        '\[#(?P<ref_block_name>[\d\w_-]+)]{\n{2,}(?P<ref_block_text>(?:(?:.)|(?:\s(?!\n{1}\))))+)\n{2}}'
     )
+    # Процедурный шаблоны, использование, поиск переменных и их значений
+    UseProceduralTemplatesUseVar: re.Pattern = re.compile("\[!(?P<name>[^]]+)]\n(?P<body>(?:.\s*(?!\[!))+.)")
     # -------------------------
 
     # -  Скрываемый блок - #

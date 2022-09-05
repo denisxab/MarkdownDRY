@@ -85,3 +85,16 @@ class HeaderMain:
     """
     # Заголовки - ИмяЗаголовка:(УровеньЗаголовка,ТипЗаголовка,{ИмяПеременной:(Значение,IdЗаголовка)},IdЗаголовка)
     date: dict[str, HeaderMain_data_body] = dict()
+
+
+class ProceduralTemplatesTypeBody(NamedTuple):
+    """
+    Структура для хранения процедурных шаблонов
+    """
+    # Весь текст в процедуру(вместе с объявлением переменных)
+    text_procedure: str
+    # Объявленные переменные в процедуре
+    vars: dict[str, str]
+
+    def __str__(self):
+        return str(self.__dict__)

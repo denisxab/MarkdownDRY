@@ -16,7 +16,7 @@ from core.core_html import HTML_CLASS, HTML_JS
 from core.core_lang import Lange, ConvertSuffixToLange, AvailableLanguages, BaseCodeRefReturn
 from core.helpful import ptabel
 from core.types import HeaderMain_data_body, HeaderType, HeaderMain_ValueVar, \
-    HeaderMain_Headers_With_Found_Variables, HeaderMain
+    HeaderMain_Headers_With_Found_Variables, HeaderMain, ProceduralTemplatesTypeBody
 
 
 class StoreDoc:
@@ -27,6 +27,24 @@ class StoreDoc:
     DropdownBlock: dict[str, str] = dict()
     # Список строк которые нужно вставить в конце сборки
     LastInsert: list[str] = []
+
+    class ProceduralTemplates:
+        """Процедурные шаблоны"""
+        # Словарь процедурных шаблонов. {ИмяПроцедуры,(ТекстПроцедуры,{ИмяПеременной,(ЗначениеПоУмолчанию,)})}
+        # TODO: Реализовать значение по умолчанию, для переменных в процедурных шаблонах
+        date: dict[str, ProceduralTemplatesTypeBody] = dict()
+
+        @classmethod
+        def addVars(cls, name_procedure: str, name_var: str):
+            """Добавить в указанную процедуру переменные"""
+            cls.date[name_procedure].vars[name_var] = ''
+
+        @classmethod
+        def addProcedure(cls, name_procedure: str, text_procedure: str):
+            """Добавить процедуру и её текст"""
+            res = cls.date.get(name_procedure)
+            if not res:
+                cls.date[name_procedure] = ProceduralTemplatesTypeBody(text_procedure=text_procedure, vars=dict())
 
     @classmethod
     def clear(cls):
@@ -203,6 +221,34 @@ class CoreMarkdownDRY:
             StoreDocs_ReferenceBlock = StoreDoc.ReferenceBlock
         return REGEX.UseReferenceBlock.sub(lambda m: GenericMDDRY.UseReferenceBlock(m, StoreDocs_ReferenceBlock),
                                            source_text)
+
+    @classmethod
+    def ProceduralTemplates(cls, source_text: str, type_out: Literal['html', 'md']) -> Optional[str]:
+        """
+        Процедурные шаблоны объявление
+        """
+        if type_out == 'html':
+            return REGEX.ProceduralTemplates.sub(lambda m: GenericMDDRY.ProceduralTemplates(m, MDDRY_TO_HTML.ProceduralTemplates),
+                                                 source_text)
+        else:
+            return REGEX.ProceduralTemplates.sub(lambda m: GenericMDDRY.ProceduralTemplates(m, MDDRY_TO_MD.ProceduralTemplates),
+                                                 source_text)
+
+    @staticmethod
+    def UseProceduralTemplates(source_text: str,
+                               StoreDocs_ProceduralTemplates: StoreDoc.ProceduralTemplates = None
+                               ) -> Optional[str]:
+        """
+        Ссылочный блок использование
+
+        :param StoreDocs_ProceduralTemplates: Хранилище с объявленными ссылочными блоками
+        """
+        if not StoreDocs_ProceduralTemplates:
+            StoreDocs_ProceduralTemplates = StoreDoc.ProceduralTemplates
+        return REGEX.UseProceduralTemplates.sub(
+            lambda m: GenericMDDRY.UseProceduralTemplates(m, StoreDocs_ProceduralTemplates,
+                                                          call_format=MDDRY_TO_MD.UseProceduralTemplates),
+            source_text)
 
     @classmethod
     def DropdownBlock(cls, source_text: str, type_out: Literal['html', 'md']) -> Optional[str]:
@@ -730,6 +776,37 @@ class GenericMDDRY:
             res = StoreDoc.HeaderMain.getVar(name_head, m['name'], default=m.group(0))
             return f"{res[0]}({res[1]})"
 
+    @classmethod
+    def ProceduralTemplates(cls, m: re.Match, call_format: typing.Callable[[re.Match], str]) -> str:
+        """Процедурные шаблоны, объявление"""
+        # Заносим переменные в кеш
+        StoreDoc.ProceduralTemplates.addProcedure(
+            name_procedure=m['ref_block_name'],
+            text_procedure=m['ref_block_text']
+        )
+        # Ищем объявление переменных
+        for x in REGEX.ProceduralTemplatesInitVar.finditer(m['ref_block_text']):
+            # Заносим переменные в кеш
+            StoreDoc.ProceduralTemplates.addVars(
+                name_procedure=m['ref_block_name'],
+                name_var=x['name'],
+            )
+        return call_format(m)
+
+    @classmethod
+    def UseProceduralTemplates(cls, m: re.Match, StoreDocs_ProceduralTemplates: StoreDoc.ProceduralTemplates,
+                               call_format: typing.Callable[[str], str]):
+        """Процедурные шаблоны, использование"""
+        # Имя процедуры
+        name_procedure: str = m['ref_block_name']
+        # Текст процедуры
+        res = StoreDocs_ProceduralTemplates.date[name_procedure].text_procedure
+        # Ищем обращение к переменным
+        for x in REGEX.UseProceduralTemplatesUseVar.finditer(m['ref_block_text']):
+            # В тексте процедурного шаблона - заменяем имя переменной(в объявление), на значение переменной(из использования).
+            res = res.replace(f'[!{x["name"]}]', x['body'])
+        return call_format(res)
+
 
 class MDDRY_TO_HTML:
     """
@@ -993,8 +1070,20 @@ class MDDRY_TO_MD:
     @staticmethod
     def ReferenceBlock(m: re.Match) -> str:
         """Ссылочные блоки"""
-        # TODO: Убрать следы ссылочного блока из обычного `Markdown`
-        return m['ref_block_text']
+        # Убрать следы ссылочного блока из обычного `Markdown`
+        return ''
+
+    @staticmethod
+    def ProceduralTemplates(m: re.Match) -> str:
+        """Процедурный шаблон, объявление"""
+        # Убрать следы ссылочного блока из обычного `Markdown`
+        return ''
+
+    @staticmethod
+    def UseProceduralTemplates(res: str) -> str:
+        """Процедурный шаблон, использование"""
+        # Вернем результат без изменений
+        return res
 
     @classmethod
     def IndisputableInsertCodeFromFile(cls, m: re.Match, self_path: str) -> Optional[str]:
