@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarkdownDRY</title>
+    <link rel="stylesheet" href="../style.min.css">
+<body>
+    <!-- Блок с подсказкой -->
+    <div id="mddry_hint" show="0">
+        <div id="mddry_hint_body">
+            <!--!! ТЕКСТ Блок с подсказкой -->
+        </div>
+        <!-- Скрыть подсказку -->
+        <div style="width: 80vw;"><br></div>
+        <div class="HelpText-div" style="display: inline-block;">
+            <input type="button" id="mddry_hint_hiden" value="Скрыть" onclick="CLS_mddry_hint.show_or_hidden()">
+            <span class="HelpText-content hot_key_info">ALT+E</span>
+        </div>
+    </div>
+    <!-- Всплывающие окно -->
+    <div id="mddry_emerge_windows">
+        <!-- Скрыть Всплывающие окно -->
+        <div class="HelpText-div-b" style="float: right;">
+            <input type="button" id="mddry_emerge_windows_hidden" value="Скрыть"
+                onclick="CLS_mddry_emerge_windows.show_or_hidden()">
+            <span class="HelpText-content hot_key_info">ALT+R</span>
+        </div>
+        <div id="mddry_emerge_windows_info">
+            <!--!! ТЕКСТ Информация Всплывающего окна -->
+        </div>
+        <div id="mddry_emerge_windows_body">
+            <!--!! ТЕКСТ Тело всплывающего окна -->
+
+        </div>
+    </div>
+    <!-- Оглавление -->
+    <div id="mddry_menu">
+        <!-- Развернуть оглавление -->
+        <div class="HelpText-div">
+            <input type="button" id="bt_show_menu" value="<<" onclick="CLS_mddry_menu.show_or_hidden()">
+            <span class="HelpText-content hot_key_info">ALT+T</span>
+        </div>
+        <!-- Скрыть оглавление -->
+        <div class="HelpText-div">
+            <input type="button" id="bt_hidden_menu" value=">>" onclick="CLS_mddry_menu.show_or_hidden()" />
+            <span class="HelpText-content hot_key_info">ALT+T</span>
+        </div>
+        <!-- Темы оглавления -->
+        <div id="detail_menu">
+            <!--!! ТЕКСТ Оглавления -->
+            <!-- <ol>
+                <ol>
+                    <li><a href="#Стек технологий">Стек технологий</a></li>
+                    <ol>
+                        <li><a href="#БД">БД</a></li>
+                        <ol>
+                            <li><a href="#SQL">SQL</a></li>
+                            <li><a href="#NoSQL">NoSQL</a></li>
+                        </ol>
+                        <li><a href="#Frontend">Frontend</a></li>
+                        <li><a href="#Брокеры сообщений">Брокеры сообщений</a></li>
+                        <li><a href="#Диплой">Диплой</a></li>
+                    </ol>
+                    <li><a href="#Ссылки на документацию">Ссылки на документацию</a></li>
+                    <li><a href="#Ошибки">Ошибки</a></li>
+                    <ol></ol>
+                    <li><a href="#Готовые решения задач, и очень длинный заголовок которые не влезает в оглавление">Готовые
+                            решения задач, и очень длинный заголовок которые не влезает в оглавление</a></li>
+                </ol>
+            </ol> -->
+        </div>
+    </div>
+    <!-- Блок с основным текстом -->
+    <div id="mddry_body">
+        <!--!! ТЕКСТ Блок с основным текстом -->
+    </div>
+    <!-- Отладка -->
+    <div id="debug">
+        <input type="button" value="DEV" onclick="DevLogic.show_or_hide_dev()">
+        <div id="debug_body">
+            <div>
+                <!-- Блок с подсказкой  -->
+                <input type="button" value="Скрыть/Показать подсказку" onclick="DevLogic.mddry_hint_show_or_hide()">
+                <input type="text" size="20" placeholder="Ввод в подсказку" id="dev_text_hide_mddry_hint"
+                    onchange="DevLogic.mddry_hint_inset_text()">
+            </div>
+            <div>
+                <input type="button" value="Скрыть/Показать всплывающие окно"
+                    onclick="DevLogic.mddry_emerge_windows_show_or_hide()">
+                <input type="text" size="20" placeholder="Ввод в всплывающие окно" id="dev_text_hide_mddry_hint"
+                    onchange="">
+            </div>
+        </div>
+    </div>
+</body>
+<footer>
+    <script src="./logic.js" defer></script>
+</footer>
+</html>

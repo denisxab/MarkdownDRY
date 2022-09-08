@@ -10,13 +10,13 @@ from typing import Optional
 import requests
 
 
-class НезависимыйHTMLФайл:
+class IndependentHtmlFile:
     """
     Класс для сборки независимого HTML файла
     """
 
     @classmethod
-    def ВставкаCSS_JS_В_HTML_Файл(cls, source_text: str, path: Path) -> tuple[str, Optional[Path]]:
+    def Insert_CSS_JS_FROM_HTML(cls, source_text: str, path: Path) -> tuple[str, Optional[Path]]:
         """
         Вставить CSS и JS который указан в HTML файле.
 
@@ -63,7 +63,7 @@ class НезависимыйHTMLФайл:
         return НайтиCssИлиJS.sub(_self, source_text), path
 
     @classmethod
-    def СохранитьФотоВ_HTML(cls, source_text: str, path: Path) -> tuple[str, Optional[Path]]:
+    def SavePhoto(cls, source_text: str, path: Path) -> tuple[str, Optional[Path]]:
         """
         Сохранить в HTML файл изображения
 
@@ -138,7 +138,7 @@ class НезависимыйHTMLФайл:
         return _res
 
     @classmethod
-    def Собрать(cls, in_path: str, out_path: str):
+    def Build(cls, in_path: str, out_path: str):
         """
         Собрать Независимый HTML Файл
 
@@ -146,7 +146,8 @@ class НезависимыйHTMLФайл:
         :param out_path: Путь куда сохранить результат
         """
         p_out_path = Path(out_path).resolve()
-        p_in_path = None
+        p_in_path: Path
+        p_text: str
         if re.search('https?|localhost', in_path):
             # Скачать из интернета
             # TODO: Это не реализовано
@@ -159,7 +160,7 @@ class НезависимыйHTMLФайл:
             p_text = p_in_path.read_text()
             p_in_path = p_in_path.parent
 
-        _res = cls.СохранитьФотоВ_HTML(*cls.ВставкаCSS_JS_В_HTML_Файл(p_text, p_in_path))
+        _res = cls.SavePhoto(*cls.Insert_CSS_JS_FROM_HTML(p_text, p_in_path))
         p_out_path.write_text(_res[0])
         return True
 
@@ -169,7 +170,7 @@ if __name__ == '__main__':
     #     "/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/core/test/dataset/pub/ParsingToHtml.html",
     #     "./ParsingToHtml_res.html"
     # )
-    НезависимыйHTMLФайл.Собрать(
+    IndependentHtmlFile.Build(
         "/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/MyProject/PycharmProjects/MarkdownDRY/www/css/мусор/test.html",
         "/media/denis/dd19b13d-bd85-46bb-8db9-5b8f6cf7a825/SYNC/Bison_sync/test_res.html"
     )
